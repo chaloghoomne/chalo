@@ -1,49 +1,133 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { fetchDataFromAPI } from "../../api-integration/fetchApi";
+import { BASE_URL, NetworkConfig } from "../../api-integration/urlsVariable";
+import VisaDetails from "../visa-details/VisaDetails";
+import Packages from "../packages/Packages";
+import { useDispatch, useSelector } from "react-redux";
+import { getVisaType } from "../../redux/actions/package-id-actions";
+import { BsEmojiSmile } from "react-icons/bs";
+import { FaCircleDot } from "react-icons/fa6";
 
 const VisaTypes = () => {
-  const [selectedVisa, setSelectedVisa] = useState('Tourist');
-const navigate = useNavigate()
-const handleRedirect = ()=>{
-navigate("/packages")
+  const [selectedVisa, setSelectedVisa] = useState("Tourist");
+  const selectedCountry = useSelector(
+    (state) => state.SelectedCountryReducer.selectedCountry
+  );
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [plans, setPlans] = useState();
+  const [data, setData] = useState();
+  const [visatypes, setVisaTypes] = useState();
+  const { id } = useParams();
 
-}
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetchDataFromAPI(
+          "GET",
+          `${BASE_URL}place/${id}`
+        );
+        if (response) {
+          setVisaTypes(response.data.tourTypes);
+          setSelectedVisa(response?.data?.tourTypes[0]?._id);
+          handleplans(
+            response?.data?.tourTypes[0]?._id,
+            response?.data?.tourTypes[0]?.name
+          );
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, [id]);
 
-  const visaTypes = [
-    { id: 'Tourist', label: 'Tourist', img: 'https://e7.pngegg.com/pngimages/174/153/png-clipart-travel-agent-bank-service-industry-visa-passport-blue-company-thumbnail.png' },
-    { id: 'Business', label: 'Business', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT39wSCkTvlPH5yoxr7661_l_wxl8WYTxE9AQ&s' },
-    { id: 'Transit', label: 'Transit', img: 'https://static1.bigstockphoto.com/2/3/3/large2/332458573.jpg' },
-    { id: 'SureShot', label: 'Sure Shot', img: 'https://e7.pngegg.com/pngimages/174/153/png-clipart-travel-agent-bank-service-industry-visa-passport-blue-company-thumbnail.png' },
-    { id: 'JobSeeker', label: 'Job Seeker', img: 'https://e7.pngegg.com/pngimages/174/153/png-clipart-travel-agent-bank-service-industry-visa-passport-blue-company-thumbnail.png' },
-  ];
+  useEffect(() => {
+    const fetchProfileImage = async () => {
+      try {
+        const response = await fetchDataFromAPI(
+          "GET",
+          `${BASE_URL}${NetworkConfig.GET_HEADING_BY_ID}/VisaTypes`
+        );
+        console.log(response);
+        if (response) {
+          setData(response.data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchProfileImage();
+  }, []);
+
+  const handleplans = async (visaTypeId, name) => {
+    setSelectedVisa(visaTypeId);
+    dispatch(getVisaType(name));
+    try {
+      const response = await fetchDataFromAPI(
+        "POST",
+        `${BASE_URL}visa-category-by-package`,
+        { package: id, tourType: visaTypeId }
+      );
+      console.log(response);
+      if (response) {
+        console.log(response.data, "data");
+        setPlans(response.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="flex flex-col  items-center justify-center py-20 px-4 bg-white">
-      <h2 className="text-2xl font-bold mb-4">Brazil Visa Application</h2>
-      <p className="text-orange-500 mb-6">Select the Purpose of your visit</p>
-      <div className="flex flex-wrap  gap-4 mb-6">
-        {visaTypes.map((visa) => (
+      <h2 className="text-3xl poppins-six text-center  font-bold mb-4">
+        {selectedCountry} Visa Application
+      </h2>
+      <p className="text-orange-500 poppins-four  mb-6">{data?.description}</p>
+      <div className="flex flex-wrap md:justify-evenly justify-center gap-8 mb-6">
+        {visatypes?.map((visa) => (
           <div
-            key={visa.id}
-            className={`p-4 relative min-w-56 w-56 h-56 flex flex-col justify-center items-center border rounded-[30px] shadow-md shadow-gray-300 text-center cursor-pointer ${
-              selectedVisa === visa.id ? 'border-orange-500' : 'border-gray-300'
+            key={visa?._id}
+            className={`p-4 relative min-w-48 w-48 h-48 flex flex-col justify-center items-center border rounded-[30px]  shadow-md shadow-gray-300 text-center cursor-pointer ${
+              selectedVisa === visa?._id
+                ? "border-orange-500"
+                : "border-gray-300"
             }`}
-            onClick={() => setSelectedVisa(visa.id)}
+            onClick={() => handleplans(visa?._id, visa?.name)}
           >
             <div
-              className={`w-4 h-4 absolute left-3 top-2 mb-4 mx-auto rounded-full border-3 ${
-                selectedVisa === visa.id ? 'border-orange-500 bg-orange-500' : 'border-gray-300'
-              }`}
-            ></div>
-            <img src={visa.img} alt={visa.label} className="w-[80%] h-auto mb-4" />
-            <p className="font-semibold">{visa.label}</p>
+              className={`w-4 h-4 absolute left-2 top-5 mb-4 mx-auto rounded-full  `}
+            >
+              {" "}
+              <FaCircleDot
+                size={15}
+                color={`${selectedVisa === visa?._id ? "orange" : "gray"}`}
+              />
+            </div>
+            <img
+              src={visa?.image}
+              alt={visa?.name}
+              className="w-32 h-32 rounded-2xl object-contain mt-6"
+            />
+            <p className="font-semibold my-2">{visa?.name}</p>
           </div>
         ))}
       </div>
-      <p className="text-orange-500 p-2 flex justify-center items-center bg-orange-200 rounded-md mb-6">
-        <span className="text-2xl">😊</span> Chalo Ghoomne has brought joy to over 100,000 happy travellers!
+      <p className="text-[#F26337] text-xl  mt-5 p-5 px-16 gap-7 flex justify-center items-center bg-[#FDF0EC] rounded-md mb-6">
+        <span className=" poppins-five  ">
+          <BsEmojiSmile size={25} color="#F26337" />
+        </span>{" "}
+        Chalo Ghoomne has brought joy to over 100,000 happy travellers!
       </p>
-      <button onClick = {handleRedirect} className="bg-orange-500 text-white py-2 px-6 rounded-full">Continue</button>
+      {/* <button
+        onClick={handleRedirect}
+        className="bg-orange-500 text-white py-2 px-6 rounded-full"
+      >
+        Continue
+      </button> */}
+      <Packages plans={plans} />
     </div>
   );
 };

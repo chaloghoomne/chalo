@@ -1,93 +1,91 @@
-import React from 'react';
-import VisaCard from './VisaCard';
+/* eslint-disable react/display-name */
+import React, { forwardRef, useEffect, useState } from "react";
+import VisaCard from "./VisaCard";
+import { MdKeyboardArrowRight } from "react-icons/md";
+import { fetchDataFromAPI } from "../../../api-integration/fetchApi";
+import { BASE_URL } from "../../../api-integration/urlsVariable";
+import { useSelector } from "react-redux";
 
+const HomeSecond = forwardRef((props, ref) => {
+  const [packages, setPackages] = useState([]);
+  const [finalValue, setFinalVlaue] = useState(12);
+  const inputValue = useSelector(
+    (state) => state.SearchPackageReducer.inputValue
+  );
 
+  console.log(inputValue, "dfghj");
 
-const visaData = [
-  {
-    image: 'https://media.tacdn.com/media/attractions-splice-spp-674x446/06/f1/db/f1.jpg',
-    city: 'Tokyo',
-    country: 'Tokyo, Japan',
-    price: 360,
-    rating: '5.0'
-  },
-  {
-    image: 'https://media.tacdn.com/media/attractions-splice-spp-674x446/06/f1/db/f1.jpg',
-    city: 'Rome',
-    country: 'Rome, Italy',
-    price: 370,
-    rating: '5.0'
-  },
-  {
-    image: 'https://media.tacdn.com/media/attractions-splice-spp-674x446/06/f1/db/f1.jpg',
-    city: 'Barcelona',
-    country: 'Barcelona, Spain',
-    price: 400,
-    rating: '5.0'
-  },
-  {
-    image: 'https://media.tacdn.com/media/attractions-splice-spp-674x446/06/f1/db/f1.jpg',
-    city: 'Tokyo',
-    country: 'Tokyo, Japan',
-    price: 360,
-    rating: '5.0'
-  },
-  {
-    image: 'https://media.tacdn.com/media/attractions-splice-spp-674x446/06/f1/db/f1.jpg',
-    city: 'Rome',
-    country: 'Rome, Italy',
-    price: 370,
-    rating: '5.0'
-  },
-  {
-    image: 'https://media.tacdn.com/media/attractions-splice-spp-674x446/06/f1/db/f1.jpg',
-    city: 'Barcelona',
-    country: 'Barcelona, Spain',
-    price: 400,
-    rating: '5.0'
-  },
-  {
-    image: 'https://media.tacdn.com/media/attractions-splice-spp-674x446/06/f1/db/f1.jpg',
-    city: 'Tokyo',
-    country: 'Tokyo, Japan',
-    price: 360,
-    rating: '5.0'
-  },
-  {
-    image: 'https://media.tacdn.com/media/attractions-splice-spp-674x446/06/f1/db/f1.jpg',
-    city: 'Rome',
-    country: 'Rome, Italy',
-    price: 370,
-    rating: '5.0'
-  },
-  {
-    image: 'https://media.tacdn.com/media/attractions-splice-spp-674x446/06/f1/db/f1.jpg',
-    city: 'Barcelona',
-    country: 'Barcelona, Spain',
-    price: 400,
-    rating: '5.0'
-  },
-  // Add more data as needed
-];
+  const viewAll = () => {
+    setFinalVlaue(10000);
+  };
 
-const HomeSecond = () => {
+  const showlimited = () => {
+    setFinalVlaue(12);
+  };
+
+  useEffect(() => {
+    const fetchProfileImage = async () => {
+      try {
+        const response = await fetchDataFromAPI(
+          "GET",
+          `${BASE_URL}places?country=${inputValue}`
+        );
+        console.log(response, "response partners");
+        if (response) {
+          console.log(response.data, "response");
+          setPackages(response.data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchProfileImage();
+  }, [inputValue]);
+
   return (
-    <div className="px-4 py-8">
-      <h1 className="text-3xl font-bold text-center mb-8">World Best Visas Requested Countries</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {visaData.map((visa, index) => (
+    <div ref={ref} className=" pt-8 px-4 md:px-10">
+      <h1 className="text-3xl poppins-six font-bold text-center mb-8">
+        World Best Visas Requested Countries
+      </h1>
+      <div className="flex flex-wrap  gap-4">
+        {packages?.slice(0, finalValue)?.map((visa, index) => (
           <VisaCard
             key={index}
-            image={visa.image}
-            city={visa.city}
-            country={visa.country}
-            price={visa.price}
-            rating={visa.rating}
+            image={visa?.image}
+            city={visa?.city}
+            country={visa?.country}
+            price={visa?.price}
+            rating={visa?.rating}
+            id={visa?._id}
+            description={visa?.description}
           />
         ))}
       </div>
+      <h1
+        onClick={finalValue === 12 ? viewAll : showlimited}
+        className="text-2xl font-bold poppins-seven flex justify-center items-center cursor-pointer mt-10 text-yellow-500 text-center gap-2  mb-8"
+      >
+        {finalValue === 12 ? "View All " : "Hide"}{" "}
+        <div className="self-center items-center flex ">
+          {/* <MdKeyboardArrowRight
+            size={25}
+            style={{ marginTop: "4px", paddingLeft: "-3px" }}
+            color="orange"
+          />{" "}
+          <MdKeyboardArrowRight
+            size={22}
+            style={{ marginTop: "4px" }}
+            color="orange"
+          />{" "}
+          <MdKeyboardArrowRight
+            size={20}
+            style={{ marginTop: "4px" }}
+            color="orange"
+          /> */}
+        </div>
+      </h1>
     </div>
   );
-};
+});
 
 export default HomeSecond;

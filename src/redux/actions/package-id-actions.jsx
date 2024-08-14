@@ -1,0 +1,41 @@
+export const PackageId = (value) => {
+  return {
+    type: "PACKAGE_ID",
+    payload: value,
+  };
+};
+
+export const coTraveler = (value) => {
+  return {
+    type: "CO_TRAVLER_ID",
+    payload: value,
+  };
+};
+
+export const getVisaType = (value) => {
+  return {
+    type: "GET_VISA_TYPE",
+    payload: value,
+  };
+};
+
+export const searchPackageByValue = (value) => {
+  return {
+    type: "SEARCH_PACKAGE",
+    payload: value,
+  };
+};
+
+export const getselectedCountry = (value) => {
+  return {
+    type: "SELECTED_COUNTRY",
+    payload: value,
+  };
+};
+
+export const getCountryId = (value) => {
+  return {
+    type: "COUNTRY_ID",
+    payload: value,
+  };
+};
