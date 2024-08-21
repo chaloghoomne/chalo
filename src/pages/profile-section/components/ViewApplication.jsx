@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { MdOutlinePersonAdd } from "react-icons/md";
-
+import { saveAs } from "file-saver";
 import { toast } from "react-toastify";
 
-import { FaEye } from "react-icons/fa";
+import { FaDownload, FaEye } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import ModalVisaRequest from "../../edit-visa-requests/ModalVisaRequest";
 import { fetchDataFromAPI } from "../../../api-integration/fetchApi";
@@ -23,10 +23,14 @@ const ViewApplication = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [isEdit, setIsEdit] = useState(false);
   const [price, setPrice] = useState(null);
-  const [discount, setDiscount] = useState();
+  const [status, setStatus] = useState();
+  const [description, setDescription] = useState();
+  const [document, setDocument] = useState();
   const [applicationType, setApplicationType] = useState();
   const [insurance, setInsurance] = useState(true);
   const [insurancePrice, setInsurancePrice] = useState();
+  const [totalAmount, setTotalAmount] = useState();
+  const [gst, setGst] = useState();
   const [from, setFrom] = useState();
   console.log(insurance, "insurance");
   useEffect(() => {
@@ -56,33 +60,39 @@ const ViewApplication = () => {
         console.log(response.data, "response daya");
         if (response) {
           setApplicationType(response?.data?.visaOrder?.applicationType);
-          setDiscount(response?.data?.visaOrder?.discount);
+          // setDiscount(response?.data?.visaOrder?.discount);
 
           setInsurance(response?.data?.visaOrder?.insurance);
+          setInsurancePrice(response?.data?.visaOrder?.insurancePrice);
+          setPrice(response?.data?.visaOrder?.pricePerUser);
+          setTotalAmount(response?.data?.visaOrder?.totalAmount);
+          setGst(response?.data?.visaOrder?.gst);
+          setStatus(response?.data?.visaOrder?.status);
+          setDescription(response?.data?.visaOrder?.description);
           setFrom(response?.data?.visaOrder?.from);
-
-          try {
-            const responseData = await fetchDataFromAPI(
-              "GET",
-              `${BASE_URL}visa-category/${response?.data?.visaOrder?.visaCategory}`
-            );
-            if (responseData) {
-              setInsurancePrice(responseData?.data?.insuranceAmount);
-              if (response?.data?.visaOrder?.applicationType === "normal") {
-                setPrice(responseData?.data?.price);
-              } else if (
-                response?.data?.visaOrder?.applicationType === "express"
-              ) {
-                setPrice(responseData?.data?.expressPrice);
-              } else if (
-                response?.data?.visaOrder?.applicationType === "instant"
-              ) {
-                setPrice(responseData?.data?.instantPrice);
-              }
-            }
-          } catch (error) {
-            console.log(error);
-          }
+          setDocument(response?.data?.visaOrder?.document);
+          // try {
+          //   const responseData = await fetchDataFromAPI(
+          //     "GET",
+          //     `${BASE_URL}visa-category/${response?.data?.visaOrder?.visaCategory}`
+          //   );
+          //   if (responseData) {
+          //     setInsurancePrice(responseData?.data?.insuranceAmount);
+          //     if (response?.data?.visaOrder?.applicationType === "normal") {
+          //       setPrice(responseData?.data?.price);
+          //     } else if (
+          //       response?.data?.visaOrder?.applicationType === "express"
+          //     ) {
+          //       setPrice(responseData?.data?.expressPrice);
+          //     } else if (
+          //       response?.data?.visaOrder?.applicationType === "instant"
+          //     ) {
+          //       setPrice(responseData?.data?.instantPrice);
+          //     }
+          //   }
+          // } catch (error) {
+          //   console.log(error);
+          // }
         }
       } catch (error) {
         console.log(error);
@@ -125,17 +135,20 @@ const ViewApplication = () => {
     navigate(-1);
   };
 
-  const calculateTotalPrice = () => {
-    const basePrice = price * users.length;
-    const discountAmount = discount || 0;
-    // const remainingAmount = basePrice - discountAmount;
-    const gstAmount = basePrice * 0.18;
-    const insuranceAmount = insurance ? insurancePrice : 0; // Assuming a fixed insurance price
-    const totalAmount = basePrice + gstAmount + insuranceAmount;
-    return { totalAmount, discount: discountAmount, gst: gstAmount };
-  };
+  // const calculateTotalPrice = () => {
+  //   const basePrice = price * users.length;
+  //   const discountAmount = discount || 0;
+  //   // const remainingAmount = basePrice - discountAmount;
+  //   const gstAmount = basePrice * 0.18;
+  //   const insuranceAmount = insurance ? insurancePrice : 0; // Assuming a fixed insurance price
+  //   const totalAmount = basePrice + gstAmount + insuranceAmount;
+  //   return { totalAmount, discount: discountAmount, gst: gstAmount };
+  // };
 
-  const totalPrice = calculateTotalPrice();
+  // const totalPrice = calculateTotalPrice();
+  const downloadImageWithFileSaver = (url, filename) => {
+    saveAs(url, filename);
+  };
 
   return (
     <div className="container mx-auto px-4 flex flex-col py-14">
@@ -144,6 +157,52 @@ const ViewApplication = () => {
           View on {new Date(from).toDateString()}
         </button>
         <h1 className="text-lg font-semibold">Review your information</h1>
+      </div>
+      <div className="w-[65%] flex justify-center self-center gap-2 items-center">
+        {status === "sent-back" && (
+          <>
+            <div className="my-5 ">
+              <h2 className="text-lg font-bold mb-5">Rejected</h2>
+              <p className="text-sm text-gray-500 my-2">{description}</p>
+            </div>
+          </>
+        )}
+        {status === "rejected" && (
+          <>
+            <div className="my-5 ">
+              <h2 className="text-lg font-bold mb-5">Rejected</h2>
+              <p className="text-sm text-gray-500 my-2">{description}</p>
+            </div>
+          </>
+        )}
+        {status === "blacklist" && (
+          <>
+            <div className="my-5 ">
+              <h2 className="text-lg font-bold mb-5">Black List</h2>
+              <p className="text-sm text-gray-500 my-2">{description}</p>
+            </div>
+          </>
+        )}
+        {status === "approved" && (
+          <>
+            <div className="mt-2 mb-5">
+              <h2 className="text-3xl text-green-600 px-2 poppins-five  font-bold mb-5">
+                Approved😊
+              </h2>
+              <p
+                onClick={() => downloadImageWithFileSaver(document, "Visa.pdf")}
+                className="text-sm flex bg-blue-500 p-2 w-48 rounded-lg px-5 text-white  gap-4 items-center poppins-four  my-2"
+              >
+                Download Visa
+                <FaDownload
+                  size={20}
+                  className="cursor-pointer "
+                  color="white"
+                />
+              </p>
+            </div>
+          </>
+        )}
       </div>
       <button className="text-xl self-center py-2 w-[65%] mx-3 mb-5 rounded-2xl px-5 flex justify-start gap-2 items-center bg-blue-500 text-white font-semibold">
         <MdOutlinePersonAdd size={25} color="white" />
@@ -201,27 +260,29 @@ const ViewApplication = () => {
         </div> */}
         <div className="w-full flex justify-between mb-2">
           <span>GST (18%):</span>
-          <span>₹{Math.floor(totalPrice.gst)} </span>
+          <span>₹{Math.floor(gst)} </span>
         </div>
-        <div className="w-full flex justify-between mb-2 items-center">
-          <label
-            htmlFor="insurance-checkbox"
-            className="flex items-center gap-2"
-          >
-            {/* <input
+        {insurance && (
+          <div className="w-full flex justify-between mb-2 items-center">
+            <label
+              htmlFor="insurance-checkbox"
+              className="flex items-center gap-2"
+            >
+              {/* <input
               type="checkbox"
               id="insurance-checkbox"
               checked={insurance}
               onChange={(e) => setInsurance(e.target.checked)}
               className="form-checkbox"
             /> */}
-            Insurance
-          </label>
-          <span>{insurance ? `₹${insurancePrice} ` : "0 "}</span>
-        </div>
+              Insurance
+            </label>
+            <span>{insurance ? `₹${insurancePrice} ` : "0 "}</span>
+          </div>
+        )}
         <div className="w-full flex justify-between font-bold">
           <span>Total Amount:</span>
-          <span>₹{Math.floor(totalPrice.totalAmount)} </span>
+          <span>₹{Math.floor(totalAmount)} </span>
         </div>
       </div>
       <div className="flex justify-center my-4">

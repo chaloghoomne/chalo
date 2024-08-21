@@ -4,6 +4,7 @@ import axios from "axios";
 import { MdOutlinePersonAdd } from "react-icons/md";
 import { IoDocumentsSharp } from "react-icons/io5";
 import ModalVisaRequest from "./ModalVisaRequest";
+import { LiaShippingFastSolid } from "react-icons/lia";
 import { coTraveler, PackageId } from "../../redux/actions/package-id-actions";
 import { fetchDataFromAPI } from "../../api-integration/fetchApi";
 import { BASE_URL } from "../../api-integration/urlsVariable";
@@ -24,12 +25,14 @@ const EditVisaDetails = () => {
   const [discount, setDiscount] = useState();
   const [applicationType, setApplicationType] = useState();
   const [insurance, setInsurance] = useState(true);
-  const [insurancePrice, setInsurancePrice] = useState();
+  const [insurancePrice, setInsurancePrice] = useState(null);
   const [from, setFrom] = useState();
   const [entryType, setEntryType] = useState();
   const [validity, setValidity] = useState();
   const [period, setPeriod] = useState();
   const [processingTime, setProcessingTime] = useState();
+
+  console.log(applicationType, "applicationType");
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -144,9 +147,10 @@ const EditVisaDetails = () => {
                           {
                             ...response.data,
                             totalAmount: totalPrice.totalAmount,
-                            discount: totalPrice.discount,
                             gst: totalPrice.gst,
                             insurance: insurance,
+                            insurancePrice,
+                            pricePerUser: price,
                             isSubmitted: true,
                           }
                         );
@@ -270,9 +274,9 @@ const EditVisaDetails = () => {
           <h2 className="text-lg  poppins-five font-semibold">
             {period} Days {entryType}
           </h2>
-          {applicationType === "express" && applicationType === "instant" && (
-            <p className="text-lg md:text-[27px] poppins-five font-bold">
-              ₹{applicationType}
+          {(applicationType === "express" || applicationType === "instant") && (
+            <p className="text-lg md:text-[27px] flex gap-2 text-orange-300 poppins-five font-bold">
+              <LiaShippingFastSolid size={30} /> {applicationType}
             </p>
           )}
         </div>
@@ -291,7 +295,7 @@ const EditVisaDetails = () => {
             </span>
           </p>
           {!(
-            applicationType === "express" && applicationType === "instant"
+            applicationType === "express" || applicationType === "instant"
           ) && (
             <p className="text-gray-500 poppins-five text-md">
               Processing Time:{" "}
@@ -360,22 +364,24 @@ const EditVisaDetails = () => {
           <span>GST (18%):</span>
           <span>₹{Math.floor(totalPrice.gst)} </span>
         </div>
-        <div className="w-full flex justify-between mb-2 items-center">
-          <label
-            htmlFor="insurance-checkbox"
-            className="flex items-center gap-2"
-          >
-            <input
-              type="checkbox"
-              id="insurance-checkbox"
-              checked={insurance}
-              onChange={(e) => setInsurance(e.target.checked)}
-              className="form-checkbox"
-            />
-            Insurance
-          </label>
-          <span>{insurance ? `₹${insurancePrice} ` : "0 "}</span>
-        </div>
+        {insurancePrice && (
+          <div className="w-full flex justify-between mb-2 items-center">
+            <label
+              htmlFor="insurance-checkbox"
+              className="flex items-center text-sm gap-2"
+            >
+              <input
+                type="checkbox"
+                id="insurance-checkbox"
+                checked={insurance}
+                onChange={(e) => setInsurance(e.target.checked)}
+                className="form-checkbox"
+              />
+              Insurance
+            </label>
+            {/* <span>{insurance ? `₹${insurancePrice} ` : "0 "}</span> */}
+          </div>
+        )}
         <div className="w-full flex justify-between font-bold">
           <span>Total Amount:</span>
           <span>₹{Math.floor(totalPrice.totalAmount)} </span>

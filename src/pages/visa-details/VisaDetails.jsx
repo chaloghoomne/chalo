@@ -314,7 +314,7 @@ const VisaDetails = () => {
         <div className=" md:w-[50%] md:px-10 relative w-full ">
           <div
             style={{ backgroundImage: `url(${card})` }}
-            className="w-full bg-cover fixed z-50 mt-7  bottom-16 lg:right-5 right-5  mx-auto bg-transparent max-w-[29rem] md:max-w-[29rem] md:p-10 p-6 "
+            className="w-full bg-cover fixed z-30 mt-7  bottom-16 lg:right-5 right-5  mx-auto bg-transparent max-w-[29rem] md:max-w-[29rem] md:p-10 p-6 "
           >
             <div className="flex justify-between px-5 items-center  mb-4">
               <h2 className="text-2xl poppins-six relative top-5 font-semibold ">
@@ -493,7 +493,11 @@ const VisaDetails = () => {
             {partners?.map((partner) => {
               return (
                 <>
-                  <Link to={`${partner?.link}`}>
+                  <Link
+                    to={`${partner?.link}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     {" "}
                     <div className="min-w-[300px] drop-shadow-lg max-w-[300px] bg-white p-4 rounded-lg border shadow-md">
                       <img
@@ -566,7 +570,7 @@ const VisaDetails = () => {
 
       {/* Calendar Modal */}
       {isCalendarModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+        <div className="fixed inset-0 flex z-50 items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white m-4 mt-16 rounded-lg shadow-lg w-full max-w-md">
             <h2 className="text-xl poppins-four font-bold text-center my-2">
               Select Departure Date

@@ -127,7 +127,18 @@ const VisaTypes = () => {
       >
         Continue
       </button> */}
-      <Packages plans={plans} />
+      {plans?.length < 1 ? (
+        <div className=" mt-8 ">
+          <p className="text-md text-[#F26337] poppins-seven text-center  font-bold mb-2">
+            RECOMMENDATIONS
+          </p>
+          <h2 className="text-orange-500 text-4xl">
+            We will update you soon...
+          </h2>
+        </div>
+      ) : (
+        <Packages plans={plans} />
+      )}
     </div>
   );
 };
