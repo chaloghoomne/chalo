@@ -399,7 +399,7 @@ const VisaDetails = () => {
             <div className="flex justify-center items-center">
               <button
                 onClick={handleStartApplication}
-                className="bg-gradient-to-r relative top-2 from-[#3180CA] to-[#7AC7F9] text-white py-3 px-4 rounded-2xl text-2xl poppins-six w-[80%]"
+                className="bg-gradient-to-r relative cursor-pointer top-2 from-[#3180CA] to-[#7AC7F9] text-white py-3 px-4 rounded-2xl text-2xl poppins-six w-[80%]"
               >
                 Start Application
               </button>

@@ -115,9 +115,34 @@ const Bookings = () => {
                       </p>
                       <p className="text-sm text-gray-600">
                         Booking Status:
-                     {booking?.status === "pending" &&   <span className="text-xs text-orange-400">{booking?.status}</span>}
-                      {booking?.status === "approved" &&   <span className="text-xs text-green-400">{booking?.status}</span>}
-                       {booking?.status === "rejected" &&   <span className="text-xs text-red-400">{booking?.status}</span>}
+                        {booking?.status === "pending" && (
+                          <span className="text-xs text-yellow-400">
+                            {booking?.status}
+                          </span>
+                        )}
+                        {booking?.status === "sent-to-immigration" && (
+                          <span className="text-xs text-orange-400">
+                            in-process
+                          </span>
+                        )}
+                        {booking?.status === "approved" && (
+                          <span className="text-xs text-green-400">
+                            {booking?.status}
+                          </span>
+                        )}
+                        {booking?.status === "rejected" && (
+                          <span className="text-xs text-red-400">
+                            {booking?.status}
+                          </span>
+                        )}
+                        {booking?.status === "blacklist" && (
+                          <span className="text-xs text-gray-700">
+                            {booking?.status}
+                          </span>
+                        )}
+                        {booking?.status === "sent-back" && (
+                          <span className="text-xs text-red-700">rejected</span>
+                        )}
                       </p>
                     </div>
 

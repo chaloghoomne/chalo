@@ -162,24 +162,61 @@ const ViewApplication = () => {
         {status === "sent-back" && (
           <>
             <div className="my-5 ">
-              <h2 className="text-lg font-bold mb-5">Rejected</h2>
-              <p className="text-sm text-gray-500 my-2">{description}</p>
+              <h2 className="text-3xl text-red-500 px-2 poppins-five text-center  font-bold mb-5">
+                Rejected
+              </h2>
+              <p
+                style={{ overflowWrap: "anywhere" }}
+                className="text-sm items-center max-h-24 overflow-auto  poppins-four  my-2"
+              >
+                {description}
+              </p>
+            </div>
+          </>
+        )}
+        {status === "sent-to-immigration" && (
+          <>
+            <div className="my-5 ">
+              <h2 className="text-3xl text-orange-500 px-2 poppins-five text-center  font-bold mb-5">
+                In Processing...
+              </h2>
+              <p
+                style={{ overflowWrap: "anywhere" }}
+                className="text-sm items-center max-h-24 overflow-auto  poppins-four  my-2"
+              >
+                Soon You will able to Download your Visa here😊{" "}
+                {/* {description} */}
+              </p>
             </div>
           </>
         )}
         {status === "rejected" && (
           <>
             <div className="my-5 ">
-              <h2 className="text-lg font-bold mb-5">Rejected</h2>
-              <p className="text-sm text-gray-500 my-2">{description}</p>
+              <h2 className="text-3xl text-red-500 px-2 poppins-five text-center  font-bold mb-5">
+                Rejected
+              </h2>
+              <p
+                style={{ overflowWrap: "anywhere" }}
+                className="text-sm items-center max-h-24 overflow-auto  poppins-four  my-2"
+              >
+                {description}
+              </p>
             </div>
           </>
         )}
         {status === "blacklist" && (
           <>
             <div className="my-5 ">
-              <h2 className="text-lg font-bold mb-5">Black List</h2>
-              <p className="text-sm text-gray-500 my-2">{description}</p>
+              <h2 className="text-3xl text-red-500 px-2 poppins-five text-center  font-bold mb-5">
+                Black List
+              </h2>
+              <p
+                style={{ overflowWrap: "anywhere" }}
+                className="text-sm items-center max-h-24 overflow-auto  poppins-four  my-2"
+              >
+                {description}
+              </p>
             </div>
           </>
         )}

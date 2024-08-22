@@ -206,6 +206,7 @@ const PersonDetails = ({ save }) => {
           }
         } catch (error) {
           console.log(error);
+          toast.error("Network error! Try again Later");
         }
       } else {
         try {
@@ -234,6 +235,7 @@ const PersonDetails = ({ save }) => {
           }
         } catch (error) {
           console.log(error);
+          toast.error("Network error! Try again Later");
         }
         window.location.href = "/upload-image";
         // navigate("/upload-image");
