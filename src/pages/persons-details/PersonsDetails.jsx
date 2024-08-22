@@ -13,7 +13,7 @@ import { useNavigate } from "react-router-dom";
 import { coTraveler, PackageId } from "../../redux/actions/package-id-actions";
 import { toast } from "react-toastify";
 
-const PersonDetails = () => {
+const PersonDetails = ({ save }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const countryId = useSelector((state) => state.CountryIdReducer.countryId);
@@ -96,7 +96,10 @@ const PersonDetails = () => {
   useEffect(() => {
     const fetchProfileImage = async () => {
       try {
-        const response = await fetchDataFromAPI("GET", `${BASE_URL}notes`);
+        const response = await fetchDataFromAPI(
+          "GET",
+          `${BASE_URL}notes-by-package/${countryId}`
+        );
         console.log(response);
         if (response) {
           const filtered = response?.data?.filter(
@@ -120,7 +123,7 @@ const PersonDetails = () => {
       console.log("enter");
       calculatePassportValidity(formData.dob, formData.passportIssueDate);
     }
-  }, [formData]);
+  }, [formData.dob, formData.passportIssueDate]);
 
   const calculatePassportValidity = (dob, issueDate) => {
     const dobDate = new Date(dob);
@@ -186,53 +189,59 @@ const PersonDetails = () => {
       return;
     }
 
-    console.log("hhh");
-    if (packageData?.orderDetails === travlersCount) {
-      try {
-        const response = await fetchDataFromAPI(
-          "PUT",
-          `${BASE_URL}edit-order-details/${cotravlerId}`,
-          { ...formData, detailsFulfilled: true }
-        );
-        console.log(response);
-        if (response) {
+    const kuchaayega = save();
+    console.log(kuchaayega, "kuchaayega");
+    if (kuchaayega) {
+      if (packageData?.orderDetails === travlersCount) {
+        try {
+          const response = await fetchDataFromAPI(
+            "PUT",
+            `${BASE_URL}edit-order-details/${cotravlerId}`,
+            { ...formData, detailsFulfilled: true }
+          );
           console.log(response);
-          navigate("/edit-visa-request");
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    } else {
-      try {
-        const response = await fetchDataFromAPI(
-          "PUT",
-          `${BASE_URL}edit-order-details/${cotravlerId}`,
-          { ...formData, detailsFulfilled: true }
-        );
-        console.log(response);
-        if (response) {
-          try {
-            const response = await fetchDataFromAPI(
-              "POST",
-              `${BASE_URL}add-order-details`,
-              { visaOrder: packageId }
-            );
-            console.log(response.data._id, "responsecotravler");
-            if (response) {
-              console.log();
-              dispatch(coTraveler(response?.data?._id));
-            }
-          } catch (error) {
-            console.log(error);
+          if (response) {
+            console.log(response);
+            navigate("/edit-visa-request");
           }
-          console.log(response);
+        } catch (error) {
+          console.log(error);
+          toast.error("Network error! Try again Later");
         }
-      } catch (error) {
-        console.log(error);
+      } else {
+        try {
+          const response = await fetchDataFromAPI(
+            "PUT",
+            `${BASE_URL}edit-order-details/${cotravlerId}`,
+            { ...formData, detailsFulfilled: true }
+          );
+          console.log(response);
+          if (response) {
+            try {
+              const response = await fetchDataFromAPI(
+                "POST",
+                `${BASE_URL}add-order-details`,
+                { visaOrder: packageId }
+              );
+              console.log(response.data._id, "responsecotravler");
+              if (response) {
+                console.log();
+                dispatch(coTraveler(response?.data?._id));
+              }
+            } catch (error) {
+              console.log(error);
+            }
+            console.log(response);
+          }
+        } catch (error) {
+          console.log(error);
+          toast.error("Network error! Try again Later");
+        }
+        window.location.href = "/upload-image";
+        // navigate("/upload-image");
       }
-      window.location.href = "/upload-image";
-      // navigate("/upload-image");
     }
+    console.log("hhh");
   };
 
   return (
@@ -249,11 +258,11 @@ const PersonDetails = () => {
 
           <div className=" p-4 flex flex-col rounded-lg mb-4">
             <button className="text-xl py-2 rounded-2xl px-5 flex justify-start gap-2 items-center bg-blue-500 text-white font-semibold">
-              <IoMdCalendar size={25} color="white" /> VISA Validity
+              <IoMdCalendar size={25} color="white" /> Traveller Information
             </button>
             <div className="flex relative justify-between mt-2">
               <div className="flex flex-col px-5 gap-2">
-                <span>From</span>
+                <span>Travel Date</span>
                 <input
                   type="date"
                   className="bg-white text-black rounded-md "
@@ -267,7 +276,7 @@ const PersonDetails = () => {
                 alt=""
               />
               <div className="flex flex-col gap-2">
-                <span>Until</span>
+                <span>Return Date</span>
                 <input
                   type="date"
                   className="bg-white text-black rounded-md "
@@ -477,11 +486,13 @@ const PersonDetails = () => {
       </div>
 
       <div className="flex w-full mt-10 flex-col md:w-[30%] bg-white sm:bg-gray-200 h-full justify-start  md:flex-col">
-        <div className="self-start p-4 rounded-lg mb-4 md:mb-0">
+        <div className="self-start p-4 rounded-lg gap-5 mb-4 md:mb-0">
           {importantPoints?.map((item) => {
             return (
               <>
-                <div className="bg-white h-auto p-4 mb-4 rounded-xl">
+
+                <div className="bg-white h-auto mb-5 p-4 rounded-xl">
+
                   <h2 className="text-xl flex gap-3 font-semibold mb-4">
                     <img src={item?.image} className="w-10 h-10" alt="" />
                     {item?.heading}

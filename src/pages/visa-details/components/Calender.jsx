@@ -5,22 +5,25 @@ import { useDispatch } from "react-redux";
 import { calenderDate } from "../../../redux/actions/calender-date-action";
 
 const Calendar = () => {
-  const [selectedDate, setSelectedDate] = useState("");
-  const [isFixed, setIsFixed] = useState(true);
+  const [selectedDate, setSelectedDate] = useState(null);
   const [startDate, setStartDate] = useState("");
   const datePickerRef = useRef(null);
   const dispatch = useDispatch();
 
-  const handleDateClick = (date) => {
-    console.log(date, "date");
+  const handleDateClick = (day) => {
+    const date = new Date(
+      new Date().getFullYear(),
+      new Date().getMonth(),
+      day + 1
+    );
     setSelectedDate(date);
-    dispatch(calenderDate(date));
+    dispatch(calenderDate(date.toISOString().split("T")[0]));
   };
 
   const handlefixed = (value) => {
-    console.log("hit ");
     setStartDate(value);
-    dispatch(calenderDate(value));
+    setSelectedDate(value);
+    dispatch(calenderDate(value.toISOString().split("T")[0]));
   };
 
   const renderCalendar = () => {
@@ -34,48 +37,36 @@ const Calendar = () => {
 
     return days.map((week, weekIndex) => (
       <div key={weekIndex} className="flex">
-        {week.map((day, dayIndex) => (
-          <button
-            key={dayIndex}
-            className="w-10 h-10 text-center text-sm hover:bg-blue-100 focus:outline-none"
-            onClick={() =>
-              handleDateClick(
-                `${new Date().getFullYear()}-${(new Date().getMonth() + 1)
-                  .toString()
-                  .padStart(2, "0")}-${day.toString().padStart(2, "0")}`
-              )
-            }
-          >
-            {day}
-          </button>
-        ))}
+        {week.map((day, dayIndex) => {
+          const isSelected =
+            selectedDate &&
+            selectedDate.getDate() === day + 1 &&
+            selectedDate.getMonth() === new Date().getMonth() &&
+            selectedDate.getFullYear() === new Date().getFullYear();
+
+          return (
+            <button
+              key={dayIndex}
+              className={`w-10 h-10 text-center text-sm 
+              ${isSelected ? "bg-blue-500 text-white" : ""}
+               focus:outline-none`}
+              onClick={() => handleDateClick(day)}
+            >
+              {day}
+            </button>
+          );
+        })}
       </div>
     ));
   };
 
   return (
     <div className="w-full bg-white  rounded-lg shadow-lg p-4">
-      {/* <h2 className="text-lg font-semibold mb-4">Select your departure date</h2>
-      <div className="flex mb-4">
-        <button
-          className={`flex-1 py-2 text-center ${isFixed ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
-          onClick={() => setIsFixed(true)}
-        >
-          Fixed Dates
-        </button>
-        <button
-          className={`flex-1 py-2 text-center ${!isFixed ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
-          onClick={() => setIsFixed(false)}
-        >
-          Flexible
-        </button>
-      </div> */}
-
       {selectedDate ? (
         <input
           type="text"
-          value={selectedDate}
-          onChange={(e) => handleDateClick(e.target.value)}
+          value={selectedDate?.toISOString().split("T")[0]}
+          onChange={(e) => handleDateClick(new Date(e.target.value))}
           placeholder="Selected Date"
           className="w-full p-2 border rounded mb-4"
         />
@@ -90,21 +81,7 @@ const Calendar = () => {
         </div>
       )}
 
-      <div className="mb-4">
-        {/* <div className="flex font-semibold mb-2">
-          <div className="w-10 text-center">Mon</div>
-          <div className="w-10 text-center">Tue</div>
-          <div className="w-10 text-center">Wed</div>
-          <div className="w-10 text-center">Thu</div>
-          <div className="w-10 text-center">Fri</div>
-          <div className="w-10 text-center">Sat</div>
-          <div className="w-10 text-center">Sun</div>
-        </div> */}
-        {renderCalendar()}
-      </div>
-      {/* <button className="w-full bg-blue-500 text-white py-2 rounded">
-        Proceed to Application
-      </button> */}
+      <div className="mb-4">{renderCalendar()}</div>
     </div>
   );
 };

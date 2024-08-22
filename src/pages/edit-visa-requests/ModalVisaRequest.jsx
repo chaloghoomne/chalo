@@ -8,13 +8,33 @@ import { toast } from "react-toastify";
 
 const ModalVisaRequest = ({ user, isEdit, onClose }) => {
   const [formData, setFormData] = useState(user);
-  const [images, setImages] = useState({
-    selfie: user.selfie,
-    passportFront: user.passportFront,
-    passportBack: user.passportBack,
-    additional: user.additional,
-  });
+  // const [documents, setDocuments] = useState(user.documents);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+
+  const handleTourTypeImageChange = async (index, e) => {
+    const data = new FormData();
+    data.append("documents", e.target.files[0]);
+    data.append("index", index);
+
+    try {
+      const response = await fetchDataFromAPI(
+        "PUT",
+        `${BASE_URL}edit-document/${user?._id}`,
+        data
+      );
+      if (response) {
+        const updatedTourTypes = [...formData?.documents];
+        updatedTourTypes[index] = {
+          ...updatedTourTypes[index],
+          image: response.data,
+        };
+        setFormData({ ...formData, documents: updatedTourTypes });
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Error In Updating ");
+    }
+  };
 
   const handleFields = (e) => {
     const { name, value } = e.target;
@@ -24,13 +44,13 @@ const ModalVisaRequest = ({ user, isEdit, onClose }) => {
     }));
   };
 
-  const handleImageChange = (e) => {
-    const { name, files } = e.target;
-    setImages((prevImages) => ({
-      ...prevImages,
-      [name]: files[0],
-    }));
-  };
+  // const handleImageChange = (e) => {
+  //   const { name, files } = e.target;
+  //   setImages((prevImages) => ({
+  //     ...prevImages,
+  //     [name]: files[0],
+  //   }));
+  // };
 
   useEffect(() => {
     console.log("try enter");
@@ -115,10 +135,17 @@ const ModalVisaRequest = ({ user, isEdit, onClose }) => {
     newformData.append(`dob`, formData.dob);
     newformData.append(`passportIssueDate`, formData.passportIssueDate);
     newformData.append(`passportValidTill`, formData.passportValidTill);
-    newformData.append(`selfie`, images.selfie);
-    newformData.append(`passportFront`, images.passportFront);
-    newformData.append(`passportBack`, images.passportBack);
-    newformData.append(`additional`, images.additional);
+    formData?.documents?.forEach((item, index) => {
+      newformData.append(`documents[${index}][name]`, item.name);
+      newformData.append(`documents[${index}][image]`, item.image);
+    });
+    // formData?.documents?.forEach((item) => {
+    //   if (typeof item.image === "string") {
+    //     console.log("");
+    //   } else {
+    //     newformData.append("documents", item.image);
+    //   }
+    // });
 
     try {
       const response = await fetchDataFromAPI(
@@ -295,39 +322,42 @@ const ModalVisaRequest = ({ user, isEdit, onClose }) => {
             <IoDocumentsSharp size={25} color="white" />
             Documents Submitted
           </button>
-          {images.selfie &&
-            images.passportFront &&
-            images.passportBack &&
-            images.additional && (
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
-                {["selfie", "passportFront", "passportBack", "additional"].map(
-                  (key) => (
-                    <div
-                      key={key}
-                      className="border-2 border-dashed border-orange-500 rounded-lg p-4"
-                    >
-                      <img
-                        src={
-                          typeof images[key] === "string"
-                            ? images[key]
-                            : URL.createObjectURL(images[key])
-                        }
-                        alt={key}
-                        className="w-20 h-20 object-cover rounded-lg"
-                      />
-                      {isEdit && (
-                        <input
-                          type="file"
-                          name={key}
-                          onChange={handleImageChange}
-                          className="w-full mt-2"
-                        />
-                      )}
-                    </div>
-                  )
-                )}
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+            {formData.documents?.map((doc, index) => (
+              <div
+                key={doc?.name}
+                className="border-2 border-dashed border-orange-500 rounded-lg p-4"
+              >
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    {doc?.name}
+                  </label>
+
+                  {doc?.image && (
+                    <img
+                      src={
+                        typeof doc?.image === "string"
+                          ? doc?.image
+                          : URL.createObjectURL(doc?.image)
+                      }
+                      alt={doc?.name}
+                      className="mt-2 w-20 h-20 object-cover"
+                    />
+                  )}
+                  {isEdit && (
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => handleTourTypeImageChange(index, e)}
+                      className="mt-1 block w-full"
+                    />
+                  )}
+                </div>
               </div>
-            )}
+            ))}
+          </div>
+
           {isEdit && (
             <div className="flex justify-end">
               <button

@@ -31,15 +31,22 @@ const MonthCalender = ({ onClose }) => {
     dispatch(calenderDate(`${month} ${year}`));
   };
 
+  console.log(selectedDate, "sdfghjk", ` 2024 Sept `);
+
   const renderMonthCards = () => {
     return (
       <div className="grid grid-cols-3 gap-4">
         {months.map((month, index) => (
           <button
             key={index}
-            className="p-4 border rounded-lg shadow-md flex flex-col items-center"
+            className={`p-4 border ${
+              selectedDate === `${month.year} ${month.name}`
+                ? "bg-blue-400"
+                : ""
+            } rounded-lg shadow-md flex flex-col items-center`}
             onClick={() =>
-              handleMonthClick(`${new Date().getFullYear()}`, month.name)
+              // handleMonthClick(`${new Date().getFullYear()}`, month.name)
+              handleMonthClick(`${month.year}`, month.name)
             }
           >
             <svg

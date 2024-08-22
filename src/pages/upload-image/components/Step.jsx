@@ -6,13 +6,16 @@ import StepLabel from "@mui/material/StepLabel";
 
 const steps = ["", "", "", ""];
 
-export default function HorizontalLinearAlternativeLabelStepper({ value }) {
+export default function HorizontalLinearAlternativeLabelStepper({
+  documents,
+  value,
+}) {
   return (
     <Box sx={{ width: "100%" }}>
       <Stepper activeStep={value} alternativeLabel>
-        {steps.map((label) => (
-          <Step key={label}>
-            <StepLabel>{label}</StepLabel>
+        {documents?.map((label) => (
+          <Step key={label?.name}>
+            <StepLabel>{label?.name}</StepLabel>
           </Step>
         ))}
       </Stepper>
