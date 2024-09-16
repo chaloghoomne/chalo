@@ -234,3 +234,11 @@ button:focus-visible {
     transform: rotate(360deg);
   }
 }
+
+.modal-enter {
+  opacity: 0;
+}
+.modal-enter-active {
+  opacity: 1;
+  transition: opacity 300ms;
+}

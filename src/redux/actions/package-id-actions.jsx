@@ -39,3 +39,10 @@ export const getCountryId = (value) => {
     payload: value,
   };
 };
+
+export const setVisaId = (value) => {
+  return {
+    type: "VISA_ID",
+    payload: value,
+  };
+};

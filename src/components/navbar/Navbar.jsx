@@ -164,7 +164,7 @@ const Navbar = () => {
                     formData?.image ||
                     "https://cdn.pixabay.com/photo/2015/03/04/22/35/avatar-659652_640.png"
                   }
-                  className="w-10 h-10 object-contain bg-white rounded-lg"
+                  className="w-12 h-12 object-contain  rounded-2xl"
                 />
                 <div className="flex flex-col justify-between">
                   <p className="text-xs">Welcome Back</p>

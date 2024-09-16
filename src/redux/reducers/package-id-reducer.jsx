@@ -78,3 +78,16 @@ export const CountryIdReducer = (state = { countryId: "" }, actions) => {
       return state;
   }
 };
+
+export const VisaIdReducer = (state = { visaId: "" }, actions) => {
+  const { type, payload } = actions;
+  switch (type) {
+    case "VISA_ID":
+      return {
+        visaId: payload,
+      };
+
+    default:
+      return state;
+  }
+};

@@ -79,7 +79,7 @@ const Packages = ({ plans }) => {
             )}
             <div className="flex  justify-between w-full px-4">
               <h2 className="text-lg md:text-[27px] poppins-five font-semibold">
-                {option?.period} Days {option?.entryType}
+                {option?.visaTypeHeading}
               </h2>
               <p className="text-lg md:text-[27px] poppins-five font-bold">
                 ₹{option?.price}

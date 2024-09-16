@@ -8,6 +8,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { getVisaType } from "../../redux/actions/package-id-actions";
 import { BsEmojiSmile } from "react-icons/bs";
 import { FaCircleDot } from "react-icons/fa6";
+import {
+  calenderDate,
+  returnCalenderDate,
+} from "../../redux/actions/calender-date-action";
 
 const VisaTypes = () => {
   const [selectedVisa, setSelectedVisa] = useState("Tourist");
@@ -42,6 +46,11 @@ const VisaTypes = () => {
     };
     fetchData();
   }, [id]);
+
+  useEffect(() => {
+    dispatch(returnCalenderDate(null));
+    dispatch(calenderDate(null));
+  }, []);
 
   useEffect(() => {
     const fetchProfileImage = async () => {

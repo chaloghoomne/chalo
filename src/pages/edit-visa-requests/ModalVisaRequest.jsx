@@ -54,6 +54,12 @@ const ModalVisaRequest = ({ user, isEdit, onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (formData?.documents?.length < 4) {
+      toast.error(`Documents images are required`);
+      return;
+    }
+
     const newformData = new FormData();
     newformData.append(`firstName`, formData.firstName);
     newformData.append(`lastName`, formData.lastName);
@@ -237,7 +243,6 @@ const ModalVisaRequest = ({ user, isEdit, onClose }) => {
                 Passport Valid Till
               </label>
               <input
-                type="date"
                 name="passportValidTill"
                 required
                 value={formData.passportValidTill?.slice(0, 10)}

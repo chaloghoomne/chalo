@@ -3,7 +3,10 @@ import { persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage"; // defaults to localStorage for web
 
 import { LoginReducer } from "./reducers/login-reducer";
-import { CalenderReducer } from "./reducers/calender-date-reducer";
+import {
+  CalenderReducer,
+  ReturnCalenderReducer,
+} from "./reducers/calender-date-reducer";
 import {
   CotravelerIdReducer,
   CountryIdReducer,
@@ -11,6 +14,7 @@ import {
   PackageIdReducer,
   SearchPackageReducer,
   SelectedCountryReducer,
+  VisaIdReducer,
 } from "./reducers/package-id-reducer";
 import { PersonalDetailsReducer } from "./reducers/personal-details-reducer";
 import { NumberOfTravelerReducer } from "./reducers/numberofTraveler-reducer";
@@ -25,6 +29,7 @@ const persistConfig = {
     "SelectedCountryReducer",
     "NumberOfTravelerReducer",
     "CountryIdReducer",
+    "VisaIdReducer",
   ], // only ImageCollectReducer will be persisted
 };
 
@@ -39,6 +44,8 @@ const rootReducer = combineReducers({
   SearchPackageReducer,
   SelectedCountryReducer,
   CountryIdReducer,
+  ReturnCalenderReducer,
+  VisaIdReducer,
 });
 
 export const persistedReducer = persistReducer(persistConfig, rootReducer);

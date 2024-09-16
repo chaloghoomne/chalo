@@ -364,7 +364,7 @@ const EditVisaDetails = () => {
           <span>GST (18%):</span>
           <span>₹{Math.floor(totalPrice.gst)} </span>
         </div>
-        {insurancePrice && (
+        {insurancePrice > 0 && (
           <div className="w-full flex justify-between mb-2 items-center">
             <label
               htmlFor="insurance-checkbox"

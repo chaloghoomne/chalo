@@ -13,18 +13,31 @@ import { useDispatch, useSelector } from "react-redux";
 import { CiLocationOn } from "react-icons/ci";
 import { MdChevronRight } from "react-icons/md";
 import { numberofCoTravelers } from "./../../redux/actions/numberoftravelers-actions";
-import { coTraveler, PackageId } from "../../redux/actions/package-id-actions";
+import {
+  coTraveler,
+  PackageId,
+  setVisaId,
+} from "../../redux/actions/package-id-actions";
 import DescriptionModal from "../home/components/DescriptionModal";
 import { GoDotFill } from "react-icons/go";
 import { CiWallet } from "react-icons/ci";
+import ReturnCalender from "./components/ReturnCalendar";
+import FAQs from "./components/Faqs";
 
 const VisaDetails = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
+  const [isReturnModalOpen, setIsReturnModalOpen] = useState(false);
+  const [selectedType, setSelectedType] = useState("");
   const selectedCountry = useSelector(
     (state) => state.SelectedCountryReducer.selectedCountry
   );
+  const returnDate = useSelector(
+    (state) => state.ReturnCalenderReducer.returnDate
+  );
+
   const fromDate = useSelector((state) => state.CalenderReducer.visaDate);
+  const toDate = useSelector((state) => state.ReturnCalenderReducer.returnDate);
   const visaType = useSelector((state) => state.GetVisaTypeReducer.visaType);
   console.log(fromDate, "zxcvbndfgh");
   const datePickerRef = useRef(null);
@@ -36,6 +49,29 @@ const VisaDetails = () => {
   const [important, setImportantPoints] = useState();
   const [partners, setPartners] = useState([]);
   const [data, setData] = useState({});
+  const mainImageRef = useRef(null);
+  const applyNowRef = useRef(null);
+  const faqRef = useRef(null);
+  const [isCardFixed, setIsCardFixed] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const mainImageTop = mainImageRef.current.getBoundingClientRect().top;
+      const applyNowTop = applyNowRef.current.getBoundingClientRect().top;
+      const faqTop = faqRef.current.getBoundingClientRect().top;
+
+      if (mainImageTop <= 0 && applyNowTop > 0) {
+        setIsCardFixed(true);
+      } else if (faqTop <= 0) {
+        setIsCardFixed(false);
+      } else {
+        setIsCardFixed(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
   console.log(important, "important data");
   const navigate = useNavigate();
 
@@ -53,6 +89,11 @@ const VisaDetails = () => {
     };
     fetchProfileImage();
   }, []);
+
+  const handleApplicationType = (type, date) => {
+    setSelectedType(type);
+    setIsReturnModalOpen(true);
+  };
 
   useEffect(() => {
     const fetchProfileImage = async () => {
@@ -88,6 +129,7 @@ const VisaDetails = () => {
       } catch (error) {
         console.log(error);
       }
+      dispatch(setVisaId(id));
     };
     fetchProfileImage();
   }, [id]);
@@ -115,10 +157,42 @@ const VisaDetails = () => {
     }
   };
 
-  const handleApplicationType = async (type, date) => {
-    console.log(date, "date");
-    const newDate = new Date(date).toISOString();
+  // const handleApplicationType = async (type, date) => {
+  //   console.log(date, "date");
+  //   const newDate = new Date(date).toISOString();
 
+  //   try {
+  //     const response = await fetchDataFromAPI(
+  //       "POST",
+  //       `${BASE_URL}create-visa-order`,
+  //       {
+  //         visaCategory: id,
+  //         travellersCount: numberOfTravelers,
+  //         from: newDate,
+  //         to: toDate,
+  //         applicationType: type,
+  //       }
+  //     );
+  //     console.log(response?.data?._id, "response Id ");
+  //     if (response) {
+  //       dispatch(PackageId(response?.data?.visaOrder?._id));
+  //       dispatch(numberofCoTravelers(numberOfTravelers));
+  //       dispatch(coTraveler(response?.data?.orderDetails?._id));
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  //   navigate("/upload-image");
+  // };
+
+  const proceedFunc = async () => {
+    if (!returnDate) {
+      // Show an error if return date is not selected
+      alert("Please select a return date");
+      return;
+    }
+
+    const newDate = new Date(returnDate).toISOString();
     try {
       const response = await fetchDataFromAPI(
         "POST",
@@ -126,20 +200,22 @@ const VisaDetails = () => {
         {
           visaCategory: id,
           travellersCount: numberOfTravelers,
-          from: newDate,
-          applicationType: type,
+          from: new Date(data[`${selectedType}Date`]).toISOString(),
+          to: newDate,
+          applicationType: selectedType,
         }
       );
-      console.log(response?.data?._id, "response Id ");
+
       if (response) {
         dispatch(PackageId(response?.data?.visaOrder?._id));
         dispatch(numberofCoTravelers(numberOfTravelers));
         dispatch(coTraveler(response?.data?.orderDetails?._id));
       }
+      setIsModalOpen(false);
+      navigate("/upload-image");
     } catch (error) {
       console.log(error);
     }
-    navigate("/upload-image");
   };
 
   const proceedApplication = async () => {
@@ -152,6 +228,7 @@ const VisaDetails = () => {
           visaCategory: id,
           travellersCount: numberOfTravelers,
           from: fromDate,
+          to: toDate,
           applicationType: "normal",
         }
       );
@@ -225,7 +302,10 @@ const VisaDetails = () => {
   return (
     <div className="w-full h-full mx-auto py-10">
       {/* Main Image */}
-      <div className="w-full relative mt-12 rounded-xl bg-cover flex h-[500px] justify-center items-center mb-10">
+      <div
+        ref={mainImageRef}
+        className="w-full relative mt-12 rounded-xl bg-cover flex h-[500px] justify-center items-center mb-10"
+      >
         <div className="px-16 w-full relative ">
           <img
             src={data?.image}
@@ -240,8 +320,9 @@ const VisaDetails = () => {
       </div>
 
       {/* Apply Section */}
+
       <div className="w-full flex md:flex-row flex-col justify-between  md:px-10 px-5 ">
-        <div className="mb-6 md:w-[50%] w-full">
+        <div ref={applyNowRef} className="mb-6 md:w-[50%] w-full">
           <h2 className="text-3xl font-bold mt-3 mb-2">
             Apply now for guaranteed visa on{" "}
           </h2>
@@ -416,46 +497,54 @@ const VisaDetails = () => {
           <hr className="border-gray-400 h-[2px] bg-gray-400  w-[28%]" />
         </div>
         <div className="flex flex-wrap   gap-4">
-          <button
-            onClick={() => handleApplicationType("instant", data?.instantDate)}
-            className="bg-gradient-to-r from-[#3180CA] to-[#7AC7F9] md:min-w-[60%] text-white p-4  relative md:px-8 md:pb-6 rounded-2xl shadow-md shadow-gray-400 flex justify-between items-center"
-          >
-            <div className="flex flex-col self-start">
-              <span className="text-2xl poppins-five text-start">
-                {data?.instantHeading}{" "}
-              </span>
-              <span className="text-2xl poppins-five text-start">
-                Visa on {data?.instantDate}{" "}
-              </span>
-            </div>
-            <span className="bg-white relative text-start md:pl-4 md:min-w-56 text-sm md:relative md:top-2  text-gray-500 p-2  rounded-lg">
-              Chalo Ghoomne Instant
-              <p className="text-start ">₹{data?.instantPrice}</p>
-              <div className="absolute hidden md:block top-5 right-2">
-                <MdChevronRight size={20} color="gray" />
+          {data?.instantHeading && data?.instantPrice && (
+            <button
+              onClick={() =>
+                handleApplicationType("instant", data?.instantDate)
+              }
+              className="bg-gradient-to-r from-[#3180CA] to-[#7AC7F9] md:min-w-[60%] text-white p-4  relative md:px-8 md:pb-6 rounded-2xl shadow-md shadow-gray-400 flex justify-between items-center"
+            >
+              <div className="flex flex-col self-start">
+                <span className="text-2xl poppins-five text-start">
+                  {data?.instantHeading}{" "}
+                </span>
+                <span className="text-2xl poppins-five text-start">
+                  Visa on {data?.instantDate}{" "}
+                </span>
               </div>
-            </span>
-          </button>
-          <button
-            onClick={() => handleApplicationType("express", data?.expressDate)}
-            className="bg-gradient-to-r from-[#3180CA] to-[#7AC7F9] md:min-w-[60%] text-white p-4 md:px-8 md:pb-6 rounded-2xl shadow-md shadow-gray-400 flex justify-between items-center"
-          >
-            <div className="flex flex-col">
-              <span className="text-2xl poppins-five text-start">
-                {data?.expressHeading}{" "}
+              <span className="bg-white relative text-start md:pl-4 md:min-w-56 text-sm md:relative md:top-2  text-gray-500 p-2  rounded-lg">
+                Chalo Ghoomne Instant
+                <p className="text-start ">₹{data?.instantPrice}</p>
+                <div className="absolute hidden md:block top-5 right-2">
+                  <MdChevronRight size={20} color="gray" />
+                </div>
               </span>
-              <span className="text-2xl poppins-five text-start">
-                Visa on {data?.expressDate}{" "}
-              </span>
-            </div>
-            <span className="bg-white relative text-start md:pl-4 md:min-w-56 text-sm md:relative md:top-2  text-gray-500 p-2  rounded-lg">
-              Chalo Ghoomne Express
-              <p className="text-start ">₹{data?.expressPrice}</p>
-              <div className="absolute hidden md:block top-5 right-2">
-                <MdChevronRight size={20} color="gray" />
+            </button>
+          )}
+          {data?.expressPrice && data?.expressHeading && (
+            <button
+              onClick={() =>
+                handleApplicationType("express", data?.expressDate)
+              }
+              className="bg-gradient-to-r from-[#3180CA] to-[#7AC7F9] md:min-w-[60%] text-white p-4 md:px-8 md:pb-6 rounded-2xl shadow-md shadow-gray-400 flex justify-between items-center"
+            >
+              <div className="flex flex-col">
+                <span className="text-2xl poppins-five text-start">
+                  {data?.expressHeading}{" "}
+                </span>
+                <span className="text-2xl poppins-five text-start">
+                  Visa on {data?.expressDate}{" "}
+                </span>
               </div>
-            </span>
-          </button>
+              <span className="bg-white relative text-start md:pl-4 md:min-w-56 text-sm md:relative md:top-2  text-gray-500 p-2  rounded-lg">
+                Chalo Ghoomne Express
+                <p className="text-start ">₹{data?.expressPrice}</p>
+                <div className="absolute hidden md:block top-5 right-2">
+                  <MdChevronRight size={20} color="gray" />
+                </div>
+              </span>
+            </button>
+          )}
         </div>
       </div>
 
@@ -484,7 +573,10 @@ const VisaDetails = () => {
           </div>
         </div>
       </div>
-
+      <FAQs ref={faqRef} data={data?.faq} />
+      <div className="text-md poppins-four py-5 text-black px-10">
+        {data?.longDescription}
+      </div>
       {/* Partners Section */}
       <div>
         <h2 className="text-2xl font-bold px-5  mb-4">Partners we work with</h2>
@@ -570,8 +662,8 @@ const VisaDetails = () => {
 
       {/* Calendar Modal */}
       {isCalendarModalOpen && (
-        <div className="fixed inset-0 flex z-50 items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white m-4 mt-16 rounded-lg shadow-lg w-full max-w-md">
+        <div className="fixed inset-0 flex z-50 items-start justify-center bg-black bg-opacity-50">
+          <div className="bg-white m-4 mt-5 max-h-[400px] rounded-lg shadow-lg w-full max-w-md">
             <h2 className="text-xl poppins-four font-bold text-center my-2">
               Select Departure Date
             </h2>
@@ -626,6 +718,25 @@ const VisaDetails = () => {
               onClick={handleFlexibleChoice}
             >
               Continue
+            </button>
+          </div>
+        </div>
+      )}
+
+      {isReturnModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-30 flex justify-center items-center">
+          <div className="bg-white cursor-pointer relative p-6 rounded-lg">
+            <div onClick={() => setIsReturnModalOpen(false)} className=" py-2">
+              ❌
+            </div>
+            <h2 className="text-xl mb-4">Select Return Date</h2>
+
+            <ReturnCalender />
+            <button
+              onClick={proceedFunc}
+              className="w-full bg-blue-500 text-white py-2 rounded mt-4"
+            >
+              Proceed to Application
             </button>
           </div>
         </div>

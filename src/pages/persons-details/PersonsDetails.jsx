@@ -246,8 +246,8 @@ const PersonDetails = ({ save }) => {
 
   return (
     <div className="flex flex-col lg:flex-row px-3 justify-center items-center py-10 min-h-screen sm:bg-gray-200 bg-white ">
-      <div className=" lg:w-[70%] w-full flex h-full mx-5 border-gray-300 border py-2 bg-white justify-center items-center ">
-        <div className="bg-white p-8 px-10  rounded-lg  w-full max-w-2xl">
+      <div className=" lg:w-full w-full flex h-full mx-5 border-gray-300 border py-2 bg-white justify-center items-center ">
+        <div className="bg-white p-8 px-10  rounded-lg  w-full ">
           {/* Visa Validity */}
           <div className="flex flex-col justify-between items-center mb-5">
             <button className="bg-orange-500 text-xl font-bold text-white py-3 mt-5 px-10 rounded-[25px]">
@@ -272,7 +272,7 @@ const PersonDetails = ({ save }) => {
               </div>
               <img
                 src="https://i.pinimg.com/originals/8d/d0/25/8dd0251b583a044fa7f5c40c9c978d06.png"
-                className="w-44 hidden lg:block absolute right-48 top-[-48px] "
+                className="w-44 hidden lg:block absolute left-[450px] top-[-48px] "
                 alt=""
               />
               <div className="flex flex-col gap-2">
@@ -485,7 +485,7 @@ const PersonDetails = ({ save }) => {
         </div>
       </div>
 
-      <div className="flex w-full mt-10 flex-col md:w-[30%] bg-white sm:bg-gray-200 h-full justify-start  md:flex-col">
+      {/* <div className="flex w-full mt-10 flex-col md:w-[30%] bg-white sm:bg-gray-200 h-full justify-start  md:flex-col">
         <div className="self-start p-4 rounded-lg gap-5 mb-4 md:mb-0">
           {importantPoints?.map((item) => {
             return (
@@ -496,18 +496,13 @@ const PersonDetails = ({ save }) => {
                     {item?.heading}
                   </h2>
                   <p className="text-gray-600 mb-4">{item?.description}</p>
-                  {/* <ul className="text-left space-y-2">
-              <li>✔️ Position your head in the oval</li>
-              <li>✔️ Make sure you're in a well-lit area</li>
-              <li>✔️ Remove glasses</li>
-              <li>✔️ Avoid glares and blurs</li>
-            </ul> */}
+                 
                 </div>
               </>
             );
           })}
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

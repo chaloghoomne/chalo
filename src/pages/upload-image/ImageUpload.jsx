@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 
 import HorizontalLinearAlternativeLabelStepper from "./components/Step";
 import { fetchDataFromAPI } from "../../api-integration/fetchApi";
@@ -7,9 +7,14 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import PersonDetails from "../persons-details/PersonsDetails";
+import {
+  calenderDate,
+  returnCalenderDate,
+} from "../../redux/actions/calender-date-action";
 
 const ImageUpload = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const packageId = useSelector((state) => state.PackageIdReducer.packagedId);
   console.log(packageId);
   const cotravlerId = useSelector(
@@ -18,6 +23,7 @@ const ImageUpload = () => {
   const travlersCount = useSelector(
     (state) => state.NumberOfTravelerReducer.travlersCount
   );
+  const visaId = useSelector((state) => state.VisaIdReducer.visaId);
   const countryId = useSelector((state) => state.CountryIdReducer.countryId);
   console.log(packageId, "packageId");
 
@@ -55,16 +61,39 @@ const ImageUpload = () => {
     }
   };
 
+  // useEffect(() => {
+  //   const fetchShowCoTraveler = async () => {
+  //     try {
+  //       const response = await fetchDataFromAPI(
+  //         "GET",
+  //         `${BASE_URL}place/${countryId}`
+  //       );
+  //       console.log(response?.data, "response daya");
+  //       if (response) {
+  //         setImportantPoints(response?.data);
+  //       }
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
+
+  //   fetchShowCoTraveler();
+  // }, []);
+
   useEffect(() => {
     const fetchShowCoTraveler = async () => {
       try {
         const response = await fetchDataFromAPI(
           "GET",
-          `${BASE_URL}place/${countryId}`
+          `${BASE_URL}visa-category/${visaId}`
         );
-        console.log(response?.data, "response daya");
+        console.log(response, "response data");
         if (response) {
-          setData(response?.data?.documents);
+          const filterDoc = response?.data?.documents.filter(
+            (doc) => doc.show === "true" || doc.show === true
+          );
+
+          setData(filterDoc);
         }
       } catch (error) {
         console.log(error);
@@ -93,6 +122,11 @@ const ImageUpload = () => {
   }, []);
 
   useEffect(() => {
+    dispatch(returnCalenderDate(null));
+    dispatch(calenderDate(null));
+  }, []);
+
+  useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await fetchDataFromAPI(
@@ -110,28 +144,28 @@ const ImageUpload = () => {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    const fetchProfileImage = async () => {
-      try {
-        const response = await fetchDataFromAPI(
-          "GET",
-          `${BASE_URL}notes-by-package/${countryId}`
-        );
-        console.log(response, "wertyuioptewertyui");
-        if (response) {
-          const filtered = response?.data?.filter(
-            (item) => item.type === "Image"
-          );
-          console.log(filtered, "filtered");
+  // useEffect(() => {
+  //   const fetchProfileImage = async () => {
+  //     try {
+  //       const response = await fetchDataFromAPI(
+  //         "GET",
+  //         `${BASE_URL}notes-by-package/${countryId}`
+  //       );
+  //       console.log(response, "wertyuioptewertyui");
+  //       if (response) {
+  //         const filtered = response?.data?.filter(
+  //           (item) => item.type === "Image"
+  //         );
+  //         console.log(filtered, "filtered");
 
-          setImportantPoints(filtered);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchProfileImage();
-  }, []);
+  //         setImportantPoints(filtered);
+  //       }
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
+  //   fetchProfileImage();
+  // }, []);
 
   const uploadImage = async (data) => {
     console.log(data);
@@ -182,30 +216,28 @@ const ImageUpload = () => {
   return (
     <>
       <div className="flex flex-col md:flex-row pb-5 pt-20   h-auto bg-white p-4">
-        <div className="flex w-full flex-col md:hidden md:w-[27%] md:min-h-full bg-gray-200 h-full justify-between md:flex-col">
-          {important?.map((item) => {
-            return (
-              <>
-                <div className="flex-1 p-4 rounded-lg mb-4 md:mb-0">
-                  <div className="bg-white h-auto p-4 rounded-xl">
-                    <h2 className="text-xl font-semibold mb-4">
-                      {item?.heading}
-                    </h2>
-                    <p className="text-gray-600 mb-4">{item?.description}</p>
-                    <ul className="text-left space-y-2">
-                      {item?.points?.map((item) => {
-                        return (
-                          <>
-                            <li>✔️ {item}</li>
-                          </>
-                        );
-                      })}
-                    </ul>
-                  </div>
-                </div>
-              </>
-            );
-          })}
+        <div className="flex w-full flex-col mb-5 md:hidden md:w-[27%] md:min-h-full bg-gray-200 h-full justify-between md:flex-col">
+          <>
+            <div className="flex-1 p-4 rounded-lg mb-4 md:mb-0">
+              <div className="bg-white h-auto p-4 rounded-xl">
+                <h2 className="text-xl font-semibold mb-4">
+                  {important?.docHeading}
+                </h2>
+                <p className="text-gray-600 mb-4">
+                  {important?.docDescription}
+                </p>
+                <ul className="text-left space-y-2">
+                  {important?.docPoints?.map((item) => {
+                    return (
+                      <>
+                        <li>✔️ {item}</li>
+                      </>
+                    );
+                  })}
+                </ul>
+              </div>
+            </div>
+          </>
         </div>
         <div className="flex flex-col self-center w-[73%]">
           <h1 className="text-xl poppins-four text-center self-center text-orange-500 ">
@@ -227,13 +259,16 @@ const ImageUpload = () => {
                   key={index}
                   className="flex flex-col min-w-52 items-center mb-4 md:mb-0"
                 >
-                  <label className="block text-gray-700">{item.name}</label>
+                  <label className=" flex gap-2 text-gray-700">
+                    <img src={item?.icon} className="w-5 h-5" />
+                    {item?.name}
+                  </label>
                   <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 mb-4">
                     {/* Show the preview if it exists */}
-                    {previews[item.name] ? (
+                    {previews[item?.name] ? (
                       <img
-                        src={previews[item.name]}
-                        alt={`Preview of ${item.name}`}
+                        src={previews[item?.name]}
+                        alt={`Preview of ${item?.name}`}
                         className="w-24 h-24 object-contain rounded-lg mt-2"
                       />
                     ) : (
@@ -241,15 +276,17 @@ const ImageUpload = () => {
                         type="file"
                         accept="image/*"
                         disabled={index !== currentIndex}
-                        onChange={(e) => handleImageChange(e, item.name, index)}
+                        onChange={(e) =>
+                          handleImageChange(e, item?.name, index)
+                        }
                         className="w-24 h-24 object-cover rounded-lg"
                       />
                     )}
                   </div>
-                  <ul className="text-start mb-4 space-y-2">
+                  {/* <ul className="text-start mb-4 space-y-2">
                     <li>✅ A well lit area</li>
                     <li>✅ Remove glasses</li>
-                  </ul>
+                  </ul> */}
                 </div>
               ))}
             </div>
@@ -257,29 +294,37 @@ const ImageUpload = () => {
         </div>
         {/* Instructions and User Details */}
         <div className="md:flex  hidden w-full flex-col md:w-[27%] md:min-h-full bg-gray-200 h-full justify-between md:flex-col">
-          {important?.map((item) => {
-            return (
-              <>
-                <div className="flex-1 p-4 rounded-lg mb-4 md:mb-0">
-                  <div className="bg-white h-auto p-4 rounded-xl">
-                    <h2 className="text-xl font-semibold mb-4">
-                      {item?.heading}
-                    </h2>
-                    <p className="text-gray-600 mb-4">{item?.description}</p>
-                    <ul className="text-left space-y-2">
-                      {item?.points?.map((item) => {
-                        return (
-                          <>
-                            <li>✔️ {item}</li>
-                          </>
-                        );
-                      })}
-                    </ul>
-                  </div>
-                </div>
-              </>
-            );
-          })}
+          <>
+            <div className="flex-1 p-4 rounded-lg mb-4 md:mb-0">
+              <div className="bg-white h-auto p-4 rounded-xl">
+                {data?.map((item) => {
+                  return (
+                    <>
+                      <h2 className="text-xl font-semibold mb-4">
+                        {item?.name}
+                      </h2>
+                      <p
+                        style={{ overflowWrap: "anywhere" }}
+                        className="text-gray-600 mb-4"
+                      >
+                        {" "}
+                        {item?.description}
+                      </p>
+                    </>
+                  );
+                })}
+                {/* <ul className="text-left space-y-2">
+                  {important?.docPoints?.map((item) => {
+                    return (
+                      <>
+                        <li>✔️ {item}</li>
+                      </>
+                    );
+                  })}
+                </ul> */}
+              </div>
+            </div>
+          </>
         </div>
       </div>
       {step === data?.length && <PersonDetails save={handleSubmit} />}

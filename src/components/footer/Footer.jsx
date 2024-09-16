@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import logo from "../../assets/CHLOGHOOMNE logo.png";
 import subscribe from "../../assets/subscribe.png";
 import { TbLocationShare } from "react-icons/tb";
+import { fetchDataFromAPI } from "../../api-integration/fetchApi";
+import { BASE_URL } from "../../api-integration/urlsVariable";
+import { toast } from "react-toastify";
 const Footer = () => {
   const [value, setValue] = useState("");
 
@@ -12,6 +15,25 @@ const Footer = () => {
   const className = ` bg-cover bg-center rounded-2xl min-h-72 flex flex-col w-[80%] justify-center items-center text-white text-center py-8 bg-gradient-to-r from-[#F2A137] to-[#F2A137] ${
     subscribe ? 'lg:bg-[url("' + subscribe + '")]' : " "
   }`;
+
+  const becomeSubscriber = async () => {
+    try {
+      const response = await fetchDataFromAPI(
+        "POST",
+        `${BASE_URL}add-subscription`,
+        { email: value }
+      );
+      console.log(response);
+      if (response) {
+        console.log(response.data, "data");
+        setValue("");
+        toast.success(`Congratulations! You are a Subscriber Now`);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.success(` You are already a Subscriber `);
+    }
+  };
 
   return (
     <footer className="bg-white  ">
@@ -33,9 +55,12 @@ const Footer = () => {
               placeholder="Enter Your email Address"
               value={value}
               onChange={(e) => handleChnage(e)}
-              className="px-4 py-2 rounded-l-md min-h-10 text-black    focus:outline-none"
+              className="px-4 py-2 rounded-l-md w-72 min-h-10 text-black    focus:outline-none"
             />
-            <button className="px-2 py-2    bg-blue-600 text-white rounded-md">
+            <button
+              onClick={() => becomeSubscriber()}
+              className="px-2 py-2    bg-blue-600 text-white rounded-md"
+            >
               <TbLocationShare size={22} color="white" />
             </button>
           </div>

@@ -71,6 +71,7 @@ const Login = () => {
       const response = await fetchDataFromAPI("POST", `${BASE_URL}user-login`, {
         credential: emailOrPhone,
         password,
+        deviceToken: token,
       });
       console.log("response", response);
       if (response.success) {

@@ -31,7 +31,7 @@ const HomeFourth = () => {
         <h3 className="text-[#F2A137]  poppins-six mb-4">{data?.title}</h3>
         <h1
           style={{ lineHeight: "3rem" }}
-          className="text-4xl md:max-w-64 poppins-seven font-bold mb-4"
+          className="text-3xl md:max-w-64 poppins-seven font-bold mb-4"
         >
           {data?.heading}
         </h1>
