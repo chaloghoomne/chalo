@@ -84,7 +84,7 @@ const Navbar = () => {
 
   return (
     <nav className={`${bgColor} w-full fixed z-50 top-0`}>
-      <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+      <div className="w-full mx-auto px-2 sm:px-6 lg:px-8">
         <div className="relative flex items-center justify-between h-16">
           <div className="absolute inset-y-0 left-0 flex items-center lg:hidden">
             {/* Mobile menu button */}
@@ -131,9 +131,9 @@ const Navbar = () => {
               )}
             </button>
           </div>
-          <div className="flex-1 flex items-center justify-end sm:items-stretch sm:justify-start">
+          <div className="flex justify-between ">
             <Link to="/">
-              <div className="sm:flex-shrink-0 mb-8 mt-8 self-end ">
+              <div className="my-8 ml-14 flex justify-center items-center">
                 <img
                   className={whichLogo ? "w-32" : "w-36"}
                   src={whichLogo ? whitelogo : logo}

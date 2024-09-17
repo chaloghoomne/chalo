@@ -66,7 +66,7 @@ const HomeSecond = forwardRef((props, ref) => {
       <h1 className="text-3xl poppins-six font-bold text-center mb-8">
         {data?.heading || "World Best Visas Requested Countries"}
       </h1>
-      <div className="flex flex-wrap  gap-4">
+      <div className="flex flex-wrap justify-start  items-start  gap-4">
         {packages?.slice(0, finalValue)?.map((visa, index) => (
           <VisaCard
             key={index}
