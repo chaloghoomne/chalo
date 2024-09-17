@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IoCloseSharp } from "react-icons/io5";
 import { MdOutlinePersonAdd } from "react-icons/md";
 import { IoDocumentsSharp } from "react-icons/io5";
@@ -52,11 +52,76 @@ const ModalVisaRequest = ({ user, isEdit, onClose }) => {
   //   }));
   // };
 
+  useEffect(() => {
+    console.log("try enter");
+
+    if (formData.dob && formData.passportIssueDate) {
+      console.log("enter");
+      calculatePassportValidity(formData.dob, formData.passportIssueDate);
+    }
+  }, [formData.dob, formData.passportIssueDate]);
+
+  const calculatePassportValidity = (dob, issueDate) => {
+    const dobDate = new Date(dob);
+    const issueDateObj = new Date(issueDate);
+    const currentDate = new Date();
+
+    // Assuming passport is valid for 10 years from issue date
+    const validityPeriod = 10 * 365 * 24 * 60 * 60 * 1000; // 10 years in milliseconds
+    const validityDate = new Date(issueDateObj.getTime() + validityPeriod);
+
+    if (validityDate < dobDate) {
+      toast.error("Passport expiry date is earlier than date of birth.");
+      return "";
+    }
+
+    if (validityDate < currentDate) {
+      toast.error("Passport has expired.");
+      return "";
+    }
+
+    setFormData((prevData) => ({
+      ...prevData,
+      passportValidTill: validityDate.toISOString().slice(0, 10),
+    }));
+
+    return validityDate.toISOString().slice(0, 10); // Format: YYYY-MM-DD
+  };
+
+  const validatePassportDetails = () => {
+    const { passportNumber, passportIssueDate, dob } = formData;
+
+    // Regex pattern for passport number validation
+    // This example assumes passport numbers are alphanumeric and between 6 and 9 characters
+    const passportNumberRegex = /^[A-Z0-9]{6,9}$/;
+
+    // Passport number validation
+    if (!passportNumberRegex.test(passportNumber)) {
+      toast.error("Invalid passport number.");
+      return false;
+    }
+
+    // Calculate and set passportValidTill date
+    const passportValidTillDate = calculatePassportValidity(
+      dob,
+      passportIssueDate
+    );
+    if (!passportValidTillDate) {
+      return false;
+    }
+
+    setFormData((prevData) => ({
+      ...prevData,
+      passportValidTill: passportValidTillDate,
+    }));
+
+    return true;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (formData?.documents?.length < 4) {
-      toast.error(`Documents images are required`);
+    if (!validatePassportDetails()) {
       return;
     }
 
@@ -245,7 +310,7 @@ const ModalVisaRequest = ({ user, isEdit, onClose }) => {
               <input
                 name="passportValidTill"
                 required
-                value={formData.passportValidTill?.slice(0, 10)}
+                value={formData.passportValidTill}
                 onChange={handleFields}
                 className="w-full p-2 border rounded-lg"
                 readOnly={!isEdit}

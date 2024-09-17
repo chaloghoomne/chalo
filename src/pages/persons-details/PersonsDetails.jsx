@@ -490,7 +490,9 @@ const PersonDetails = ({ save }) => {
           {importantPoints?.map((item) => {
             return (
               <>
+
                 <div className="bg-white h-auto mb-5 p-4 rounded-xl">
+
                   <h2 className="text-xl flex gap-3 font-semibold mb-4">
                     <img src={item?.image} className="w-10 h-10" alt="" />
                     {item?.heading}
