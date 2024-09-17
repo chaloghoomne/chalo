@@ -1,12 +1,27 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import logo from "../../assets/CHLOGHOOMNE logo.png";
 import subscribe from "../../assets/subscribe.png";
 import { TbLocationShare } from "react-icons/tb";
 import { fetchDataFromAPI } from "../../api-integration/fetchApi";
 import { BASE_URL } from "../../api-integration/urlsVariable";
 import { toast } from "react-toastify";
+import { useLocation } from "react-router-dom";
+
 const Footer = () => {
   const [value, setValue] = useState("");
+  const location = useLocation();
+
+  const [show,setShow] = useState(true)
+
+  useEffect(() => {
+    const pathName = location.pathname;
+    console.log(pathName, "pathName");
+    if (pathName === "/edit-visa-request" || pathName === "/upload-image" || pathName === "/view-application" || pathName === "/visa-details/:id" ) {
+      setShow(false);
+    } else {
+      setShow(true);
+    }
+  }, [location.pathname]);
 
   const handleChnage = (e) => {
     setValue(e.target.value);
@@ -38,7 +53,7 @@ const Footer = () => {
   return (
     <footer className="bg-white  ">
       <div className="flex justify-center py-3 pb-5 items-center w-full bg-white">
-        <div className={className}>
+        {show && <div className={className}>
           <h2 className="text-4xl  text-black poppins-six  font-semibold">
             Sign up to our newsletter
           </h2>
@@ -64,7 +79,7 @@ const Footer = () => {
               <TbLocationShare size={22} color="white" />
             </button>
           </div>
-        </div>
+        </div>}
       </div>
       <div className="max-w-7xl mx-auto border-t border-gray-200 border-b px-4 sm:px-6 lg:px-8 py-14 flex flex-wrap lg:flex-nowrap lg:justify-between  gap-8">
         <div className="lg:min-w-96 flex flex-col justify-start items-start lg:max-w-96">

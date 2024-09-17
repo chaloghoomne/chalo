@@ -73,6 +73,7 @@ const Calendar = () => {
           selected={selectedDate}
           onChange={handleDateChange}
           dateFormat="dd-MM-yyyy"
+           minDate={new Date()}
           customInput={
             <input
               type="text"

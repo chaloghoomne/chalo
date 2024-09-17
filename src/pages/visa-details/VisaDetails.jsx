@@ -49,29 +49,64 @@ const VisaDetails = () => {
   const [important, setImportantPoints] = useState();
   const [partners, setPartners] = useState([]);
   const [data, setData] = useState({});
-  const mainImageRef = useRef(null);
+
   const applyNowRef = useRef(null);
   const faqRef = useRef(null);
   const [isCardFixed, setIsCardFixed] = useState(false);
+  const [isLargeScreen, setIsLargeScreen] = useState(false);
+  
+  const mainImageRef = useRef(null);
+  const cardRef = useRef(null);
+  const contentRef = useRef(null);
+
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsLargeScreen(window.innerWidth >= 1024); // Assuming 1024px is your 'lg' breakpoint
+    };
+
+    checkScreenSize();
+    window.addEventListener('resize', checkScreenSize);
+
+    return () => window.removeEventListener('resize', checkScreenSize);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
-      const mainImageTop = mainImageRef.current.getBoundingClientRect().top;
-      const applyNowTop = applyNowRef.current.getBoundingClientRect().top;
-      const faqTop = faqRef.current.getBoundingClientRect().top;
+      if (!isLargeScreen || !mainImageRef.current || !cardRef.current || !contentRef.current) return;
 
-      if (mainImageTop <= 0 && applyNowTop > 0) {
-        setIsCardFixed(true);
-      } else if (faqTop <= 0) {
-        setIsCardFixed(false);
-      } else {
-        setIsCardFixed(false);
+      const imageBottom = mainImageRef.current.getBoundingClientRect().bottom;
+      const contentBottom = contentRef.current.getBoundingClientRect().bottom;
+      const windowHeight = window.innerHeight;
+
+      if (imageBottom <= 0 && contentBottom > windowHeight) {
+        cardRef.current.style.position = 'fixed';
+        cardRef.current.style.top = '30px';
+        cardRef.current.style.right = '15px';
+      } else if (imageBottom > 0) {
+        cardRef.current.style.position = 'absolute';
+        cardRef.current.style.top = `${imageBottom}px`;
+        cardRef.current.style.right = '5px';
+      } else if (contentBottom <= windowHeight) {
+        cardRef.current.style.position = 'absolute';
+        cardRef.current.style.top = `${contentBottom - cardRef.current.offsetHeight}px`;
+        cardRef.current.style.right = '5px';
       }
     };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+    if (isLargeScreen) {
+      window.addEventListener('scroll', handleScroll);
+    } else {
+      // Reset styles for smaller screens
+      if (cardRef.current) {
+        cardRef.current.style.position = '';
+        cardRef.current.style.top = '';
+        cardRef.current.style.right = '';
+      }
+    }
+
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [isLargeScreen]);
+
   console.log(important, "important data");
   const navigate = useNavigate();
 
@@ -300,10 +335,10 @@ const VisaDetails = () => {
   };
 
   return (
-    <div className="w-full h-full mx-auto py-10">
+    <div ref={contentRef} className="w-full h-full mx-auto py-10">
       {/* Main Image */}
       <div
-        ref={mainImageRef}
+         ref={mainImageRef}
         className="w-full relative mt-12 rounded-xl bg-cover flex h-[500px] justify-center items-center mb-10"
       >
         <div className="px-16 w-full relative ">
@@ -350,7 +385,7 @@ const VisaDetails = () => {
                       .map((point) => point.trim());
                     return (
                       <React.Fragment key={index}>
-                        {pointsArray.map((point, pointIndex) => (
+                        {pointsArray?.map((point, pointIndex) => (
                           <p
                             key={pointIndex}
                             className="flex justify-start gap-2 items-center text-gray-400 poppins-four text-sm"
@@ -363,39 +398,20 @@ const VisaDetails = () => {
                     );
                   })}
                 </ul>
-
-                {/* <p className="flex justify-start gap-2 items-center text-gray-400   poppins-four text-sm">
-                  <GoDotFill color="black" size={5} />
-                  Valid Passport
-                </p>
-                <p className="flex justify-start gap-2 items-center text-gray-400   poppins-four text-sm">
-                  <GoDotFill color="black" size={5} />
-                  Valid Passport
-                </p>
-                <p className="flex justify-start gap-2 items-center text-gray-400  poppins-four text-sm">
-                  <GoDotFill color="black" size={5} />
-                  Valid Passport
-                </p>
-                <p className="flex justify-start gap-2 items-center text-gray-400   poppins-four text-sm">
-                  <GoDotFill color="black" size={5} />
-                  Valid Passport
-                </p>
-                <p className="flex justify-start gap-2 items-center text-gray-400   poppins-four text-sm">
-                  <GoDotFill color="black" size={5} />
-                  Valid Passport
-                </p>
-                <p className="flex justify-start gap-2 items-center text-gray-400   poppins-four text-sm">
-                  <GoDotFill color="black" size={5} />
-                  Valid Passport
-                </p> */}
               </div>
             </div>
           </div>
         </div>
         <div className=" md:w-[50%] md:px-10 relative w-full ">
-          <div
-            style={{ backgroundImage: `url(${card})` }}
-            className="w-full bg-cover fixed z-30 mt-7  bottom-16 lg:right-5 right-5  mx-auto bg-transparent max-w-[29rem] md:max-w-[29rem] md:p-10 p-6 "
+        <div
+            ref={cardRef}
+            style={{ 
+              backgroundImage: `url(${card})`,
+              position: isLargeScreen ? 'absolute' : 'relative',
+              top: isLargeScreen ? '0' : 'auto',
+              right: isLargeScreen ? '5px' : 'auto'
+            }}
+            className="w-full bg-cover z-30 mt-7 mb-8 pb-16 mx-auto bg-transparent max-w-[29rem] md:max-w-[29rem] md:p-10 p-6"
           >
             <div className="flex justify-between px-5 items-center  mb-4">
               <h2 className="text-2xl poppins-six relative top-5 font-semibold ">
@@ -573,12 +589,13 @@ const VisaDetails = () => {
           </div>
         </div>
       </div>
-      <FAQs ref={faqRef} data={data?.faq} />
-      <div className="text-md poppins-four py-5 text-black px-10">
+      <div className="md:w-[60%] w-full"><FAQs ref={faqRef} data={data?.faq} /></div>
+    
+      <div className="text-md w-full md:w-[60%] poppins-four py-5 text-black px-10">
         {data?.longDescription}
       </div>
       {/* Partners Section */}
-      <div>
+      <div className="w-full md:w-[60%]">
         <h2 className="text-2xl font-bold px-5  mb-4">Partners we work with</h2>
         <div className="overflow-x-auto px-5">
           <div className="flex space-x-4 py-5">
@@ -591,17 +608,17 @@ const VisaDetails = () => {
                     rel="noopener noreferrer"
                   >
                     {" "}
-                    <div className="min-w-[300px] drop-shadow-lg max-w-[300px] bg-white p-4 rounded-lg border shadow-md">
+                    <div className="min-w-[200px] drop-shadow-lg max-w-[300px] bg-white p-4 rounded-lg border shadow-md">
                       <img
                         src={partner?.image}
                         alt="India"
-                        className="w-full h-[200px] bg-cover rounded-lg mb-2"
+                        className="w-full h-[160px] bg-cover rounded-lg mb-2"
                       />
                       <p
                         style={{
                           overflowWrap: "anywhere",
                         }}
-                        className="font-semibold max-w-[300px]"
+                        className="font-semibold max-w-[200px]"
                       >
                         {partner?.title}
                       </p>

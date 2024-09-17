@@ -157,7 +157,7 @@ const Navbar = () => {
                 Login
               </Link>
             ) : (
-              <div className="w-56 h-12 p-1 px-3 items-center justify-between bg-gray-200/80 flex gap-2">
+              <div className="w-60 h-12 p-1 px-3 items-center justify-between bg-gray-200/80 flex gap-2">
                 <img
                   onClick={() => setIsLogin(!isLogin)}
                   src={
@@ -168,7 +168,7 @@ const Navbar = () => {
                 />
                 <div className="flex flex-col justify-between">
                   <p className="text-xs">Welcome Back</p>
-                  <p className="text-xs">
+                  <p className="text-sm  max-w-40 overflow-x-auto  font-bold">
                     {formData?.firstName} {formData?.lastName}
                   </p>
                 </div>

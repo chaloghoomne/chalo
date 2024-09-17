@@ -185,12 +185,12 @@ const SignUp = () => {
     <div
       className="min-h-screen flex py-8 items-center object-contain justify-center bg-cover bg-center"
       style={{
-        backgroundImage: `url(https://img.lovepik.com/background/20211022/large/lovepik-simple-technology-background-image_401740828.jpg)`,
+        backgroundImage: `url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTw0uAVzEIqlrCrLkFz9KLzU0FGUFppxUP5wRg1JOO7MUUEtBvroKMzt_xYVedz3VERd_I&usqp=CAU)`,
       }}
     >
-      <div className="bg-gray-900 bg-opacity-50 h-[80%] text-white p-8 rounded-lg shadow-lg max-w-md w-full">
+      <div className="bg-white/30 h-[80%] text-white p-8 rounded-lg shadow-lg max-w-md w-full">
         <Link to="/" className="text-center mb-6">
-          <img src={logo} alt="Logo" className="mx-auto h-20" />
+          <img src={logo} alt="Logo" className="mx-auto w-48" />
         </Link>
         <h2 className="text-center text-2xl font-bold mb-2">Register</h2>
         <p className="text-center mb-6">You're so close to leveling up!</p>
