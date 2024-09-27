@@ -31,7 +31,7 @@ const VisaCard = ({ image, city, country, price, rating, description, id }) => {
   }, [image]);
 
   return (
-    <div className="max-w-[280px] self-start min-w-[260px] cursor-pointer bg-white rounded-e-2xl overflow-hidden transform hover:scale-105 transition-transform duration-300">
+    <div className="max-w-[280px] items-start self-start min-w-[260px] cursor-pointer bg-white rounded-e-2xl overflow-hidden transform hover:scale-105 transition-transform duration-300">
       <div className="relative ">
         <div className="relative w-full">
           {imageLoaded ? (

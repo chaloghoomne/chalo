@@ -89,7 +89,7 @@ const Login = () => {
       console.log("Login successful:", response);
     } catch (err) {
       console.error("Login failed:", err);
-      setError("Login failed. Please try again.");
+      setError("Login failed, Wrong Credentials.");
     }
   };
 
@@ -122,7 +122,7 @@ const Login = () => {
       }
     } catch (err) {
       console.error("Google login failed:", err);
-      toast.error(err);
+      toast.error(err.message);
     }
   };
 

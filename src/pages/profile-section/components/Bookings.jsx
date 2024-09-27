@@ -40,7 +40,7 @@ const Bookings = () => {
     dispatch(getVisaType(visaType));
     dispatch(coTraveler(cotravlerId));
     dispatch(numberofCoTravelers(travlerscount));
-    navigate("/upload-image");
+    navigate("/persons-details");
   };
 
   const handleSubmitApplication = async (
@@ -71,7 +71,7 @@ const Bookings = () => {
       <div className="bg-white md:p-4 p-1 rounded shadow-md">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-semibold">Latest Bookings</h2>
-          <div className="relative">
+          {/* <div className="relative">
             <input
               type="text"
               placeholder="Search by Booking ID"
@@ -80,7 +80,7 @@ const Bookings = () => {
             <span className="absolute left-0 top-0 mt-2 ml-2 text-gray-500">
               <i className="fas fa-search"></i>
             </span>
-          </div>
+          </div> */}
         </div>
         <div className="flex flex-wrap  justify-evenly gap-4">
           {bookings?.map((booking, index) => (

@@ -133,7 +133,7 @@ const Navbar = () => {
           </div>
           <div className="flex justify-between ">
             <Link to="/">
-              <div className="my-8 ml-14 flex justify-center items-center">
+              <div className="my-8  flex justify-center items-center">
                 <img
                   className={whichLogo ? "w-32" : "w-36"}
                   src={whichLogo ? whitelogo : logo}
@@ -147,28 +147,28 @@ const Navbar = () => {
               href="tel:+918527418635"
               className=" block poppins-three pop px-3 py-2 text-white rounded-md text-[12px] font-normal"
             >
-              Agent Login
+              Agent 
             </a>
             {!localStorage.getItem("token") ? (
               <Link
                 to="/login"
-                className="ml-3 bg-[#F26337] poppins-three text-white px-6 py-1 rounded-md text-[10px] font-normal"
+                className="ml-3 bg-[#F26337] poppins-three text-white px-8 py-2 rounded-md text-[14px] font-medium"
               >
                 Login
               </Link>
             ) : (
-              <div className="w-60 h-12 p-1 px-3 items-center justify-between bg-gray-200/80 flex gap-2">
+              <div className="w-60 h-12 p-1 px-3 items-center justify-between  flex gap-2">
                 <img
                   onClick={() => setIsLogin(!isLogin)}
                   src={
                     formData?.image ||
                     "https://cdn.pixabay.com/photo/2015/03/04/22/35/avatar-659652_640.png"
                   }
-                  className="w-12 h-12 object-contain  rounded-2xl"
+                  className="w-12 h-12  rounded-[70px]"
                 />
                 <div className="flex flex-col justify-between">
-                  <p className="text-xs">Welcome Back</p>
-                  <p className="text-sm  max-w-40 overflow-x-auto  font-bold">
+                  <p className="text-xs text-white">Welcome Back</p>
+                  <p className="text-sm  text-white max-w-40 overflow-x-auto  font-bold">
                     {formData?.firstName} {formData?.lastName}
                   </p>
                 </div>
@@ -241,13 +241,13 @@ const Navbar = () => {
             >
               Contact us
             </a>
-            <a
+            {/* <a
               href="tel:+918527418635"
               className="hover:text-[#439BD5] block px-3 py-2 rounded-md text-base font-medium"
             >
               Agent Login
-            </a>
-            <button className="block w-full bg-[#F26337] text-white px-3 py-2 rounded-md text-base font-medium">
+            </a> */}
+            <button className="block w-full bg-[#F26337] text-white px-8 py-2 rounded-md text-base font-medium">
               Login
             </button>
           </div>

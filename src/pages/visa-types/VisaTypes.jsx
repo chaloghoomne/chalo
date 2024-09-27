@@ -94,7 +94,7 @@ const VisaTypes = () => {
       <h2 className="text-3xl poppins-six text-center  font-bold mb-4">
         {selectedCountry} Visa Application
       </h2>
-      <p className="text-orange-500 poppins-four  mb-6">{data?.description}</p>
+      <p className="text-orange-500 poppins-four  text-xl mb-6">{data?.description }</p>
       <div className="flex flex-wrap md:justify-evenly justify-center gap-8 mb-6">
         {visatypes?.map((visa) => (
           <div

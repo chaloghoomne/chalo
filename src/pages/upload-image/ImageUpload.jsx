@@ -6,13 +6,15 @@ import { BASE_URL } from "../../api-integration/urlsVariable";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
-import PersonDetails from "../persons-details/PersonsDetails";
+// import PersonDetails from "../persons-details/PersonsDetails";
 import {
   calenderDate,
   returnCalenderDate,
 } from "../../redux/actions/calender-date-action";
+import { showButton } from "../../redux/actions/package-id-actions";
 
 const ImageUpload = () => {
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const packageId = useSelector((state) => state.PackageIdReducer.packagedId);
@@ -59,7 +61,15 @@ const ImageUpload = () => {
       setCurrentIndex(index + 1);
       setStep(index + 1);
     }
+    console.log(data?.length,"data length")
+   
   };
+
+  useEffect(()=>{
+    dispatch(showButton(false))
+  },[])
+
+  
 
   // useEffect(() => {
   //   const fetchShowCoTraveler = async () => {
@@ -205,7 +215,7 @@ const ImageUpload = () => {
         formData.append("documents", item.image);
       }
     });
-
+    dispatch(showButton(true))
     const getData = uploadImage(formData);
     console.log(getData, "getdatatata");
     return getData;
@@ -240,9 +250,9 @@ const ImageUpload = () => {
           </>
         </div>
         <div className="flex flex-col self-center w-[73%]">
-          <h1 className="text-xl poppins-four text-center self-center text-orange-500 ">
+          {/* <h1 className="text-xl poppins-four text-center self-center text-orange-500 ">
             {`Traveler Information: Applicant #${packageData?.orderDetails} of ${travlersCount}`}
-          </h1>
+          </h1> */}
           <div className="bg-white p-8 rounded-lg flex flex-col justify-center items-center  w-full max-w-6xl">
             <HorizontalLinearAlternativeLabelStepper
               documents={data}
@@ -327,7 +337,7 @@ const ImageUpload = () => {
           </>
         </div>
       </div>
-      {step === data?.length && <PersonDetails save={handleSubmit} />}
+      {step === data?.length && <button onClick={handleSubmit} className="bg-orange-500 text-white relative top-[-40px] px-4 py-2 rounded-lg">Submit Documents</button>}
     </>
   );
 };

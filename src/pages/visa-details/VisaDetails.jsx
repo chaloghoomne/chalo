@@ -16,6 +16,7 @@ import { numberofCoTravelers } from "./../../redux/actions/numberoftravelers-act
 import {
   coTraveler,
   PackageId,
+  setChildShowId,
   setVisaId,
 } from "../../redux/actions/package-id-actions";
 import DescriptionModal from "../home/components/DescriptionModal";
@@ -27,6 +28,7 @@ import FAQs from "./components/Faqs";
 const VisaDetails = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
+  const countryId = useSelector((state) => state.CountryIdReducer.countryId);
   const [isReturnModalOpen, setIsReturnModalOpen] = useState(false);
   const [selectedType, setSelectedType] = useState("");
   const selectedCountry = useSelector(
@@ -35,7 +37,7 @@ const VisaDetails = () => {
   const returnDate = useSelector(
     (state) => state.ReturnCalenderReducer.returnDate
   );
-
+  const [faqData,setfaqData] = useState([])
   const fromDate = useSelector((state) => state.CalenderReducer.visaDate);
   const toDate = useSelector((state) => state.ReturnCalenderReducer.returnDate);
   const visaType = useSelector((state) => state.GetVisaTypeReducer.visaType);
@@ -69,6 +71,25 @@ const VisaDetails = () => {
 
     return () => window.removeEventListener('resize', checkScreenSize);
   }, []);
+
+  useEffect(() => {
+    const fetchShowCoTraveler = async () => {
+      try {
+        const response = await fetchDataFromAPI(
+          "GET",
+          `${BASE_URL}place/${countryId}`
+        );
+   
+        if (response) {
+          setfaqData(response?.data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchShowCoTraveler();
+  }, [countryId]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -160,6 +181,7 @@ const VisaDetails = () => {
         console.log(response, "response data");
         if (response) {
           setData(response.data);
+          dispatch(setChildShowId(id))
         }
       } catch (error) {
         console.log(error);
@@ -247,7 +269,7 @@ const VisaDetails = () => {
         dispatch(coTraveler(response?.data?.orderDetails?._id));
       }
       setIsModalOpen(false);
-      navigate("/upload-image");
+      navigate("/persons-details");
     } catch (error) {
       console.log(error);
     }
@@ -276,7 +298,7 @@ const VisaDetails = () => {
     } catch (error) {
       console.log(error);
     }
-    navigate("/upload-image");
+    navigate("/persons-details");
   };
 
   const handleCalendarChoice = (choice) => {
@@ -292,7 +314,7 @@ const VisaDetails = () => {
   const handleFlexibleChoice = () => {
     setFlexibleModalOpen(false);
     // Handle flexible date choice
-    navigate("/upload-image");
+    navigate("/persons-details");
   };
 
   const renderCalendar = () => {
@@ -589,7 +611,7 @@ const VisaDetails = () => {
           </div>
         </div>
       </div>
-      <div className="md:w-[60%] w-full"><FAQs ref={faqRef} data={data?.faq} /></div>
+      <div className="md:w-[60%] w-full"><FAQs ref={faqRef} data={faqData?.faq} /></div>
     
       <div className="text-md w-full md:w-[60%] poppins-four py-5 text-black px-10">
         {data?.longDescription}
@@ -622,7 +644,7 @@ const VisaDetails = () => {
                       >
                         {partner?.title}
                       </p>
-                      <p
+                      {/* <p
                         style={{
                           overflowWrap: "anywhere",
                         }}
@@ -642,7 +664,7 @@ const VisaDetails = () => {
                       </p>
                       <p className="text-gray-500">
                         {partner?.travellersCount} travelers
-                      </p>
+                      </p> */}
                     </div>
                   </Link>
                 </>

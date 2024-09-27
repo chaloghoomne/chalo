@@ -12,19 +12,25 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { coTraveler, PackageId } from "../../redux/actions/package-id-actions";
 import { toast } from "react-toastify";
+import ImageUpload from "../upload-image/ImageUpload";
 
-const PersonDetails = ({ save }) => {
+const PersonDetails = () => {
+ 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const buttonShow = useSelector((state)=>state.ShowButtonReducer.buttonShow)
+  console.log(buttonShow,"kdijeio")
   const countryId = useSelector((state) => state.CountryIdReducer.countryId);
+  const childId = useSelector((state) => state.ChildSHowIdReducer.childId);
   const [showCoTravler, setShowCoTravler] = useState();
-  console.log(showCoTravler, "showCoTravler");
+   const [childData,setChildData] = useState()
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     fatherName: "",
     motherName: "",
     gender: "",
+    ageGroup:"",
     passportNumber: "",
     dob: "",
     passportIssueDate: "",
@@ -44,7 +50,7 @@ const PersonDetails = ({ save }) => {
           "GET",
           `${BASE_URL}place/${countryId}`
         );
-        console.log(response?.data, "response daya");
+   
         if (response) {
           setShowCoTravler(response?.data?.showCoTraveller);
         }
@@ -56,6 +62,27 @@ const PersonDetails = ({ save }) => {
     fetchShowCoTraveler();
   }, []);
 
+  useEffect(() => {
+    const fetchProfileImage = async () => {
+      try {
+        const response = await fetchDataFromAPI(
+          "GET",
+          `${BASE_URL}visa-category/${childId}`
+        );
+        console.log(response, "response data");
+        if (response) {
+          setChildData(response.data);
+         
+        }
+      } catch (error) {
+        console.log(error);
+      }
+     
+    };
+    fetchProfileImage();
+  }, [childId]);
+
+
   const [importantPoints, setImportantPoints] = useState([]);
   const [packageData, setPackageData] = useState({});
   const selectedDate = useSelector((state) => state.CalenderReducer.visaDate);
@@ -66,12 +93,6 @@ const PersonDetails = ({ save }) => {
     (state) => state.CotravelerIdReducer.cotravlerId
   );
   const packageId = useSelector((state) => state.PackageIdReducer.packagedId);
-  console.log(
-    packageId,
-    travlersCount,
-    "travlersCount",
-    packageData?.orderDetails
-  );
 
   useEffect(() => {
     const fetchData = async () => {
@@ -186,12 +207,13 @@ const PersonDetails = ({ save }) => {
     e.preventDefault();
 
     if (!validatePassportDetails()) {
+      toast.error(`All Fields are Required`)
       return;
     }
 
-    const kuchaayega = save();
-    console.log(kuchaayega, "kuchaayega");
-    if (kuchaayega) {
+    // const kuchaayega = save();
+    // console.log(kuchaayega, "kuchaayega");
+    // if (kuchaayega) {
       if (packageData?.orderDetails === travlersCount) {
         try {
           const response = await fetchDataFromAPI(
@@ -237,12 +259,14 @@ const PersonDetails = ({ save }) => {
           console.log(error);
           toast.error("Network error! Try again Later");
         }
-        window.location.href = "/upload-image";
+        window.location.href = "/persons-details";
         // navigate("/upload-image");
       }
-    }
+    // }
     console.log("hhh");
   };
+
+ 
 
   return (
     <div className="flex flex-col lg:flex-row px-3 justify-center items-center py-10 min-h-screen sm:bg-gray-200 bg-white ">
@@ -253,7 +277,10 @@ const PersonDetails = ({ save }) => {
             <button className="bg-orange-500 text-xl font-bold text-white py-3 mt-5 px-10 rounded-[25px]">
               View on {new Date(packageData?.visaOrder?.from).toDateString()}
             </button>
-            <h1 className="text-lg font-semibold">Review your information</h1>
+            {/* <h1 className="text-lg font-semibold">Review your information</h1> */}
+            <h1 className="text-xl poppins-four mt-3 text-center self-center text-orange-500 ">
+            {`Traveler Information: Applicant #${packageData?.orderDetails} of ${travlersCount}`}
+          </h1>
           </div>
 
           <div className=" p-4 flex flex-col rounded-lg mb-4">
@@ -357,6 +384,20 @@ const PersonDetails = ({ save }) => {
                 </select>
               </div>
               <div>
+  <label className="block text-sm font-semibold">Age Group</label>
+  <select
+    name="ageGroup"
+    required
+    value={formData.ageGroup}
+    onChange={handleFields}
+    className="w-full p-2 border rounded-lg"
+  >
+    <option value="">Select Age Group</option>
+    {childData?.childPrice >0 && <option value="Child">Under 18</option>}
+   <option value="Adult">18 and Over</option>
+  </select>
+</div>
+              <div>
                 <label className="block text-sm font-semibold">
                   Passport Number
                 </label>
@@ -376,6 +417,7 @@ const PersonDetails = ({ save }) => {
                   type="date"
                   name="dob"
                   required
+                  max={new Date().toISOString().split('T')[0]}
                   value={formData.dob}
                   onChange={handleFields}
                   className="w-full p-2 border rounded-lg"
@@ -443,6 +485,8 @@ const PersonDetails = ({ save }) => {
               <p className="text-red-500 text-sm">{errors.name?.message}</p>
             </div> */}
             {/* Co-Traveller */}
+
+            <ImageUpload  />
             {showCoTravler && (
               <>
                 <div className=" text-black p-4 flex justify-start font-bold  items-center mb-4">
@@ -470,7 +514,7 @@ const PersonDetails = ({ save }) => {
             )}
             {/* Proceed to Checkout */}
             <div className="text-center">
-              <button
+             { buttonShow && <button
                 type="submit"
                 className="bg-green-500 text-white py-2 px-4 rounded-lg"
               >
@@ -479,7 +523,7 @@ const PersonDetails = ({ save }) => {
                   : `Add Traveler ${
                       packageData?.orderDetails + 1
                     }/${travlersCount}`}
-              </button>
+              </button>}
             </div>
           </form>
         </div>

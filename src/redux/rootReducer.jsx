@@ -15,6 +15,8 @@ import {
   SearchPackageReducer,
   SelectedCountryReducer,
   VisaIdReducer,
+  ShowButtonReducer,
+  ChildSHowIdReducer,
 } from "./reducers/package-id-reducer";
 import { PersonalDetailsReducer } from "./reducers/personal-details-reducer";
 import { NumberOfTravelerReducer } from "./reducers/numberofTraveler-reducer";
@@ -25,6 +27,7 @@ const persistConfig = {
   whitelist: [
     "PackageIdReducer",
     "CotravelerIdReducer",
+    "ChildSHowIdReducer",
     "GetVisaTypeReducer",
     "SelectedCountryReducer",
     "NumberOfTravelerReducer",
@@ -46,6 +49,8 @@ const rootReducer = combineReducers({
   CountryIdReducer,
   ReturnCalenderReducer,
   VisaIdReducer,
+  ShowButtonReducer,
+  ChildSHowIdReducer
 });
 
 export const persistedReducer = persistReducer(persistConfig, rootReducer);

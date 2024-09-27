@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import logo from "../../assets/loginlogo.png";
-import whitelogo from "../../assets/whitelogo.png";
 import { ImFacebook2 } from "react-icons/im";
 import { FcGoogle } from "react-icons/fc";
 import { Link, useNavigate } from "react-router-dom";
@@ -16,10 +15,12 @@ import { BASE_URL } from "../../api-integration/urlsVariable";
 import { toast } from "react-toastify";
 import { FaEye } from "react-icons/fa";
 import { IoMdEyeOff } from "react-icons/io";
-import EditProfileModal from "./EditUserDetails";
+import { login } from "../../redux/actions/login-actions";
+import { useDispatch } from "react-redux";
 
 const SignUp = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch()
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [showPassword, setShowPAssword] = useState(false);
@@ -74,7 +75,7 @@ const SignUp = () => {
       setError("Passwords do not match.");
       return;
     }
-    console.log("nnn67");
+
     try {
       // If successful, register the user with the backend
       console.log("nnn");
@@ -86,11 +87,35 @@ const SignUp = () => {
   };
 
   const handleGoogleLogin = async () => {
+    const state = location.state;
     try {
       const result = await signInWithPopup(auth, googleProvider);
-      console.log("Google login successful:", result.user);
+      console.log("Google login successful:", result.user.email);
+      console.log("Google login successful:", result.user.displayName);
+      const response = await fetchDataFromAPI(
+        "POST",
+        `${BASE_URL}user-google-login`,
+        {
+          email: result.user.email,
+          firstName: result.user.displayName,
+        }
+      );
+      console.log("response", response);
+      if (response.success) {
+        toast.success("Login SuccessFully");
+        dispatch(login(true));
+        localStorage.setItem("token", response.data);
+        if (state?.countryId) {
+          console.log("in");
+          navigate(`/visa-types/${state.countryId}`);
+        } else {
+          console.log("out");
+          navigate("/");
+        }
+      }
     } catch (err) {
       console.error("Google login failed:", err);
+      toast.error(err.message);
     }
   };
   const sendPhoneOtp = async () => {
@@ -111,12 +136,12 @@ const SignUp = () => {
     }
   };
 
-  const verifyPhoneOtp = async () => {
+  const verifyPhoneOtp = async (otp) => {
     try {
       const response = await fetchDataFromAPI(
         "POST",
         `${BASE_URL}user-verify-number`,
-        { phoneNumber: phone, otp: phoneOtp }
+        { phoneNumber: phone, otp }
       );
       if (response) {
         setPhoneVerified(true);
@@ -145,11 +170,11 @@ const SignUp = () => {
     }
   };
 
-  const verifyEmailOtp = async () => {
+  const verifyEmailOtp = async (otp) => {
     try {
       const response = await fetchDataFromAPI("POST", `${BASE_URL}verify-otp`, {
         email,
-        otp: emailOtp,
+        otp,
       });
       if (response) {
         setEmailVerified(true);
@@ -162,6 +187,7 @@ const SignUp = () => {
     }
   };
 
+
   const handleFacebookLogin = async () => {
     try {
       const result = await signInWithPopup(auth, facebookProvider);
@@ -173,12 +199,29 @@ const SignUp = () => {
 
   const validatePhoneNumber = (phone) => {
     const phoneRegex = /^\d{10}$/;
-    return phoneRegex.test(phone);
+    const right =  phoneRegex.test(phone);
+   return right 
   };
 
   const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
+  };
+
+  const handlePhoneOtp = (e) => {
+    const otp = e.target.value;
+    setPhoneOtp(otp);
+    if (otp.length === 6) {
+      verifyPhoneOtp(otp);
+    }
+  };
+
+  const handleEmailOtp = (e) => {
+    const otp = e.target.value;
+    setEmailOtp(otp);
+    if (otp.length === 6) {
+      verifyEmailOtp(otp);
+    }
   };
 
   return (
@@ -218,20 +261,21 @@ const SignUp = () => {
           )}
           {otpSentToPhone && !phoneVerified && (
             <>
-              <input
-                type="text"
-                value={phoneOtp}
-                onChange={(e) => setPhoneOtp(e.target.value)}
-                placeholder="Enter OTP"
-                className="w-full p-2 mt-2 text-black border border-gray-300 rounded-md"
-              />
-              <button
+               <input
+              type="text"
+              value={phoneOtp}
+              onChange={handlePhoneOtp}
+              placeholder="Enter OTP"
+              className="w-full p-2 mt-2 text-black border border-gray-300 rounded-md"
+              maxLength={6}
+            />
+              {/* <button
                 type="button"
                 onClick={verifyPhoneOtp}
                 className="bg-green-500 text-white py-2 px-4 rounded-md mt-2"
               >
                 Verify Phone
-              </button>
+              </button> */}
             </>
           )}
           {phoneVerified && (
@@ -264,19 +308,20 @@ const SignUp = () => {
           {otpSentToEmail && !emailVerified && (
             <>
               <input
-                type="text"
-                value={emailOtp}
-                onChange={(e) => setEmailOtp(e.target.value)}
-                placeholder="Enter OTP"
-                className="w-full p-2 mt-2 text-black border border-gray-300 rounded-md"
-              />
-              <button
+              type="text"
+              value={emailOtp}
+              onChange={handleEmailOtp}
+              placeholder="Enter OTP"
+              className="w-full p-2 mt-2 text-black border border-gray-300 rounded-md"
+              maxLength={6}
+            />
+              {/* <button
                 type="button"
                 onClick={verifyEmailOtp}
                 className="bg-green-500 text-white py-2 px-4 rounded-md mt-2"
               >
                 Verify Email
-              </button>
+              </button> */}
             </>
           )}
           {emailVerified && (
@@ -328,7 +373,7 @@ const SignUp = () => {
           <button
             type="submit"
             className="w-full py-2 bg-blue-500 text-white rounded-md"
-            disabled={!phoneVerified || !emailVerified}
+            // disabled={!phoneVerified || !emailVerified}
           >
             Register
           </button>

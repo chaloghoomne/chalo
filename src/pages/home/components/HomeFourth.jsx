@@ -28,10 +28,10 @@ const HomeFourth = () => {
     <div className="flex flex-col md:flex-row items-center justify-center py-2 px-4 md:px-10 bg-white">
       {/* Left Content */}
       <div className="w-full md:w-[43%] md:text-left text-center md:p-4 p-1">
-        <h3 className="text-[#F2A137]  poppins-six mb-4">{data?.title}</h3>
+        <h2 className="text-[#F2A137] text-xl poppins-six mb-4">{data?.title}</h2>
         <h1
           style={{ lineHeight: "3rem" }}
-          className="text-3xl md:max-w-64 poppins-seven font-bold mb-4"
+          className="text-4xl md:max-w-[600px] poppins-seven font-bold mb-4"
         >
           {data?.heading}
         </h1>

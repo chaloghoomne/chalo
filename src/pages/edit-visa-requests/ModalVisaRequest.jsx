@@ -133,6 +133,7 @@ const ModalVisaRequest = ({ user, isEdit, onClose }) => {
     newformData.append(`gender`, formData.gender);
     newformData.append(`passportNumber`, formData.passportNumber);
     newformData.append(`dob`, formData.dob);
+    newformData.append(`ageGroup`, formData.ageGroup);
     newformData.append(`passportIssueDate`, formData.passportIssueDate);
     newformData.append(`passportValidTill`, formData.passportValidTill);
     formData?.documents?.forEach((item, index) => {
@@ -262,6 +263,20 @@ const ModalVisaRequest = ({ user, isEdit, onClose }) => {
                 <option value="female">Female</option>
               </select>
             </div>
+            <div>
+  <label className="block text-sm font-semibold">Age Group</label>
+  <select
+    name="ageGroup"
+    required
+    value={formData.ageGroup}
+    onChange={handleFields}
+    className="w-full p-2 border rounded-lg"
+  >
+    <option value="">Select Age Group</option>
+    <option value="Child">Under 18</option>
+    <option value="Adult">18 and Over</option>
+  </select>
+</div>
             <div>
               <label className="block text-sm font-semibold">
                 Passport Number

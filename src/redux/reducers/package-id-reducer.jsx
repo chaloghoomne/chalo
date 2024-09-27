@@ -91,3 +91,29 @@ export const VisaIdReducer = (state = { visaId: "" }, actions) => {
       return state;
   }
 };
+
+export const ChildSHowIdReducer = (state = { childId: "" }, actions) => {
+  const { type, payload } = actions;
+  switch (type) {
+    case "CHILD_SHOW_ID":
+      return {
+        childId: payload,
+      };
+
+    default:
+      return state;
+  }
+};
+
+export const ShowButtonReducer = (state = { buttonShow: false }, actions) => {
+  const { type, payload } = actions;
+  switch (type) {
+    case "SHOW_BUTTON":
+      return {
+        buttonShow: payload,
+      };
+
+    default:
+      return state;
+  }
+};

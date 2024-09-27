@@ -57,6 +57,7 @@ const Footer = () => {
           <h2 className="text-4xl  text-black poppins-six  font-semibold">
             Sign up to our newsletter
           </h2>
+          
           <p
             style={{ overflowWrap: "anywhere" }}
             className="mt-4  text-black poppins-four  w-full text-sm text-center max-w-[90%] md:max-w-[40%]"
@@ -83,7 +84,9 @@ const Footer = () => {
       </div>
       <div className="max-w-7xl mx-auto border-t border-gray-200 border-b px-4 sm:px-6 lg:px-8 py-14 flex flex-wrap lg:flex-nowrap lg:justify-between  gap-8">
         <div className="lg:min-w-96 flex flex-col justify-start items-start lg:max-w-96">
-          <img src={logo} alt="Chalo Ghoomne" className="w-52" />
+          <div className="w-full self-start ">
+          <img src={logo} alt="Chalo Ghoomne" className="w-52 self-start items-start"  />
+          </div>
           <p className=" text-gray-700 text-xs poppins-five ">
             {/* <span>125, 2nd FLoor New UCO Bank Shahhpur Jat,Siri Fort </span>
             <span>New Delhi - 110049</span>
