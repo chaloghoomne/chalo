@@ -18,8 +18,8 @@ function FAQs({ data }) {
   };
 
   return (
-    <div className="w-full p-6 bg-white">
-      <h1 className="text-3xl font-bold text-center mb-6">
+    <div className="w-full p-6 bg-white ml-[8px]">
+      <h1 className="text-3xl font-bold  mb-6">
         Frequently Asked Questions
       </h1>
       <div className="w-full max-w-4xl mx-auto">

@@ -92,9 +92,9 @@ const MonthCalender = ({ onClose }) => {
   return (
     <div className="w-full bg-white rounded-lg max-h-[500px] overflow-auto shadow-lg p-4">
       <h2 className="text-lg font-semibold mb-4">Select your departure date</h2>
-      <div className="flex mb-4">
+      <div className="flex gap-5 mb-4">
         <button
-          className={`flex-1 py-2 text-center rounded-l-full rounded-r-full ${
+          className={`flex-1 py-2 text-center rounded-lg ${
             isFixed ? "bg-blue-500 text-white" : "bg-gray-200"
           }`}
           onClick={() => setIsFixed(true)}
@@ -102,7 +102,7 @@ const MonthCalender = ({ onClose }) => {
           Travel Date
         </button>
         <button
-          className={`flex-1 py-2 text-center rounded-l-full rounded-r-full ${
+          className={`flex-1 py-2 text-center rounded-lg ${
             !isFixed ? "bg-blue-500 text-white" : "bg-gray-200"
           }`}
           onClick={() => setIsFixed(false)}
@@ -123,7 +123,7 @@ const MonthCalender = ({ onClose }) => {
       <div className="mb-4 ">{isFixed ? <Calendar /> : <ReturnCalender />}</div>
       <button
         onClick={() => proceedFunc()}
-        className="w-full bg-blue-500 text-white py-2 rounded"
+        className="w-full bg-blue-500 text-white py-2 rounded-lg"
       >
         Proceed to Application
       </button>

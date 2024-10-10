@@ -12,7 +12,9 @@ const Home = () => {
     <>
       <HomeFirst homeSecondRef={homeSecondRef} />
       <HomeSecond ref={homeSecondRef} />
+      <div className="h-1 rounded-lg border-2  border-black/10 "></div>
       <HomeThird />
+      <div className="h-1 rounded-lg border-2  border-black/10 "></div>
       <HomeFourth />
     </>
   );

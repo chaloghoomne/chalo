@@ -213,7 +213,7 @@ const VisaDetails = () => {
       console.log("hit3");
     }
   };
-
+console.log({partners},"Partnerts")
   // const handleApplicationType = async (type, date) => {
   //   console.log(date, "date");
   //   const newDate = new Date(date).toISOString();
@@ -378,8 +378,8 @@ const VisaDetails = () => {
 
       {/* Apply Section */}
 
-      <div className="w-full flex md:flex-row flex-col justify-between  md:px-10 px-5 ">
-        <div ref={applyNowRef} className="mb-6 md:w-[50%] w-full">
+      <div className="w-full flex md:flex-row flex-col justify-between  md:px-10 px-5  ">
+        <div ref={applyNowRef} className="mb-6 md:w-[50%] ml-6 w-full">
           <h2 className="text-3xl font-bold mt-3 mb-2">
             Apply now for guaranteed visa on{" "}
           </h2>
@@ -436,12 +436,12 @@ const VisaDetails = () => {
             className="w-full bg-cover z-30 mt-7 mb-8 pb-16 mx-auto bg-transparent max-w-[29rem] md:max-w-[29rem] md:p-10 p-6"
           >
             <div className="flex justify-between px-5 items-center  mb-4">
-              <h2 className="text-2xl poppins-six relative top-5 font-semibold ">
-                {" "}
+              <h2 className="text-2xl flex flex-row poppins-six relative top-5 font-semibold ">
+              Travellers
                 <RiContactsLine size={30} style={{ fontWeight: "bold" }} />
-                Travellers
+              
               </h2>
-              <div className="flex items-center relative top-10 space-x-2 p-b8">
+              <div className="flex items-center relative top-5 space-x-2 p-b8">
                 <button
                   onClick={() => handletravelerNumber("sub")}
                   className="bg-white border border-black  text-lg flex cursor-pointer justify-center items-center w-4 h-4 rounded-full"
@@ -457,7 +457,7 @@ const VisaDetails = () => {
                 </button>
               </div>
             </div>
-            <div className="w-full px-5 rounded-xl  relative top-3 border-gray-300 border bg-gray-800/60 "></div>
+            <div className="w-full px-5 rounded-xl  relative top-3 border-gray-400 border-dashed border-[1px] "></div>
             {/* <hr className="border-black " /> */}
             <div className="mb-4 pt-3 px-5">
               <h3 className="text-xl poppins-six relative top-3 font-semibold">
@@ -476,7 +476,7 @@ const VisaDetails = () => {
             <div className="mb-4 px-10 relative top-3 ">
               <div
                 style={{}}
-                className="flex w-full flex-wrap gap-6 justify-evenly "
+                className="flex w-full flex-wrap gap-3 justify-between "
               >
                 <div className="text-center">
                   <p className="font-semibold poppins-six text-[12px]">
@@ -496,29 +496,32 @@ const VisaDetails = () => {
                   </p>
                   <p className="text-xs text-start">{data?.processingTime}</p>
                 </div>
-                <div className="text-center">
+                <div className="flex flex-row gap-16 justify-between">
+                <div className="">
                   <p className="font-semibold poppins-six text-[12px]">STAY</p>
                   <p className="text-xs text-start">{data?.period}</p>
                 </div>
-                <div className="text-center">
+                <div >
                   <p className="poppins-six text-[12px] font-semibold">
                     ENTRY TYPE
                   </p>
                   <p className="text-xs text-start">{data?.entryType}</p>
                 </div>
+                </div>
               </div>
             </div>
-            <div className="mb-4 flex px-5 justify-between w-full">
-              <h3 className="text-xl poppins-six font-medium">Total Amount</h3>
-              <p className="text-xl poppins-six font-medium">
+            <div className="mb-[6px] flex  px-5 justify-between w-full">
+              <h3 className="text-xl poppins-six font-medium " >Total Amount</h3>
+              <p className="text-xl poppins-six font-medium ">
                 ₹{data?.price * numberOfTravelers}
               </p>
             </div>
-            <div className="w-full border-dashed border px-5  my-2 border-black"></div>
+            <div className="w-full px-5 rounded-xl  relative top-3 border-gray-400 border-dashed border-[1px] "></div>
+            {/* <div className="w-full border-dashed border px-5  my-2 border-black"></div> */}
             <div className="flex justify-center items-center">
               <button
                 onClick={handleStartApplication}
-                className="bg-gradient-to-r relative cursor-pointer top-2 from-[#3180CA] to-[#7AC7F9] text-white py-3 px-4 rounded-2xl text-2xl poppins-six w-[80%]"
+                className="bg-gradient-to-r mt-[20px] relative cursor-pointer top-2 from-[#3180CA] to-[#7AC7F9] text-white py-3 px-4 rounded-2xl text-2xl poppins-six w-[80%]"
               >
                 Start Application
               </button>
@@ -614,12 +617,12 @@ const VisaDetails = () => {
       <div className="md:w-[60%] w-full"><FAQs ref={faqRef} data={faqData?.faq} /></div>
     
       <div className="text-md w-full md:w-[60%] poppins-four py-5 text-black px-10">
-        {data?.longDescription}
+        {data?.longDescription} 
       </div>
       {/* Partners Section */}
-      <div className="w-full md:w-[60%]">
-        <h2 className="text-2xl font-bold px-5  mb-4">Partners we work with</h2>
-        <div className="overflow-x-auto px-5">
+      <div className="w-full md:w-[60%] p-6 ml-[8px]">
+        <h2 className="text-3xl font-bold  mb-6">Partners we work with</h2>
+        <div className="overflow-x-auto">
           <div className="flex space-x-4 py-5">
             {partners?.map((partner) => {
               return (
@@ -636,14 +639,16 @@ const VisaDetails = () => {
                         alt="India"
                         className="w-full h-[160px] bg-cover rounded-lg mb-2"
                       />
+                      <div className="h-[50px] overflow-scroll">
                       <p
                         style={{
                           overflowWrap: "anywhere",
                         }}
                         className="font-semibold max-w-[200px]"
                       >
-                        {partner?.title}
+                        {partner?.heading}
                       </p>
+                      </div>
                       {/* <p
                         style={{
                           overflowWrap: "anywhere",

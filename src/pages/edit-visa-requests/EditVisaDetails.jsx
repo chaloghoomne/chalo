@@ -258,7 +258,7 @@ const EditVisaDetails = () => {
   const totalPrice = calculateTotalPrice();
 
   return (
-    <div className="container mx-auto px-4 flex flex-col py-14">
+    <div className="container mx-auto px-4 flex flex-col py-20">
       <div className="flex flex-col justify-between items-center mb-5">
         <button className="bg-orange-500 text-xl font-bold text-white py-3 mt-5 px-10 rounded-[25px]">
           View on {new Date(from).toDateString()}
@@ -390,7 +390,7 @@ const EditVisaDetails = () => {
           <span>GST (18%):</span>
           <span>₹{Math.floor(totalPrice.gst)} </span>
         </div>
-        {insurancePrice > 0 && (
+        {/* {insurancePrice > 0 && (
           <div className="w-full flex justify-between mb-2 items-center">
             <label
               htmlFor="insurance-checkbox"
@@ -405,9 +405,9 @@ const EditVisaDetails = () => {
               />
               Insurance
             </label>
-            {/* <span>{insurance ? `₹${insurancePrice} ` : "0 "}</span> */}
+            <span>{insurance ? `₹${insurancePrice} ` : "0 "}</span>
           </div>
-        )}
+        )} */}
         <div className="w-full flex justify-between font-bold">
           <span>Total Amount:</span>
           <span>₹{Math.floor(totalPrice.totalAmount)} </span>

@@ -183,7 +183,7 @@ const ModalVisaRequest = ({ user, isEdit, onClose }) => {
 
   return (
     <div className="fixed inset-0 h-full z-30 bg-gray-600 bg-opacity-50 flex justify-center items-center">
-      <div className="bg-orange-100 p-6 rounded-lg shadow-lg w-full max-w-3xl overflow-y-auto max-h-[75%]">
+      <div className="bg-orange-100 p-6 mt-10 rounded-lg shadow-lg w-full max-w-3xl overflow-y-auto max-h-[75%]">
         <button
           className="text-gray-500 hover:text-gray-700"
           onClick={handleClose}
@@ -376,7 +376,7 @@ const ModalVisaRequest = ({ user, isEdit, onClose }) => {
             <div className="flex justify-end">
               <button
                 type="submit"
-                className="bg-blue-500 text-white py-2 px-4 rounded-lg"
+                className="bg-blue-600 text-white py-2 px-4 rounded-lg"
               >
                 Save Changes
               </button>

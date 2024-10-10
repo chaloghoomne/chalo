@@ -27,7 +27,7 @@ const HomeSecond = forwardRef((props, ref) => {
           "GET",
           `${BASE_URL}${NetworkConfig.GET_HEADING_BY_ID}/Main`
         );
-        console.log(response);
+        console.log(response,"responseOfDATA");
         if (response) {
           setData(response.data);
         }
@@ -62,11 +62,18 @@ const HomeSecond = forwardRef((props, ref) => {
   }, [inputValue]);
 
   return (
-    <div ref={ref} className=" pt-12 px-4  md:px-10">
-      <h1 className="text-3xl poppins-six font-bold text-center mb-12">
+    <div ref={ref} className="py-20 px-4 container">
+      {/* <h1 className="text-3xl poppins-six font-bold text-center mb-12">
         {data?.heading || "World Best Visas Requested Countries"}
+      </h1> */}
+      <h2 className="text-[22px] text-orange-500 text-center poppins-five mb-2">
+      {data?.title}
+      </h2>
+      <h1 className="text-5xl poppins-six text-center  font-bold mb-6">
+      {data?.heading}
       </h1>
-      <div className="flex flex-wrap justify-center  items-center  gap-6">
+      
+      <div className="flex flex-wrap mt-12 justify-center items-center gap-6">
         {packages?.slice(0, finalValue)?.map((visa, index) => (
           <VisaCard
             key={index}

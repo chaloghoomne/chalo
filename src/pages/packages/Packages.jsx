@@ -49,7 +49,7 @@ const Packages = ({ plans }) => {
   };
 
   return (
-    <div className="  flex flex-col items-center  mt-[-40px] justify-center md:px-0 px-5 py-20">
+    <div className=" flex flex-col items-center  mt-[-40px] justify-center md:px-0 px-5 pt-20">
       <p className="text-md text-[#F26337] poppins-seven  font-bold mb-2">
         RECOMMENDATIONS
       </p>

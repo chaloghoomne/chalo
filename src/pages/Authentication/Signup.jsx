@@ -372,7 +372,7 @@ const SignUp = () => {
           {/* Register Button */}
           <button
             type="submit"
-            className="w-full py-2 bg-blue-500 text-white rounded-md"
+            className="w-full py-2 bg-blue-600 text-white rounded-md"
             // disabled={!phoneVerified || !emailVerified}
           >
             Register

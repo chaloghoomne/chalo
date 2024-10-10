@@ -269,9 +269,9 @@ const PersonDetails = () => {
  
 
   return (
-    <div className="flex flex-col lg:flex-row px-3 justify-center items-center py-10 min-h-screen sm:bg-gray-200 bg-white ">
-      <div className=" lg:w-full w-full flex h-full mx-5 border-gray-300 border py-2 bg-white justify-center items-center ">
-        <div className="bg-white p-8 px-10  rounded-lg  w-full ">
+    <div className="flex flex-col lg:flex-row px-3 justify-center items-center py-10 min-h-screen  bg-white">
+      <div className=" lg:w-full w-full flex h-full rounded-lg mx-5 border-gray-300 shadow-md shadow-gray-300 border py-2 bg-white justify-center items-center w-[90%] mx-[5%]  ">
+        <div className="bg-white p-8 px-10 rounded-lg  w-full ">
           {/* Visa Validity */}
           <div className="flex flex-col justify-between items-center mb-5">
             <button className="bg-orange-500 text-xl font-bold text-white py-3 mt-5 px-10 rounded-[25px]">
@@ -297,11 +297,12 @@ const PersonDetails = () => {
                   disabled
                 />
               </div>
+              <div>
               <img
                 src="https://i.pinimg.com/originals/8d/d0/25/8dd0251b583a044fa7f5c40c9c978d06.png"
-                className="w-44 hidden lg:block absolute left-[450px] top-[-48px] "
+                className="w-96 hidden lg:block absolute right-[30%] top-[-150px] "
                 alt=""
-              />
+              /></div>
               <div className="flex flex-col gap-2">
                 <span>Return Date</span>
                 <input
@@ -516,7 +517,7 @@ const PersonDetails = () => {
             <div className="text-center">
              { buttonShow && <button
                 type="submit"
-                className="bg-green-500 text-white py-2 px-4 rounded-lg"
+                className=" bg-orange-500 text-white py-2 px-8 mt-12 text-lg poppins-three rounded"
               >
                 {packageData?.orderDetails === travlersCount
                   ? "Proceed to Checkout"

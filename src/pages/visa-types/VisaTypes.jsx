@@ -106,7 +106,7 @@ const VisaTypes = () => {
             }`}
             onClick={() => handleplans(visa?._id, visa?.name)}
           >
-            <div
+            {/* <div
               className={`w-4 h-4 absolute left-2 top-5 mb-4 mx-auto rounded-full  `}
             >
               {" "}
@@ -114,7 +114,7 @@ const VisaTypes = () => {
                 size={15}
                 color={`${selectedVisa === visa?._id ? "orange" : "gray"}`}
               />
-            </div>
+            </div> */}
             <img
               src={visa?.image}
               alt={visa?.name}

@@ -8,6 +8,7 @@ import whitelogo from "../../assets/whitelogo.png";
 import { BASE_URL } from "../../api-integration/urlsVariable";
 import { fetchDataFromAPI } from "../../api-integration/fetchApi";
 import { getCountryId } from "../../redux/actions/package-id-actions";
+import { FaPhoneAlt } from "react-icons/fa";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -77,7 +78,7 @@ const Navbar = () => {
     }
     setBgColor(
       pathName === "/"
-        ? "bg-gradient-to-r from-[#3180CA] to-[#7AC7F9]"
+        ? "bg-gradient-to-r  from-[#3180CA] to-[#7AC7F9]"
         : "bg-white shadow-md"
     );
   }, [location.pathname]);
@@ -85,7 +86,7 @@ const Navbar = () => {
   return (
     <nav className={`${bgColor} w-full fixed z-50 top-0`}>
       <div className="w-full mx-auto px-2 sm:px-6 lg:px-8">
-        <div className="relative flex items-center justify-between h-16">
+        <div className="relative flex items-center py-5 my-2 justify-between h-16">
           <div className="absolute inset-y-0 left-0 flex items-center lg:hidden">
             {/* Mobile menu button */}
             <button
@@ -131,7 +132,7 @@ const Navbar = () => {
               )}
             </button>
           </div>
-          <div className="flex justify-between ">
+          <div className="flex justify-between items-center  ">
             <Link to="/">
               <div className="my-8  flex justify-center items-center">
                 <img
@@ -141,18 +142,30 @@ const Navbar = () => {
                 />
               </div>
             </Link>
-          </div>
-          <div className="absolute hidden inset-y-0 right-0 sm:flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-            <a
+            <div className={`flex ${whichLogo? "text-white":"text-black"}`}>
+          <div className="block poppins-three pop px-3 py-2  rounded-md text-[12px] font-normal">Visa</div>
+          <div className="block poppins-three pop px-3 py-2  rounded-md text-[12px] font-normal">Visa Application</div>
+          <a
               href="tel:+918527418635"
-              className=" block poppins-three pop px-3 py-2 text-white rounded-md text-[12px] font-normal"
+              className=" block poppins-three pop px-3 py-2 rounded-md text-[12px] font-normal"
             >
               Agent 
+            </a>
+          </div>
+          </div>
+         
+          <div className={` ${whichLogo? "text-white":"text-black"} absolute hidden inset-y-0 right-0 sm:flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0`}>
+         
+            <a
+              href="tel:+918527418635"
+              className=" block poppins-three flex gap-2 pop px-3 py-2  rounded-md text-[12px] font-normal"
+            >
+           <FaPhoneAlt  size={15} color={whichLogo?"white":"black"}/> 8527418635
             </a>
             {!localStorage.getItem("token") ? (
               <Link
                 to="/login"
-                className="ml-3 bg-[#F26337] poppins-three text-white px-8 py-2 rounded-md text-[14px] font-medium"
+                className="ml-3 bg-[#F26337] poppins-three text-black px-8 py-2 rounded-md text-[14px] font-medium"
               >
                 Login
               </Link>
@@ -167,8 +180,8 @@ const Navbar = () => {
                   className="w-12 h-12  rounded-[70px]"
                 />
                 <div className="flex flex-col justify-between">
-                  <p className="text-xs text-white">Welcome Back</p>
-                  <p className="text-sm  text-white max-w-40 overflow-x-auto  font-bold">
+                  <p className="text-xs text-black">Welcome</p>
+                  <p className="text-sm  text-black max-w-40 overflow-x-auto  font-bold">
                     {formData?.firstName} {formData?.lastName}
                   </p>
                 </div>
@@ -241,12 +254,12 @@ const Navbar = () => {
             >
               Contact us
             </a>
-            {/* <a
+            <a
               href="tel:+918527418635"
               className="hover:text-[#439BD5] block px-3 py-2 rounded-md text-base font-medium"
             >
               Agent Login
-            </a> */}
+            </a>
             <button className="block w-full bg-[#F26337] text-white px-8 py-2 rounded-md text-base font-medium">
               Login
             </button>
