@@ -25,7 +25,7 @@ const HomeFourth = () => {
   }, []);
 
   return (
-    <div className="flex container flex-col md:flex-row items-center justify-between py-20 md:px-10 bg-white ">
+    <div className="flex  flex-col md:flex-row container  mx-auto items-center justify-between py-20 md:px-10 bg-white ">
       {/* Left Content */}
       <div className="w-full md:w-[43%] md:text-left text-center md:p-4 p-1">
         <h2 className="text-[#F2A137] text-xl poppins-six mb-4">{data?.title}</h2>
@@ -55,11 +55,11 @@ const HomeFourth = () => {
       </div>
 
       {/* Right Image */}
-      <div className="w-full relative md:w-[57%]  flex md:items-end bg-cover justify-center mt-5 md:mt-0">
+      <div className="w-full relative md:w-[57%]  flex md:items-end bg-cover justify-end mt-5 md:mt-0">
         <img
           src={ratings}
           alt="Happy Customer"
-          className="w-[80%] relative md:left-20 h-auto max-w-[600px] "
+          className="w-[80%] relative  h-auto max-w-[600px] "
         />
       </div>
     </div>

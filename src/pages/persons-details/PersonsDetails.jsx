@@ -269,9 +269,9 @@ const PersonDetails = () => {
  
 
   return (
-    <div className="flex flex-col lg:flex-row px-3 justify-center items-center py-10 min-h-screen  bg-white">
-      <div className=" lg:w-full w-full flex h-full rounded-lg mx-5 border-gray-300 shadow-md shadow-gray-300 border py-2 bg-white justify-center items-center w-[90%] mx-[5%]  ">
-        <div className="bg-white p-8 px-10 rounded-lg  w-full ">
+    <div className="flex flex-col lg:flex-row px-3 justify-center items-center pt-20 min-h-screen  bg-white">
+      <div className=" lg:w-full w-full flex h-full rounded-lg mx-5 border-gray-300 mx-auto container py-2 bg-white justify-center items-center w-[90%] mx-[5%]  ">
+        <div className="bg-white pt-12 px-10 rounded-lg  w-full ">
           {/* Visa Validity */}
           <div className="flex flex-col justify-between items-center mb-5">
             <button className="bg-orange-500 text-xl font-bold text-white py-3 mt-5 px-10 rounded-[25px]">
@@ -283,8 +283,8 @@ const PersonDetails = () => {
           </h1>
           </div>
 
-          <div className=" p-4 flex flex-col rounded-lg mb-4">
-            <button className="text-xl py-2 rounded-2xl px-5 flex justify-start gap-2 items-center bg-blue-500 text-white font-semibold">
+          <div className=" p-4 relative flex flex-col w-full rounded-lg mb-4">
+            <button className="text-xl z-30 w-full py-2 rounded-2xl px-5 flex justify-start gap-2 items-center bg-blue-500 text-white font-semibold">
               <IoMdCalendar size={25} color="white" /> Traveller Information
             </button>
             <div className="flex relative justify-between mt-2">
@@ -299,8 +299,8 @@ const PersonDetails = () => {
               </div>
               <div>
               <img
-                src="https://i.pinimg.com/originals/8d/d0/25/8dd0251b583a044fa7f5c40c9c978d06.png"
-                className="w-96 hidden lg:block absolute right-[30%] top-[-150px] "
+                src="https://t3.ftcdn.net/jpg/05/69/35/72/360_F_569357280_YSngXd8RPso9rI1D3YxakFBAnfVgxkwn.jpg"
+                className="w-[290px] z-0 hidden lg:block absolute right-[40%] top-[-45px] "
                 alt=""
               /></div>
               <div className="flex flex-col gap-2">
@@ -316,12 +316,12 @@ const PersonDetails = () => {
           </div>
 
           {/* Personal Information */}
-
-          <button className="text-xl  py-2 w-[95%] mx-3 mb-5 rounded-2xl px-5 flex justify-start gap-2 items-center bg-blue-500 text-white font-semibold">
+          <div className=" px-4 relative flex flex-col w-full rounded-lg my-4">
+          <button className="text-xl z-30 py-2 w-full rounded-2xl px-5   flex justify-start gap-2 items-center bg-blue-500 text-white font-semibold">
             <MdOutlinePersonAdd size={25} color="white" />
             Personal Information
           </button>
-
+</div>
           <form onSubmit={handleSubmit}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 px-10 mb-4">
               <div>
@@ -517,7 +517,7 @@ const PersonDetails = () => {
             <div className="text-center">
              { buttonShow && <button
                 type="submit"
-                className=" bg-orange-500 text-white py-2 px-8 mt-12 text-lg poppins-three rounded"
+                className="bg-[#F26438] text-white py-2 px-8 mt-12 text-lg poppins-three rounded-full"
               >
                 {packageData?.orderDetails === travlersCount
                   ? "Proceed to Checkout"

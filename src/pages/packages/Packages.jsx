@@ -111,7 +111,7 @@ const Packages = ({ plans }) => {
       </div>
       <button
         onClick={handleRedirect}
-        className=" bg-orange-500 text-white py-2 px-8 mt-12 text-lg poppins-three rounded"
+        className=" bg-[#F26438] text-white py-2 px-8 mt-12 text-lg poppins-three rounded-full"
       >
         Continue
       </button>

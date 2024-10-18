@@ -5,6 +5,8 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import React, { useEffect, useRef, useState } from "react";
 import Calendar from "./components/Calender";
+import { RxCross1 } from "react-icons/rx";
+
 import MonthCalender from "./components/MonthCalender";
 import { fetchDataFromAPI } from "../../api-integration/fetchApi";
 import { BASE_URL } from "../../api-integration/urlsVariable";
@@ -357,7 +359,7 @@ console.log({partners},"Partnerts")
   };
 
   return (
-    <div ref={contentRef} className="w-full h-full mx-auto py-10">
+    <div ref={contentRef} className="w-full h-full mx-auto container py-10">
       {/* Main Image */}
       <div
          ref={mainImageRef}
@@ -433,7 +435,7 @@ console.log({partners},"Partnerts")
               top: isLargeScreen ? '0' : 'auto',
               right: isLargeScreen ? '5px' : 'auto'
             }}
-            className="w-full bg-cover z-30 mt-7 mb-8 pb-16 mx-auto bg-transparent max-w-[29rem] md:max-w-[29rem] md:p-10 p-6"
+            className="w-full bg-cover z-30  pb-16 mx-auto mt-7  bg-transparent max-w-[29rem] md:max-w-[26rem] md:p-10 p-6"
           >
             <div className="flex justify-between px-5 items-center  mb-4">
               <h2 className="text-2xl flex flex-row poppins-six relative top-5 font-semibold ">
@@ -521,7 +523,7 @@ console.log({partners},"Partnerts")
             <div className="flex justify-center items-center">
               <button
                 onClick={handleStartApplication}
-                className="bg-gradient-to-r mt-[20px] relative cursor-pointer top-2 from-[#3180CA] to-[#7AC7F9] text-white py-3 px-4 rounded-2xl text-2xl poppins-six w-[80%]"
+                className="bg-gradient-to-r mt-[10px] relative cursor-pointer top-2 from-[#3180CA] to-[#7AC7F9] text-white py-3 px-4 rounded-full text-2xl poppins-six w-[80%]"
               >
                 Start Application
               </button>
@@ -533,9 +535,9 @@ console.log({partners},"Partnerts")
       {/* Options Section */}
       <div className="mb-6  md:px-10 px-5">
         <div className="flex justify-center my-2 md:justify-start items-center mb-4">
-          <hr className="border-gray-400 h-[2px] bg-gray-400  w-[28%]" />
+          <hr className="border-gray-400 border-dashed border   w-[28%]" />
           <span className="mx-4 poppins-six text-xl">OR</span>
-          <hr className="border-gray-400 h-[2px] bg-gray-400  w-[28%]" />
+          <hr className="border-gray-400 border-dashed border   w-[28%]" />
         </div>
         <div className="flex flex-wrap   gap-4">
           {data?.instantHeading && data?.instantPrice && (
@@ -707,7 +709,7 @@ console.log({partners},"Partnerts")
       {/* Calendar Modal */}
       {isCalendarModalOpen && (
         <div className="fixed inset-0 flex z-50 items-start justify-center bg-black bg-opacity-50">
-          <div className="bg-white m-4 mt-5 max-h-[400px] rounded-lg shadow-lg w-full max-w-md">
+          <div className="bg-white relative m-4 mt-5 max-h-[400px] rounded-lg shadow-lg w-full max-w-md">
             <h2 className="text-xl poppins-four font-bold text-center my-2">
               Select Departure Date
             </h2>
@@ -720,9 +722,9 @@ console.log({partners},"Partnerts")
             <MonthCalender onClose={proceedApplication} />
             <button
               onClick={() => setCalendarModalOpen(false)}
-              className="absolute right-2 top-20 text-2xl font-bold"
+              className="absolute right-2 top-3 text-2xl font-bold"
             >
-              ❌
+             <RxCross1 size={20} color="red" />
             </button>
           </div>
         </div>
@@ -758,7 +760,7 @@ console.log({partners},"Partnerts")
               </div>
             </div>
             <button
-              className="bg-blue-500 text-white py-2 px-4 rounded-lg w-full"
+              className="bg-blue-500 text-white py-2 px-4 rounded-full w-full"
               onClick={handleFlexibleChoice}
             >
               Continue

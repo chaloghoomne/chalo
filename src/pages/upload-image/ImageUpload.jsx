@@ -269,8 +269,8 @@ const ImageUpload = () => {
                   key={index}
                   className="flex flex-col min-w-52 items-center mb-4 md:mb-0"
                 >
-                  <label className=" flex gap-2 text-gray-700">
-                    <img src={item?.icon} className="w-5 h-5" />
+                  <label className=" flex gap-4 justify-center items-center text-gray-700">
+                    <img src={item?.icon} className="w-8 h-4" />
                     {item?.name}
                   </label>
                   <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 mb-4">
@@ -337,7 +337,7 @@ const ImageUpload = () => {
           </>
         </div>
       </div>
-      {step === data?.length && <button onClick={handleSubmit} className="bg-orange-500 text-white relative top-[-40px] px-4 py-2 rounded-lg">Submit Documents</button>}
+      {step === data?.length && <button onClick={handleSubmit} className="bg-[#F26438] text-white relative top-[-40px] px-4 py-2 rounded-full">Submit Documents</button>}
     </>
   );
 };

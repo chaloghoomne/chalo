@@ -91,7 +91,7 @@ const VisaTypes = () => {
 
   return (
     <div className="flex flex-col  items-center justify-center py-20 px-4 bg-white">
-      <h2 className="text-3xl poppins-six text-center  font-bold mb-4">
+      <h2 className="text-3xl poppins-six text-center  font-bold my-4">
         {selectedCountry} Visa Application
       </h2>
       <p className="text-orange-500 poppins-four  text-xl mb-6">{data?.description }</p>
@@ -118,7 +118,7 @@ const VisaTypes = () => {
             <img
               src={visa?.image}
               alt={visa?.name}
-              className="w-32 h-32 rounded-2xl object-contain mt-6"
+              className="max-w-32 max-h-32 min-w-32 min-h-32 rounded-2xl object-cover mt-3"
             />
             <p className="font-semibold my-2">{visa?.name}</p>
           </div>

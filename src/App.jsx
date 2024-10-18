@@ -27,6 +27,14 @@ import Profile from "./pages/profile-section/Profile";
 import ScrollToTop from "./pages/helper/ScrolltoTop";
 import EditVisaDetails from "./pages/edit-visa-requests/EditVisaDetails";
 import ViewApplication from "./pages/profile-section/components/ViewApplication";
+import RefundPolicyPage from "./pages/policies/Refund";
+import PrivacyPolicyPage from "./pages/policies/Privacy";
+import Blog from "./pages/blogs/Blogs";
+import BlogDetails from "./pages/blogs/BlogDetails";
+import AboutUs from "./pages/our-details/About";
+import ContactUs from "./pages/our-details/Contact";
+import CareerForm from "./pages/forms/CareerForm";
+import TravelAgentForm from "./pages/forms/TravelAgentForm";
 
 const PrivateRoute = ({ children }) => {
   const token = localStorage.getItem("token");
@@ -116,6 +124,66 @@ const AppContent = () => {
               <PrivateRoute>
                 <ViewApplication />
               </PrivateRoute>
+            }
+          />
+           <Route
+            path="/privacy-policy"
+            element={
+              <PrivateRoute>
+                <PrivacyPolicyPage />
+              </PrivateRoute>
+            }
+          />
+           <Route
+            path="/refund-policy"
+            element={
+              <PrivateRoute>
+                <RefundPolicyPage />
+              </PrivateRoute>
+            }
+          />
+           <Route
+            path="/blogs"
+            element={
+              <PrivateRoute>
+                <Blog />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/blog/:id"
+            element={
+              <PrivateRoute>
+                <BlogDetails />
+              </PrivateRoute>
+            }
+          />
+           <Route
+            path="/about"
+            element={
+                <AboutUs />
+            }
+          />
+           <Route
+            path="/contact"
+            element={
+              
+                <ContactUs />
+             
+            }
+          />
+           <Route
+            path="/career-form"
+            element={
+                <CareerForm />
+            }
+          />
+           <Route
+            path="/travel-form"
+            element={
+              
+                <TravelAgentForm />
+             
             }
           />
         </Routes>

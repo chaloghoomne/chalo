@@ -376,7 +376,7 @@ const ModalVisaRequest = ({ user, isEdit, onClose }) => {
             <div className="flex justify-end">
               <button
                 type="submit"
-                className="bg-blue-600 text-white py-2 px-4 rounded-lg"
+                className="bg-[#F26438] text-white py-2 px-4 rounded-full"
               >
                 Save Changes
               </button>
@@ -396,13 +396,13 @@ const ModalVisaRequest = ({ user, isEdit, onClose }) => {
             <div className="flex justify-end gap-4">
               <button
                 onClick={() => handleConfirmation(false)}
-                className="bg-red-500 text-white py-2 px-4 rounded-lg"
+                className="bg-red-500 text-white py-2 px-4 rounded-full"
               >
                 No
               </button>
               <button
                 onClick={() => handleConfirmation(true)}
-                className="bg-orange-500 text-white py-2 px-4 rounded-lg"
+                className="bg-[#F26438] text-white py-2 px-4 rounded-full"
               >
                 Yes
               </button>

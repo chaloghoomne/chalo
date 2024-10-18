@@ -9,14 +9,14 @@ const Home = () => {
   const homeSecondRef = useRef(null);
 
   return (
-    <>
+    <div className="min-w-screen">
       <HomeFirst homeSecondRef={homeSecondRef} />
       <HomeSecond ref={homeSecondRef} />
-      <div className="h-1 rounded-lg border-2  border-black/10 "></div>
+      <div className="h-[2px] rounded-lg  bg-black/10 "></div>
       <HomeThird />
-      <div className="h-1 rounded-lg border-2  border-black/10 "></div>
+      <div className="h-[2px]  rounded-lg  bg-black/10 "></div>
       <HomeFourth />
-    </>
+    </div>
   );
 };
 

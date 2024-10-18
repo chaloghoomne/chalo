@@ -6,13 +6,18 @@ import linkedin from "../../assets/linkedin.jpg";
 import pinterest from "../../assets/pinterest.png";
 import twitter from "../../assets/twitter.png";
 import whatsapp from "../../assets/whatsapp.png";
-
+import whitelogo from "../../assets/whitelogo.png";
 import subscribe from "../../assets/subscribe.png";
 import { TbLocationShare } from "react-icons/tb";
+
 import { fetchDataFromAPI } from "../../api-integration/fetchApi";
 import { BASE_URL } from "../../api-integration/urlsVariable";
 import { toast } from "react-toastify";
 import { Link, useLocation } from "react-router-dom";
+import { FaFacebookF, FaInstagram, FaLinkedinIn, FaTwitter, FaWhatsapp, FaPinterest } from 'react-icons/fa';
+import { SiVisa, SiMastercard, SiPaypal, SiAmazonpay } from 'react-icons/si';
+import { BsPaypal } from "react-icons/bs";
+import { FaCcMastercard } from "react-icons/fa6";
 
 const Footer = () => {
   const [value, setValue] = useState("");
@@ -34,7 +39,7 @@ const Footer = () => {
     setValue(e.target.value);
   };
 
-  const className = ` mx-[5%] w-[90%] bg-cover bg-center rounded-2xl min-h-72 flex flex-col min-[1000px]  px-10 justify-center items-center text-white text-center py-8 bg-gradient-to-r from-[#F2A137] to-[#F2A137] mt-4 ${
+  const className = ` container  mx-auto w-[93%] bg-cover bg-center rounded-2xl min-h-72 flex flex-col min-[1000px]  mx-10 justify-center items-center text-white text-center py-8 bg-gradient-to-r from-[#F2A137] to-[#F2A137] mt-4 ${
     subscribe ? 'lg:bg-[url("' + subscribe + '")]' : " "
   }`;
 
@@ -59,7 +64,7 @@ const Footer = () => {
 
   return (
     <footer className="bg-white">
-      <div className="flex  py-3 pb-5 w-full bg-white">
+      <div className="flex justify-center items-center py-3 pb-5 w-full bg-white">
         {show && <div className={className}>
           <div className="w-full justify-center flex flex-col items-center text-center">
           <h2 className="text-4xl  text-black poppins-six font-semibold">
@@ -90,89 +95,81 @@ const Footer = () => {
           </div>
         </div>}
       </div>
-      <div className="bg-slate-300 container  mx-auto border-t border-gray-200 border-b px-6 sm:px-10 lg:px-14 py-14 flex flex-wrap lg:flex-nowrap lg:justify-between mt-4  gap-8">
-        <div className="lg:min-w-72 flex flex-col justify-start items-start lg:max-w-72">
-          <div className="w-full self-start">
-          <img src={logo} alt="Chalo Ghoomne"  className="self-start items-start w-[150px] mt-[-35px]"  />
-          </div>
-          <p className="text-gray-600 text-[13px]  mt-[25px] ">
-            {/* <span>125, 2nd FLoor New UCO Bank Shahhpur Jat,Siri Fort </span>
-            <span>New Delhi - 110049</span>
-            <span>b2b@chaloghoomne.com</span>
-            <span>www.chaloghoomne.com</span> */}
-            Our visa booking company is dedicated to simplifying the complex and
-            often daunting process of obtaining travel visas. With extensive
-            experience and a team of experts, we provide personalized services
-            to ensure a smooth and hassle-free visa application experience.
-          </p>
-          {/* <button className="mt-4 bg-[#F26337] text-white px-4 py-2 rounded">Read More</button> */}
+      <div className="bg-[#1E231F] text-white mx-auto border-t border-gray-200 border-b px-6 sm:px-10 lg:px-14 py-14 flex flex-wrap lg:flex-nowrap lg:justify-between mt-4 gap-8">
+      <div className="lg:min-w-72 flex flex-col justify-start items-start lg:max-w-72">
+        <div className="w-full self-start">
+          <img src={whitelogo} alt="Chalo Ghoomne" className="self-start items-start w-[150px] mt-[-5px]" />
         </div>
-        {/* <div>
-          <h3 className="text-lg font-semibold text-gray-800">Product</h3>
-          <ul className="mt-4 space-y-2 text-gray-600">
-            <li style={{ lineHeight: "2rem" }}>Features</li>
-            <li style={{ lineHeight: "2rem" }}>Pricing</li>
-          </ul>
-        </div> */}
-        <div>
-          <h3 className="text-lg font-bold text-gray-800">Company</h3>
-          <ul className="mt-4 space-y-2 text-gray-600">
-            <li style={{ lineHeight: "2rem" }}>Carrers</li>
-            <li style={{ lineHeight: "2rem" }}>Partners</li>
-            <li style={{ lineHeight: "2rem" }}>For Travel Agents</li>
-            <li style={{ lineHeight: "2rem" }}>About us</li>
-            <li style={{ lineHeight: "2rem" }}>Blog</li>
-          </ul>
+        <p className="text-white text-[13px] mt-[25px]">
+          Our visa booking company is dedicated to simplifying the complex and
+          often daunting process of obtaining travel visas. With extensive
+          experience and a team of experts, we provide personalized services
+          to ensure a smooth and hassle-free visa application experience.
+        </p>
+        <div className="mt-4 flex flex-wrap gap-4">
+          <a href="https://www.facebook.com/chaloghoomneofficial/" target="_blank" rel="noopener noreferrer">
+            <FaFacebookF className="w-6 h-6 hover:scale-110" />
+          </a>
+          <a href="https://www.instagram.com/chaloghoomneofficial/" target="_blank" rel="noopener noreferrer">
+            <FaInstagram className="w-6 h-6 hover:scale-110" />
+          </a>
+          <a href="https://linkedin.com/company/chaloghoomneofficial" target="_blank" rel="noopener noreferrer">
+            <FaLinkedinIn className="w-6 h-6 hover:scale-110" />
+          </a>
+          <a href="https://x.com/chaloghoomne1" target="_blank" rel="noopener noreferrer">
+            <FaTwitter className="w-6 h-6 hover:scale-110" />
+          </a>
+          <a href="https://wa.me/919555535252" target="_blank" rel="noopener noreferrer">
+            <FaWhatsapp className="w-6 h-6 hover:scale-110" />
+          </a>
+          <a href="https://in.pinterest.com/chaloghoomneofficial" target="_blank" rel="noopener noreferrer">
+            <FaPinterest className="w-6 h-6 hover:scale-110" />
+          </a>
         </div>
-        <div>
-          <h3 className="text-lg font-bold text-gray-800">Important Links</h3>
-          <ul className="mt-4 space-y-2 text-gray-600">
-            <li style={{ lineHeight: "2rem" }}>Privacy Policy</li>
-            <li style={{ lineHeight: "2rem" }}>Terms and Conditions</li>
-            <li style={{ lineHeight: "2rem" }}>Refund Policy</li>
-          </ul>
-        </div>
-        <div>
-          <h3 className="text-lg font-bold text-gray-800">Contact Us</h3>
-          <ul className="mt-4 space-y-2 text-gray-600">
-            <p style={{ lineHeight: "2rem" }}>
-              125, 2nd FLoor New UCO Bank Shahhpur Jat{" "}
-            </p>
-            <p style={{ lineHeight: "2rem" }}> Siri Fort,New Delhi - 110049</p>
-            <p style={{ lineHeight: "2rem" }}>b2b@chaloghoomne.com</p>
-            <p style={{ lineHeight: "2rem" }}>www.chaloghoomne.com</p>
-            <p style={{ lineHeight: "2rem" }}>9999999999</p>
-          </ul>
-
-          <div>
-            <div className="flex flex-row">
-            <a href = 'https://www.facebook.com/chaloghoomneofficial/' target="_blank">
-            <img src={facebook} className="w-6 h-6 hover:scale-110" />
-            </a>
-            <a href = 'https://www.instagram.com/chaloghoomneofficial/'  className="mx-2"  target="_blank">
-            <img src={instagram} className="w-6 h-6 hover:scale-110"/>
-            </a>
-            <a href = 'linkedin.com/company/chaloghoomneofficial' target="_blank">
-            <img src={linkedin} className="w-6 h-6 hover:scale-110"/>
-            </a>
-            </div>
-            <div className="flex flex-row mt-2">
-            <a href = 'https://x.com/chaloghoomne1' target="_blank">
-            <img src={twitter} className="w-6 h-6 hover:scale-110"/>
-            </a>
-            <a href = 'https://wa.me/919555535252' className="mx-2" target="_blank">
-            <img src={whatsapp} className="w-6 h-6 hover:scale-110"/>
-            </a>
-            <a href = 'https://in.pinterest.com/chaloghoomneofficial' target="_blank">
-            <img src={pinterest} className="w-6 h-6 hover:scale-110"/>
-            </a>
-            </div>
+      </div>
+      
+      <div>
+        <h3 className="text-lg font-bold text-white">Company</h3>
+        <ul className="mt-4 space-y-2 text-white">
+        <Link to="/career-form" className=""><li style={{ lineHeight: "2rem" }}>Careers</li></Link>
+        <Link to="/travel-form" className="">  <li style={{ lineHeight: "2rem" }}>For Travel Agents</li></Link>
+          <Link to="/about" className="">  <li style={{ lineHeight: "2rem" }}>About us</li></Link>
+          <Link to="/blogs" className=""><li style={{ lineHeight: "2rem" }}>Blog</li></Link>
+        </ul>
+      </div>
+      
+      <div>
+        <h3 className="text-lg font-bold text-white">Important Links</h3>
+        <ul className="mt-4 space-y-2 text-white">
+          <Link to="/privacy-policy"><li style={{ lineHeight: "2rem" }}>Privacy Policy</li></Link>
+          <li style={{ lineHeight: "2rem" }}>Terms and Conditions</li>
+          <Link to="/refund-policy"><li style={{ lineHeight: "2rem" }}>Refund Policy</li></Link>
+        </ul>
+      </div>
+      
+      <div>
+        <h3 className="text-lg font-bold text-white">Contact Us</h3>
+        <ul className="mt-4 space-y-2 text-white">
+          <p style={{ lineHeight: "2rem" }}>125, 2nd Floor New UCO Bank Shahhpur Jat</p>
+          <p style={{ lineHeight: "2rem" }}>Siri Fort, New Delhi - 110049</p>
+          <p style={{ lineHeight: "2rem" }}>www.chaloghoomne.com, 9999999999</p>
+        </ul>
+        
+        <div className="mt-4">
+          <h4 className="text-md font-semibold text-white mb-2">Payment Methods</h4>
+          <div className="flex flex-wrap gap-2">
+            <SiVisa className="w-8 h-8" color="" />
+            <FaCcMastercard className="w-8 h-8"  />
+            <BsPaypal className="w-8 h-8" color="blue" />
+            {/* <SiSkrill className="w-8 h-8" /> */}
+            <SiAmazonpay className="w-8 h-8"  color="yellow"/>
           </div>
         </div>
       </div>
-      <div className="py-2 bg-slate-300 flex justify-between px-14 items-center ">
-        <p className="text-gray-600 text-md poppins-four">Copyright c 2023</p>
-        <p className="text-gray-600 text-md poppins-four">
+    </div>
+      <div className="py-2 bg-[#1E231F] flex justify-between px-14 items-center ">
+        <p className="text-white text-md poppins-four">Copyright c 2023</p>
+        <p className="text-white text-md poppins-four">
           All Rights Reserved
         </p>
       </div>

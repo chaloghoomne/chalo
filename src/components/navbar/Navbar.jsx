@@ -142,54 +142,50 @@ const Navbar = () => {
                 />
               </div>
             </Link>
-            <div className={`flex ${whichLogo? "text-white":"text-black"}`}>
-          <div className="block poppins-three pop px-3 py-2  rounded-md text-[12px] font-normal">Visa</div>
-          <div className="block poppins-three pop px-3 py-2  rounded-md text-[12px] font-normal">Visa Application</div>
-          <a
-              href="tel:+918527418635"
-              className=" block poppins-three pop px-3 py-2 rounded-md text-[12px] font-normal"
-            >
-              Agent 
-            </a>
+          
+          <div className={`flex  md:ml-10 ${whichLogo? "text-white":"text-black"}`}>
+          <div className="block poppins-five pop px-3 py-2 cursor-pointer  rounded-md text-[16px] font-normal">Visa</div>
+          <div className="block poppins-five pop px-3 py-2 cursor-pointer rounded-md text-[16px] font-normal">Visa Appointments</div>
+          
           </div>
           </div>
          
-          <div className={` ${whichLogo? "text-white":"text-black"} absolute hidden inset-y-0 right-0 sm:flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0`}>
-         
+          <div className={` ${whichLogo? "text-white":"text-black"} absolute hidden inset-y-0 right-0 sm:flex items-center pr-2 sm:static sm:inset-auto sm:ml-20 sm:pr-0`}>
             <a
-              href="tel:+918527418635"
-              className=" block poppins-three flex gap-2 pop px-3 py-2  rounded-md text-[12px] font-normal"
+          
+              href="tel:+919555535252"
+              className={`block poppins-five relative ${!localStorage.getItem("token")?"left-0":"left-8"} flex  items-center justify-center gap-2 pop px-3 py-2 ml-6 rounded-md text-[16px] font-normal`}
             >
-           <FaPhoneAlt  size={15} color={whichLogo?"white":"black"}/> 8527418635
+           <FaPhoneAlt  size={15} color={whichLogo?"white":"black"}/> 9555535252
             </a>
             {!localStorage.getItem("token") ? (
               <Link
                 to="/login"
-                className="ml-3 bg-[#F26337] poppins-three text-black px-8 py-2 rounded-md text-[14px] font-medium"
+                className={`ml-3 bg-[#F26337] poppins-three  ${whichLogo?"text-white":"text-black"}  px-8 py-2 rounded-full text-[14px] font-medium`}
               >
                 Login
               </Link>
             ) : (
-              <div className="w-60 h-12 p-1 px-3 items-center justify-between  flex gap-2">
+              <div className="w-48 h-12 p-1 pl-3 items-center justify-end  flex gap-2">
                 <img
                   onClick={() => setIsLogin(!isLogin)}
                   src={
                     formData?.image ||
                     "https://cdn.pixabay.com/photo/2015/03/04/22/35/avatar-659652_640.png"
                   }
-                  className="w-12 h-12  rounded-[70px]"
+                  className="w-10 h-10  rounded-[70px]"
                 />
                 <div className="flex flex-col justify-between">
-                  <p className="text-xs text-black">Welcome</p>
-                  <p className="text-sm  text-black max-w-40 overflow-x-auto  font-bold">
+                  <p className={`text-sm ${whichLogo?"text-white":"text-black"} `}>Welcome</p>
+                  {/* <p className="text-sm  text-black max-w-40 overflow-x-auto  font-bold">
                     {formData?.firstName} {formData?.lastName}
-                  </p>
+                  </p> */}
                 </div>
                 <div
                   className="cursor-pointer"
                   onClick={() => setModalOpen(!modalOpen)}
                 >
-                  <IoMdArrowDropdown size={25} />
+                  <IoMdArrowDropdown size={25} color={whichLogo?"white":"black"} />
                 </div>
               </div>
             )}
@@ -198,13 +194,13 @@ const Navbar = () => {
                 <Link
                   to="/profile"
                   onClick={() => setModalOpen(!modalOpen)}
-                  className="border-b-2 py-1 cursor-pointer text-center hover:text-blue-600 border-gray-300"
+                  className="border-b-2 py-1 cursor-pointer text-black text-center hover:text-blue-600 border-gray-300"
                 >
                   Profile
                 </Link>
                 <p
                   onClick={() => handleLogout()}
-                  className="border-b-2 py-1 cursor-pointer text-center hover:text-blue-600 border-gray-300"
+                  className="border-b-2 py-1 text-black cursor-pointer text-center hover:text-blue-600 border-gray-300"
                 >
                   Logout
                 </p>

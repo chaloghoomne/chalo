@@ -258,7 +258,7 @@ const EditVisaDetails = () => {
   const totalPrice = calculateTotalPrice();
 
   return (
-    <div className="container mx-auto px-4 flex flex-col py-20">
+    <div className="container mx-auto px-4 flex flex-col pt-20">
       <div className="flex flex-col justify-between items-center mb-5">
         <button className="bg-orange-500 text-xl font-bold text-white py-3 mt-5 px-10 rounded-[25px]">
           View on {new Date(from).toDateString()}
@@ -421,7 +421,7 @@ const EditVisaDetails = () => {
       <div className="flex justify-center my-4">
         <button
           onClick={() => handlePayment()}
-          className="bg-orange-500 text-white py-2 px-4 rounded-lg"
+          className="bg-[#F26438] poppins-four text-white py-2 px-4 rounded-full "
         >
           Make Payment
         </button>
