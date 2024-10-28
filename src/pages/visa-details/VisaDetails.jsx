@@ -6,7 +6,6 @@ import "react-datepicker/dist/react-datepicker.css";
 import React, { useEffect, useRef, useState } from "react";
 import Calendar from "./components/Calender";
 import { RxCross1 } from "react-icons/rx";
-
 import MonthCalender from "./components/MonthCalender";
 import { fetchDataFromAPI } from "../../api-integration/fetchApi";
 import { BASE_URL } from "../../api-integration/urlsVariable";
@@ -26,13 +25,14 @@ import { GoDotFill } from "react-icons/go";
 import { CiWallet } from "react-icons/ci";
 import ReturnCalender from "./components/ReturnCalendar";
 import FAQs from "./components/Faqs";
+import VisaProcessSteps from "./components/Steps";
 
 const VisaDetails = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const countryId = useSelector((state) => state.CountryIdReducer.countryId);
   const [isReturnModalOpen, setIsReturnModalOpen] = useState(false);
-  const [selectedType, setSelectedType] = useState("");
+  const [selectedType, setSelectedType] = useState(null);
   const selectedCountry = useSelector(
     (state) => state.SelectedCountryReducer.selectedCountry
   );
@@ -43,7 +43,7 @@ const VisaDetails = () => {
   const fromDate = useSelector((state) => state.CalenderReducer.visaDate);
   const toDate = useSelector((state) => state.ReturnCalenderReducer.returnDate);
   const visaType = useSelector((state) => state.GetVisaTypeReducer.visaType);
-  console.log(fromDate, "zxcvbndfgh");
+
   const datePickerRef = useRef(null);
   const [numberOfTravelers, setNumberOfTravelers] = useState(1);
   const [isApplicationModalOpen, setApplicationModalOpen] = useState(false);
@@ -65,12 +65,12 @@ const VisaDetails = () => {
 
   useEffect(() => {
     const checkScreenSize = () => {
-      setIsLargeScreen(window.innerWidth >= 1024); // Assuming 1024px is your 'lg' breakpoint
+      setIsLargeScreen(window.innerWidth >= 1024);
     };
-
+  
     checkScreenSize();
     window.addEventListener('resize', checkScreenSize);
-
+  
     return () => window.removeEventListener('resize', checkScreenSize);
   }, []);
 
@@ -93,37 +93,69 @@ const VisaDetails = () => {
     fetchShowCoTraveler();
   }, [countryId]);
 
+  const [cardPosition, setCardPosition] = useState({ top: 0, right: 0 });
+  
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsLargeScreen(window.innerWidth >= 1024);
+    };
+  
+    checkScreenSize();
+    window.addEventListener('resize', checkScreenSize);
+  
+    return () => window.removeEventListener('resize', checkScreenSize);
+  }, []);
+
+  const footerRef = useRef(null);
+
   useEffect(() => {
     const handleScroll = () => {
-      if (!isLargeScreen || !mainImageRef.current || !cardRef.current || !contentRef.current) return;
+      if (!isLargeScreen || !mainImageRef.current || !cardRef.current || !footerRef.current) return;
 
       const imageBottom = mainImageRef.current.getBoundingClientRect().bottom;
-      const contentBottom = contentRef.current.getBoundingClientRect().bottom;
+      const footerTop = footerRef.current.getBoundingClientRect().top;
+      const cardHeight = cardRef.current.offsetHeight;
       const windowHeight = window.innerHeight;
+      const cardBottom = cardHeight + 80; // 80px is the top offset we're using
 
-      if (imageBottom <= 0 && contentBottom > windowHeight) {
+      // Calculate when card would overlap footer
+      const wouldOverlapFooter = (windowHeight - footerTop) + cardBottom > windowHeight;
+
+      // If we've scrolled past the main image but not into footer territory
+      if (imageBottom <= 0 && !wouldOverlapFooter) {
         cardRef.current.style.position = 'fixed';
-        cardRef.current.style.top = '30px';
-        cardRef.current.style.right = '15px';
-      } else if (imageBottom > 0) {
-        cardRef.current.style.position = 'absolute';
-        cardRef.current.style.top = `${imageBottom}px`;
-        cardRef.current.style.right = '5px';
-      } else if (contentBottom <= windowHeight) {
-        cardRef.current.style.position = 'absolute';
-        cardRef.current.style.top = `${contentBottom - cardRef.current.offsetHeight}px`;
-        cardRef.current.style.right = '5px';
+        cardRef.current.style.top = '60px';
+        cardRef.current.style.right = '47px';
+        cardRef.current.style.width = '26rem';
+        cardRef.current.style.opacity = '1';
+        cardRef.current.style.visibility = 'visible';
+      } else if (wouldOverlapFooter) {
+        // Hide card when it would overlap footer
+        cardRef.current.style.opacity = '0';
+        cardRef.current.style.visibility = 'hidden';
+      } else {
+        // Reset to original position when above the image
+        cardRef.current.style.position = 'relative';
+        cardRef.current.style.top = '20px';
+        cardRef.current.style.right = '-80px';
+        cardRef.current.style.width = '26rem';
+        cardRef.current.style.opacity = '1';
+        cardRef.current.style.visibility = 'visible';
       }
     };
 
     if (isLargeScreen) {
       window.addEventListener('scroll', handleScroll);
+      handleScroll(); // Initial position check
     } else {
-      // Reset styles for smaller screens
+      // Reset styles for mobile view
       if (cardRef.current) {
-        cardRef.current.style.position = '';
-        cardRef.current.style.top = '';
-        cardRef.current.style.right = '';
+        cardRef.current.style.position = 'relative';
+        cardRef.current.style.top = 'auto';
+        cardRef.current.style.right = 'auto';
+        cardRef.current.style.width = '100%';
+        cardRef.current.style.opacity = '1';
+        cardRef.current.style.visibility = 'visible';
       }
     }
 
@@ -150,7 +182,9 @@ const VisaDetails = () => {
 
   const handleApplicationType = (type, date) => {
     setSelectedType(type);
-    setIsReturnModalOpen(true);
+    // setIsReturnModalOpen(true);
+    setCalendarModalOpen(true);
+
   };
 
   useEffect(() => {
@@ -216,41 +250,15 @@ const VisaDetails = () => {
     }
   };
 console.log({partners},"Partnerts")
-  // const handleApplicationType = async (type, date) => {
-  //   console.log(date, "date");
-  //   const newDate = new Date(date).toISOString();
-
-  //   try {
-  //     const response = await fetchDataFromAPI(
-  //       "POST",
-  //       `${BASE_URL}create-visa-order`,
-  //       {
-  //         visaCategory: id,
-  //         travellersCount: numberOfTravelers,
-  //         from: newDate,
-  //         to: toDate,
-  //         applicationType: type,
-  //       }
-  //     );
-  //     console.log(response?.data?._id, "response Id ");
-  //     if (response) {
-  //       dispatch(PackageId(response?.data?.visaOrder?._id));
-  //       dispatch(numberofCoTravelers(numberOfTravelers));
-  //       dispatch(coTraveler(response?.data?.orderDetails?._id));
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  //   navigate("/upload-image");
-  // };
+ 
 
   const proceedFunc = async () => {
-    if (!returnDate) {
-      // Show an error if return date is not selected
-      alert("Please select a return date");
-      return;
-    }
-
+    // if (!returnDate) {
+    //   // Show an error if return date is not selected
+    //   alert("Please select a return date");
+    //   return;
+    // }
+    setCalendarModalOpen(false);
     const newDate = new Date(returnDate).toISOString();
     try {
       const response = await fetchDataFromAPI(
@@ -259,8 +267,10 @@ console.log({partners},"Partnerts")
         {
           visaCategory: id,
           travellersCount: numberOfTravelers,
-          from: new Date(data[`${selectedType}Date`]).toISOString(),
-          to: newDate,
+          // from: new Date(data[`${selectedType}Date`]).toISOString(),
+          // to: newDate,
+          from: fromDate,
+          to: toDate,
           applicationType: selectedType,
         }
       );
@@ -361,14 +371,11 @@ console.log({partners},"Partnerts")
   return (
     <div ref={contentRef} className="w-full h-full mx-auto container py-10">
       {/* Main Image */}
-      <div
-         ref={mainImageRef}
-        className="w-full relative mt-12 rounded-xl bg-cover flex h-[500px] justify-center items-center mb-10"
-      >
+      <div ref={mainImageRef} className="w-full relative mt-12 rounded-xl bg-cover flex h-[500px] justify-center items-center mb-10">
         <div className="px-16 w-full relative ">
           <img
             src={data?.image}
-            alt="Gramado, Brazil"
+            alt={selectedCountry}
             className="w-full bg-cover   h-[450px] rounded-2xl"
           />
           <div className="absolute lg:block hidden inset-0 left-28 -z-10 w-[85%] rounded-2xl bg-gradient-to-r from-blue-600 to-purple-600 blur-md opacity-65"></div>
@@ -386,7 +393,7 @@ console.log({partners},"Partnerts")
             Apply now for guaranteed visa on{" "}
           </h2>
           <span className="text-blue-500 font-bold text-3xl">
-            {new Date(data?.expressDate).toDateString()?.slice(4, 100)}
+            {new Date().toDateString()?.slice(4, 100)}
           </span>
 
           <div className="mb-6 w-full">
@@ -423,6 +430,7 @@ console.log({partners},"Partnerts")
                   })}
                 </ul>
               </div>
+              <VisaProcessSteps country={selectedCountry} />
             </div>
           </div>
         </div>
@@ -431,11 +439,9 @@ console.log({partners},"Partnerts")
             ref={cardRef}
             style={{ 
               backgroundImage: `url(${card})`,
-              position: isLargeScreen ? 'absolute' : 'relative',
-              top: isLargeScreen ? '0' : 'auto',
-              right: isLargeScreen ? '5px' : 'auto'
+              // transition: 'all 0.3s ease-in-out'
             }}
-            className="w-full bg-cover z-30  pb-16 mx-auto mt-7  bg-transparent max-w-[29rem] md:max-w-[26rem] md:p-10 p-6"
+            className="w-full bg-cover z-30 pb-16 mx-auto mt-7 bg-transparent md:p-10 p-6"
           >
             <div className="flex justify-between px-5 items-center  mb-4">
               <h2 className="text-2xl flex flex-row poppins-six relative top-5 font-semibold ">
@@ -651,27 +657,7 @@ console.log({partners},"Partnerts")
                         {partner?.heading}
                       </p>
                       </div>
-                      {/* <p
-                        style={{
-                          overflowWrap: "anywhere",
-                        }}
-                        className="text-gray-500"
-                      >
-                        {partner?.heading < 20
-                          ? partner?.heading
-                          : `${partner?.heading?.slice(0, 20)}...`}
-                        {partner?.heading?.length > 20 && (
-                          <span
-                            onClick={() => setIsModalOpen(true)}
-                            className="text-blue-500 cursor-pointer"
-                          >
-                            see more
-                          </span>
-                        )}
-                      </p>
-                      <p className="text-gray-500">
-                        {partner?.travellersCount} travelers
-                      </p> */}
+                    
                     </div>
                   </Link>
                 </>
@@ -680,7 +666,9 @@ console.log({partners},"Partnerts")
           </div>
         </div>
       </div>
-
+      <div ref={footerRef}>
+        {/* Your footer content */}
+      </div>
       {isApplicationModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-11/12 max-w-md">
@@ -708,18 +696,13 @@ console.log({partners},"Partnerts")
 
       {/* Calendar Modal */}
       {isCalendarModalOpen && (
-        <div className="fixed inset-0 flex z-50 items-start justify-center bg-black bg-opacity-50">
-          <div className="bg-white relative m-4 mt-5 max-h-[400px] rounded-lg shadow-lg w-full max-w-md">
+        <div className="fixed inset-0 flex z-50 items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white relative m-4 mt-5 max-h-[600px] overflow-auto rounded-lg shadow-lg w-full max-w-md">
             <h2 className="text-xl poppins-four font-bold text-center my-2">
               Select Departure Date
             </h2>
-            {/* <div className="mb-4 flex ">
-              <button className="bg-gray-200 py-2 px-4 rounded-lg w-full mb-2" onClick={() => handleCalendarChoice('fixed')}>Fixed</button>
-              <button className="bg-gray-200 py-2 px-4 rounded-lg w-full" onClick={() => handleCalendarChoice('flexible')}>Flexible</button>
-            </div>
-
-             <DatePicker ref={datePickerRef} selected={startDate} onChange={(date) => setStartDate(date)} /> */}
-            <MonthCalender onClose={proceedApplication} />
+           
+            <MonthCalender onClose={!selectedType ? proceedApplication:proceedFunc} />
             <button
               onClick={() => setCalendarModalOpen(false)}
               className="absolute right-2 top-3 text-2xl font-bold"

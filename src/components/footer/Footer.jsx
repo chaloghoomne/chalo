@@ -14,16 +14,53 @@ import { fetchDataFromAPI } from "../../api-integration/fetchApi";
 import { BASE_URL } from "../../api-integration/urlsVariable";
 import { toast } from "react-toastify";
 import { Link, useLocation } from "react-router-dom";
-import { FaFacebookF, FaInstagram, FaLinkedinIn, FaTwitter, FaWhatsapp, FaPinterest } from 'react-icons/fa';
-import { SiVisa, SiMastercard, SiPaypal, SiAmazonpay } from 'react-icons/si';
+import { 
+  FaFacebookF, 
+  FaInstagram, 
+  FaLinkedinIn, 
+  FaTwitter, 
+  FaWhatsapp, 
+  FaPinterest,
+  FaCcMastercard,
+  FaBriefcase,
+  FaUserTie,
+  FaInfoCircle,
+  FaBlog,
+  FaPhone,
+  FaMapMarkerAlt,
+  FaGlobe,
+  FaShieldAlt,
+  FaFileContract,
+  FaMoneyBillWave
+} from 'react-icons/fa';
+import { SiVisa, SiAmazonpay } from 'react-icons/si';
 import { BsPaypal } from "react-icons/bs";
-import { FaCcMastercard } from "react-icons/fa6";
+import axios from "axios";
+
 
 const Footer = () => {
   const [value, setValue] = useState("");
   const location = useLocation();
 
   const [show,setShow] = useState(true)
+  const [formData, setFormData] = useState({
+    offices: [{ city: '', addressLine1: '', addressLine2: '', phone: '' }],
+    supportEmail: ''
+  });
+
+  useEffect(() => {
+    // Fetch existing contact info (if available)
+    const fetchData = async () => {
+      try {
+        const resp = await axios.get(`${BASE_URL}/contact`);
+        setFormData(resp.data.data);
+      } catch (error) {
+        console.error('Error fetching contact data:', error);
+      }
+    };
+    fetchData();
+  }, []);
+
 
   useEffect(() => {
     const pathName = location.pathname;
@@ -39,7 +76,7 @@ const Footer = () => {
     setValue(e.target.value);
   };
 
-  const className = ` container  mx-auto w-[93%] bg-cover bg-center rounded-2xl min-h-72 flex flex-col min-[1000px]  mx-10 justify-center items-center text-white text-center py-8 bg-gradient-to-r from-[#F2A137] to-[#F2A137] mt-4 ${
+  const className = ` container  md:mx-5 w-full bg-cover bg-center rounded-2xl min-h-72 flex flex-col min-[1000px]   justify-center items-center text-white text-center py-8 bg-gradient-to-r from-[#F2A137] to-[#F2A137] mt-4 ${
     subscribe ? 'lg:bg-[url("' + subscribe + '")]' : " "
   }`;
 
@@ -63,8 +100,8 @@ const Footer = () => {
   };
 
   return (
-    <footer className="bg-white">
-      <div className="flex justify-center items-center py-3 pb-5 w-full bg-white">
+    <footer className="bg-white w-full">
+      <div className="flex justify-center items-center py-3 px-5  pb-5 w-full bg-white">
         {show && <div className={className}>
           <div className="w-full justify-center flex flex-col items-center text-center">
           <h2 className="text-4xl  text-black poppins-six font-semibold">
@@ -72,7 +109,7 @@ const Footer = () => {
           </h2>
           <p
             style={{ overflowWrap: "anywhere" }}
-            className="mt-4 text-black poppins-four w-[40%] se text-sm "
+            className="mt-4 text-black poppins-four w-[40%] se text-sm"
           >
             We value the connections we make with our clients and partners. Your
             feedback and insights are crucial to our growth and improvement.
@@ -84,7 +121,7 @@ const Footer = () => {
               placeholder="Enter Your email Address"
               value={value}
               onChange={(e) => handleChnage(e)}
-              className="px-4 py-2 rounded-l-md w-72 min-h-10 text-black    focus:outline-none"
+              className="px-4 py-2 rounded-l-md sm:w-72 w-56 min-h-10 text-black focus:outline-none"
             />
             <button
               onClick={() => becomeSubscriber()}
@@ -127,42 +164,95 @@ const Footer = () => {
           </a>
         </div>
       </div>
-      
+
       <div>
         <h3 className="text-lg font-bold text-white">Company</h3>
         <ul className="mt-4 space-y-2 text-white">
-        <Link to="/career-form" className=""><li style={{ lineHeight: "2rem" }}>Careers</li></Link>
-        <Link to="/travel-form" className="">  <li style={{ lineHeight: "2rem" }}>For Travel Agents</li></Link>
-          <Link to="/about" className="">  <li style={{ lineHeight: "2rem" }}>About us</li></Link>
-          <Link to="/blogs" className=""><li style={{ lineHeight: "2rem" }}>Blog</li></Link>
+          <Link to="/career-form" className="">
+            <li className="flex items-center gap-2" style={{ lineHeight: "2rem" }}>
+              <FaBriefcase className="w-4 h-4" />
+              Careers
+            </li>
+          </Link>
+          <Link to="/travel-form" className="">
+            <li className="flex items-center gap-2" style={{ lineHeight: "2rem" }}>
+              <FaUserTie className="w-4 h-4" />
+              For Travel Agents
+            </li>
+          </Link>
+          <Link to="/about" className="">
+            <li className="flex items-center gap-2" style={{ lineHeight: "2rem" }}>
+              <FaInfoCircle className="w-4 h-4" />
+              About us
+            </li>
+          </Link>
+          <Link to="/blogs" className="">
+            <li className="flex items-center gap-2" style={{ lineHeight: "2rem" }}>
+              <FaBlog className="w-4 h-4" />
+              Blog
+            </li>
+          </Link>
         </ul>
       </div>
-      
+
       <div>
         <h3 className="text-lg font-bold text-white">Important Links</h3>
         <ul className="mt-4 space-y-2 text-white">
-          <Link to="/privacy-policy"><li style={{ lineHeight: "2rem" }}>Privacy Policy</li></Link>
-          <li style={{ lineHeight: "2rem" }}>Terms and Conditions</li>
-          <Link to="/refund-policy"><li style={{ lineHeight: "2rem" }}>Refund Policy</li></Link>
+          <Link to="/privacy-policy">
+            <li className="flex items-center gap-2" style={{ lineHeight: "2rem" }}>
+              <FaShieldAlt className="w-4 h-4" />
+              Privacy Policy
+            </li>
+          </Link>
+          <Link to="/terms-condition">
+          <li className="flex items-center gap-2" style={{ lineHeight: "2rem" }}>
+            <FaFileContract className="w-4 h-4" />
+            Terms and Conditions
+          </li>
+          </Link>
+          <Link to="/refund-policy">
+            <li className="flex items-center gap-2" style={{ lineHeight: "2rem" }}>
+              <FaMoneyBillWave className="w-4 h-4" />
+              Refund Policy
+            </li>
+          </Link>
+          <Link to="/contact">
+            <li className="flex items-center gap-2" style={{ lineHeight: "2rem" }}>
+              <FaPhone className="w-4 h-4" />
+            Contact Us
+            </li>
+          </Link>
         </ul>
       </div>
-      
+
       <div>
         <h3 className="text-lg font-bold text-white">Contact Us</h3>
         <ul className="mt-4 space-y-2 text-white">
-          <p style={{ lineHeight: "2rem" }}>125, 2nd Floor New UCO Bank Shahhpur Jat</p>
-          <p style={{ lineHeight: "2rem" }}>Siri Fort, New Delhi - 110049</p>
-          <p style={{ lineHeight: "2rem" }}>www.chaloghoomne.com, 9999999999</p>
+          <p className="flex items-center gap-2" style={{ lineHeight: "2rem" }}>
+            <FaMapMarkerAlt className="w-4 h-4" />
+            { formData.addressLine1 ||"Siri Fort, New Delhi - 110049"}
+          </p>
+          <p className="flex items-center gap-2" style={{ lineHeight: "2rem" }}>
+            <FaMapMarkerAlt className="w-4 h-4" />
+            { formData.addressLine2 ||"Siri Fort, New Delhi - 110049"}
+          </p>
+          <p className="flex items-center gap-2" style={{ lineHeight: "2rem" }}>
+            <FaGlobe className="inline-block w-4 h-4 mr-2" />
+          { formData.supportEmail ||"  www.chaloghoomne.com"}
+          </p>
+          <p className="flex items-center gap-2" style={{ lineHeight: "2rem" }}>
+            <FaPhone className="inline-block w-4 h-4 mr-2" />
+            { formData.phoneNumber || 9555535252}
+          </p>
         </ul>
-        
+
         <div className="mt-4">
           <h4 className="text-md font-semibold text-white mb-2">Payment Methods</h4>
           <div className="flex flex-wrap gap-2">
-            <SiVisa className="w-8 h-8" color="" />
-            <FaCcMastercard className="w-8 h-8"  />
+            <SiVisa className="w-8 h-8" />
+            <FaCcMastercard className="w-8 h-8" />
             <BsPaypal className="w-8 h-8" color="blue" />
-            {/* <SiSkrill className="w-8 h-8" /> */}
-            <SiAmazonpay className="w-8 h-8"  color="yellow"/>
+            <SiAmazonpay className="w-8 h-8" color="yellow" />
           </div>
         </div>
       </div>

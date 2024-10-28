@@ -90,7 +90,7 @@ const MonthCalender = ({ onClose }) => {
   };
 
   return (
-    <div className="w-full bg-white rounded-lg max-h-[500px] overflow-auto shadow-lg p-4">
+    <div className="w-full bg-white rounded-lg max-h-[500px] overflow-auto shadow-lg py-2 px-4">
       <h2 className="text-lg font-semibold mb-4">Select your departure date</h2>
       <div className="flex gap-5 mb-4">
         <button

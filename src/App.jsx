@@ -35,11 +35,34 @@ import AboutUs from "./pages/our-details/About";
 import ContactUs from "./pages/our-details/Contact";
 import CareerForm from "./pages/forms/CareerForm";
 import TravelAgentForm from "./pages/forms/TravelAgentForm";
+import TermsConditions from "./pages/policies/TermsConditions";
 
 const PrivateRoute = ({ children }) => {
   const token = localStorage.getItem("token");
   const countryId = useSelector((state) => state.CountryIdReducer.countryId);
   const location = useLocation();
+
+  const useScrollToSection = () => {
+    const location = useLocation();
+  
+    useEffect(() => {
+      // Check if there's a hash in the URL
+      if (location.hash) {
+        const targetElement = document.querySelector(location.hash);
+        if (targetElement) {
+          targetElement.scrollIntoView({ behavior: 'smooth' });
+        }
+      } else if (location.state?.scrollTo) {
+        // Check for scrollTo in location state
+        const targetElement = document.querySelector(location.state.scrollTo);
+        if (targetElement) {
+          targetElement.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+    }, [location]);
+  };
+
+  useScrollToSection();
 
   return token ? (
     children
@@ -139,6 +162,14 @@ const AppContent = () => {
             element={
               <PrivateRoute>
                 <RefundPolicyPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/terms-condition"
+            element={
+              <PrivateRoute>
+                <TermsConditions />
               </PrivateRoute>
             }
           />

@@ -349,9 +349,9 @@ const EditVisaDetails = () => {
               <td className="py-2 text-lg poppins-four font-medium ">
                 {user?.ageGroup === "Child"?childPrice:price} 
               </td>
-              <td className="py-2">
+              <td className="py-2 flex sm:flex-row  flex-col justify-center items-center gap-2 ">
                 <button
-                  className="mr-5 text-blue-500"
+                  className=" text-blue-500"
                   onClick={() => handleView(user?._id)}
                 >
                   <FaEye size={22} color="orange" />

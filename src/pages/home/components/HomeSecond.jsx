@@ -62,7 +62,7 @@ const HomeSecond = forwardRef((props, ref) => {
   }, [inputValue]);
 
   return (
-    <div ref={ref} className="py-20 container  mx-auto px-4 ">
+    <div ref={ref} className="py-20  container mx-auto  px-4 ">
       {/* <h1 className="text-3xl poppins-six font-bold text-center mb-12">
         {data?.heading || "World Best Visas Requested Countries"}
       </h1> */}
@@ -73,7 +73,7 @@ const HomeSecond = forwardRef((props, ref) => {
       {data?.heading}
       </h1>
       
-      <div className="flex flex-wrap mt-12 w-full justify-start items-center gap-6">
+      <div className=" md:grid  md:grid-cols-3 lg:grid-cols-4 pt-10 flex px-5 flex-wrap w-full md:justify-start justify-center items-center gap-6">
         {packages?.slice(0, finalValue)?.map((visa, index) => (
           <VisaCard
             key={index}
@@ -112,7 +112,7 @@ const HomeSecond = forwardRef((props, ref) => {
           </div>
         </h1>
       ) : (
-        <h1 className="text-2xl font-bold poppins-seven flex justify-center items-center cursor-pointer mt-10 text-yellow-500 text-center gap-2  mb-8"></h1>
+        <h1 className="text-2xl font-bold poppins-seven flex justify-center items-center cursor-pointer  text-yellow-500 text-center gap-2  mb-8"></h1>
       )}
     </div>
   );

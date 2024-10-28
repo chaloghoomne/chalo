@@ -11,7 +11,7 @@ const BlogCard = ({ blog }) => {
           <Link className='underline text-blue-500' to={`/blog/${blog._id}`}>{blog.title}</Link>
         </div>
         <p className="text-gray-700 text-base">
-        {blog.description.substring(0, 30)}...
+        {blog?.description?.substring(0, 30)}...
         </p>
       </div>
       <div className="px-6 flex justify-between pt-2 pb-2 px-5">

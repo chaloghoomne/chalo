@@ -228,7 +228,7 @@ const ImageUpload = () => {
       <div className="flex flex-col md:flex-row pb-5 pt-20   h-auto bg-white p-4">
         <div className="flex w-full flex-col mb-5 md:hidden md:w-[27%] md:min-h-full bg-gray-200 h-full justify-between md:flex-col">
           <>
-            <div className="flex-1 p-4 rounded-lg mb-4 md:mb-0">
+            <div className=" p-4 hidden md:flex-1 rounded-lg mb-4 md:mb-0">
               <div className="bg-white h-auto p-4 rounded-xl">
                 <h2 className="text-xl font-semibold mb-4">
                   {important?.docHeading}
@@ -253,7 +253,7 @@ const ImageUpload = () => {
           {/* <h1 className="text-xl poppins-four text-center self-center text-orange-500 ">
             {`Traveler Information: Applicant #${packageData?.orderDetails} of ${travlersCount}`}
           </h1> */}
-          <div className="bg-white p-8 rounded-lg flex flex-col justify-center items-center  w-full max-w-6xl">
+          <div className="bg-white sm:p-8 p-2 rounded-lg flex flex-col justify-center items-center  w-full sm:max-w-6xl">
             <HorizontalLinearAlternativeLabelStepper
               documents={data}
               value={step}

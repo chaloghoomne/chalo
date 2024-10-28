@@ -271,7 +271,7 @@ const PersonDetails = () => {
   return (
     <div className="flex flex-col lg:flex-row px-3 justify-center items-center pt-20 min-h-screen  bg-white">
       <div className=" lg:w-full w-full flex h-full rounded-lg mx-5 border-gray-300 mx-auto container py-2 bg-white justify-center items-center w-[90%] mx-[5%]  ">
-        <div className="bg-white pt-12 px-10 rounded-lg  w-full ">
+        <div className="bg-white pt-12  px-3 sm:px-10 rounded-lg  w-full ">
           {/* Visa Validity */}
           <div className="flex flex-col justify-between items-center mb-5">
             <button className="bg-orange-500 text-xl font-bold text-white py-3 mt-5 px-10 rounded-[25px]">
@@ -452,40 +452,7 @@ const PersonDetails = () => {
                 />
               </div>
             </div>
-            {/* Documents Submitted */}
-            {/* <button className="text-xl  py-3 w-[95%] mx-3 mb-5 rounded-2xl px-5 flex justify-start gap-2 items-center bg-blue-500 text-white font-semibold">
-              <IoDocumentsSharp size={25} color="white" />
-              Documents Submitted
-            </button> */}
-            {/* <div className="flex justify-between md:px-10 mb-4 ">
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-4">
-                <input
-                  type="file"
-                  className="md:w-24 md:h-24 w-20 h-20 object-cover rounded-lg"
-                />
-              </div>
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-4">
-                <input
-                  type="file"
-                  className="md:w-24 md:h-24 w-20 h-20 object-cover rounded-lg"
-                />
-              </div>
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-4">
-                <input
-                  type="file"
-                  className="md:w-24 md:h-24 w-20 h-20 object-cover rounded-lg"
-                />
-              </div>
-            </div> */}
-            {/* <div className="my-6 w-full flex justify-center items-center">
-              <input
-                {...register("Name")}
-                defaultValue="Name"
-                className="w-[70%] font-semibold text-2xl p-4 border rounded-[25px]"
-              />
-              <p className="text-red-500 text-sm">{errors.name?.message}</p>
-            </div> */}
-            {/* Co-Traveller */}
+           
 
             <ImageUpload  />
             {showCoTravler && (

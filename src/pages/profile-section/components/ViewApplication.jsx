@@ -27,12 +27,15 @@ const ViewApplication = () => {
   const [description, setDescription] = useState();
   const [document, setDocument] = useState();
   const [applicationType, setApplicationType] = useState();
+  const [childPrice,setChildPrice] = useState(null)
   const [insurance, setInsurance] = useState(true);
   const [insurancePrice, setInsurancePrice] = useState();
   const [totalAmount, setTotalAmount] = useState();
   const [gst, setGst] = useState();
+  const [amount,setAmount] = useState()
   const [from, setFrom] = useState();
-  console.log(insurance, "insurance");
+  console.log(users, "insurance");
+  console.log(childPrice, "childprice");
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -69,6 +72,7 @@ const ViewApplication = () => {
           setGst(response?.data?.visaOrder?.gst);
           setStatus(response?.data?.visaOrder?.status);
           setDescription(response?.data?.visaOrder?.description);
+          setChildPrice(response?.data?.visaCategory?.childPrice);
           setFrom(response?.data?.visaOrder?.from);
           setDocument(response?.data?.visaOrder?.document);
           // try {
@@ -93,6 +97,17 @@ const ViewApplication = () => {
           // } catch (error) {
           //   console.log(error);
           // }
+          let amount = 0
+          const nnn = users.map((item)=>{
+           console.log(item.ageGroup,"kkk")
+           if(item.ageGroup === "Child"){
+             amount += Number(childPrice)
+           }else{
+             amount += Number(price)
+           }
+           setAmount(amount)
+           return  
+          });
         }
       } catch (error) {
         console.log(error);
@@ -134,6 +149,8 @@ const ViewApplication = () => {
   const handleSubmit = async () => {
     navigate(-1);
   };
+
+ 
 
   // const calculateTotalPrice = () => {
   //   const basePrice = price * users.length;
@@ -249,6 +266,8 @@ const ViewApplication = () => {
         <thead>
           <tr className="bg-orange-500 text-white">
             <th className="py-2">Traveler Name </th>
+            <th className="py-2">Age Group</th>
+            <th className="py-2">Price</th>
             <th className="py-2">Actions</th>
           </tr>
         </thead>
@@ -257,6 +276,13 @@ const ViewApplication = () => {
             <tr key={user?._id} className="text-center">
               <td className="py-2 text-lg poppins-four font-medium ">
                 {user?.firstName} {user?.lastName}
+              </td>
+              <td className="py-2 text-lg poppins-four font-medium ">
+                {user?.ageGroup} 
+                
+              </td>
+              <td className="py-2 text-lg poppins-four font-medium ">
+                {user?.ageGroup === "Child"?childPrice:price} 
               </td>
               <td className="py-2">
                 <button
@@ -281,7 +307,7 @@ const ViewApplication = () => {
         <div className="w-full flex justify-between mb-2">
           <span>Total Price:</span>
           <span>
-            ₹{price} * {users.length}{" "}
+    {amount}
           </span>
         </div>
         {/* <div className="w-full flex justify-between mb-2">
@@ -314,7 +340,7 @@ const ViewApplication = () => {
             /> */}
               Insurance
             </label>
-            <span>{insurance ? `₹${insurancePrice} ` : "0 "}</span>
+            <span>{insurance ? `₹${insurancePrice} ` : "0"}</span>
           </div>
         )}
         <div className="w-full flex justify-between font-bold">
