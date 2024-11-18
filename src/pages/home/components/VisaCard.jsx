@@ -31,8 +31,8 @@ const VisaCard = ({ image, city, country, price, rating, description, id }) => {
   }, [image]);
 
   return (
-    <div className="max-w-[280px] items-start self-start min-w-[260px] cursor-pointer bg-white rounded-e-2xl overflow-hidden transform hover:scale-105 transition-transform duration-300">
-      <div  onClick={() => handleRedirect(id, country)} className="relative ">
+    <div className="max-w-[240px] items-start self-start min-w-[180px] cursor-pointer bg-white rounded-e-2xl overflow-hidden transform hover:scale-105 transition-transform duration-300">
+      <div onClick={() => handleRedirect(id, country)} className="relative ">
         <div className="relative w-full">
           {imageLoaded ? (
             <img
@@ -50,10 +50,16 @@ const VisaCard = ({ image, city, country, price, rating, description, id }) => {
         </div> */}
       </div>
       <div className="w-full">
-        <h3 onClick={() => handleRedirect(id, country)} className="text-lg px-4 py-1 mt-2 poppins-seven font-bold">
+        <h3
+          onClick={() => handleRedirect(id, country)}
+          className="text-lg px-4 py-1 mt-2 poppins-seven font-bold"
+        >
           {country}
         </h3>
-        <p onClick={() => handleRedirect(id, country)} className="text-gray-500 text-sm poppins-three min-h-14 max-h-14 overflow-auto py-2 px-4 mb-4">
+        <p
+          onClick={() => handleRedirect(id, country)}
+          className="text-gray-500 text-sm poppins-three min-h-14 max-h-14 overflow-auto py-2 px-4 mb-4"
+        >
           {description?.length < finalValue
             ? description
             : `${description?.slice(0, 50)}...`}
@@ -85,7 +91,7 @@ const VisaCard = ({ image, city, country, price, rating, description, id }) => {
           </div>
 
           <button
-           onClick={() => handleRedirect(id, country)}
+            onClick={() => handleRedirect(id, country)}
             className="bg-gradient-to-r from-[#3180CA] to-[#7AC7F9] text-white py-2 px-6 rounded-full self-center text-xs shadow-lg poppins-five shadow-[#a4d3f3] transition-colors duration-300"
           >
             Apply

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import logo from "../../assets/loginlogo.png";
-import whitelogo from "../../assets/whitelogo.png";
+import backgroundImage from "../../assets/signupbackground.jpg";
 import { ImFacebook2 } from "react-icons/im";
 import { FcGoogle } from "react-icons/fc";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -139,7 +139,7 @@ const Login = () => {
     <div
       className="flex items-center justify-center h-[100%] py-8 min-h-screen bg-center bg-cover"
       style={{
-        backgroundImage: `url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTw0uAVzEIqlrCrLkFz9KLzU0FGUFppxUP5wRg1JOO7MUUEtBvroKMzt_xYVedz3VERd_I&usqp=CAU)`,
+        backgroundImage: `url(${backgroundImage})`,
       }}
     >
       <div className="bg-white/30  p-10 rounded-xl shadow-lg text-white w-full max-w-md">

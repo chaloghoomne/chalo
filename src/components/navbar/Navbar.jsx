@@ -90,7 +90,7 @@ const Navbar = () => {
   }, [location.pathname, isOpen]);
 
   const handleVisaClick = () => {
-    navigate("/", { 
+  navigate("/", { 
       state: { 
         scrollToVisaSection: true 
       }

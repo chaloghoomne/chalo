@@ -27,7 +27,7 @@ const HomeSecond = forwardRef((props, ref) => {
           "GET",
           `${BASE_URL}${NetworkConfig.GET_HEADING_BY_ID}/Main`
         );
-        console.log(response,"responseOfDATA");
+        console.log(response, "responseOfDATA");
         if (response) {
           setData(response.data);
         }
@@ -70,10 +70,10 @@ const HomeSecond = forwardRef((props, ref) => {
       {data?.title}
       </h2> */}
       <h1 className="text-5xl poppins-six text-center  font-bold mb-6">
-      {data?.heading}
+        {data?.heading}
       </h1>
-      
-      <div className=" md:grid  md:grid-cols-3 lg:grid-cols-4 pt-10 flex px-5 flex-wrap w-full md:justify-start justify-center items-center gap-6">
+
+      <div className="md:grid md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-5 pt-10 flex px-5 flex-wrap w-full justify-center items-center gap-6">
         {packages?.slice(0, finalValue)?.map((visa, index) => (
           <VisaCard
             key={index}
