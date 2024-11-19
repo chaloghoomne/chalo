@@ -31,12 +31,12 @@ const VisaCard = ({ image, city, country, price, rating, description, id }) => {
   }, [image]);
 
   return (
-    <div className="max-w-[280px] items-start self-start min-w-[260px] cursor-pointer bg-white rounded-e-2xl overflow-hidden transform hover:scale-105 transition-transform duration-300">
+    <div className="w-full md:max-w-xl items-start self-start cursor-pointer bg-white rounded-e-2xl overflow-hidden transform hover:scale-105 transition-transform duration-300">
       <div  onClick={() => handleRedirect(id, country)} className="relative ">
         <div className="relative w-full">
           {imageLoaded ? (
             <img
-              className="w-full rounded-[24px] h-48 object-cover"
+              className="h-[300px] w-full rounded-t-brand object-cover md:h-[280px] md:transition-all md:ease-in-out 2xl:h-[270px]"
               src={image}
               alt={country}
             />
@@ -65,12 +65,13 @@ const VisaCard = ({ image, city, country, price, rating, description, id }) => {
               see more
             </span>
           ) : (
-            <span
-              onClick={() => handleseeMore(30)}
-              className="text-blue-500 cursor-pointer"
-            >
-              hide
-            </span>
+            // <span
+            //   onClick={() => handleseeMore(30)}
+            //   className="text-blue-500 cursor-pointer"
+            // >
+            //   hide
+            // </span>
+            <></>
           )}
         </p>
         <div
