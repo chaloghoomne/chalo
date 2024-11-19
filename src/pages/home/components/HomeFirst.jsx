@@ -68,7 +68,7 @@ const HomeFirst = ({ homeSecondRef }) => {
       <div className="md:flex  hidden text-white flex-col items-start  w-full md:w-[55%] text-left p-2 md:pt-20 md:pb-4 ">
         <h1
           style={{ textShadow: "1px 0px 0px rgba(0,0,0,0.8)" }}
-          className="text-2xl  md:w-[90%] flex flex-col poppins-six gap-3  md:text-[2.8rem] font-bold mb-4"
+          className="text-5xl  md:w-[90%] flex flex-col poppins-six gap-3  md:text-[2.8rem] font-bold mb-4"
         >
           {data?.title || "Get the VISA simple, fast & Reliable"}<br />
           <p className="text-2xl ">Get your visa with Chalo Ghoomne</p>
