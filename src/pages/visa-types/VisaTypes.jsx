@@ -8,6 +8,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { getVisaType } from "../../redux/actions/package-id-actions";
 import { BsEmojiSmile } from "react-icons/bs";
 import { FaCircleDot } from "react-icons/fa6";
+import {
+  calenderDate,
+  returnCalenderDate,
+} from "../../redux/actions/calender-date-action";
 
 const VisaTypes = () => {
   const [selectedVisa, setSelectedVisa] = useState("Tourist");
@@ -42,6 +46,11 @@ const VisaTypes = () => {
     };
     fetchData();
   }, [id]);
+
+  useEffect(() => {
+    dispatch(returnCalenderDate(null));
+    dispatch(calenderDate(null));
+  }, []);
 
   useEffect(() => {
     const fetchProfileImage = async () => {
@@ -82,10 +91,10 @@ const VisaTypes = () => {
 
   return (
     <div className="flex flex-col  items-center justify-center py-20 px-4 bg-white">
-      <h2 className="text-3xl poppins-six text-center  font-bold mb-4">
+      <h2 className="text-3xl poppins-six text-center  font-bold my-4">
         {selectedCountry} Visa Application
       </h2>
-      <p className="text-orange-500 poppins-four  mb-6">{data?.description}</p>
+      <p className="text-orange-500 poppins-four  text-xl mb-6">{data?.description }</p>
       <div className="flex flex-wrap md:justify-evenly justify-center gap-8 mb-6">
         {visatypes?.map((visa) => (
           <div
@@ -97,7 +106,7 @@ const VisaTypes = () => {
             }`}
             onClick={() => handleplans(visa?._id, visa?.name)}
           >
-            <div
+            {/* <div
               className={`w-4 h-4 absolute left-2 top-5 mb-4 mx-auto rounded-full  `}
             >
               {" "}
@@ -105,11 +114,11 @@ const VisaTypes = () => {
                 size={15}
                 color={`${selectedVisa === visa?._id ? "orange" : "gray"}`}
               />
-            </div>
+            </div> */}
             <img
               src={visa?.image}
               alt={visa?.name}
-              className="w-32 h-32 rounded-2xl object-contain mt-6"
+              className="max-w-32 max-h-32 min-w-32 min-h-32 rounded-2xl object-cover mt-3"
             />
             <p className="font-semibold my-2">{visa?.name}</p>
           </div>

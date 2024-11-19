@@ -133,6 +133,7 @@ const ModalVisaRequest = ({ user, isEdit, onClose }) => {
     newformData.append(`gender`, formData.gender);
     newformData.append(`passportNumber`, formData.passportNumber);
     newformData.append(`dob`, formData.dob);
+    newformData.append(`ageGroup`, formData.ageGroup);
     newformData.append(`passportIssueDate`, formData.passportIssueDate);
     newformData.append(`passportValidTill`, formData.passportValidTill);
     formData?.documents?.forEach((item, index) => {
@@ -182,7 +183,7 @@ const ModalVisaRequest = ({ user, isEdit, onClose }) => {
 
   return (
     <div className="fixed inset-0 h-full z-30 bg-gray-600 bg-opacity-50 flex justify-center items-center">
-      <div className="bg-orange-100 p-6 rounded-lg shadow-lg w-full max-w-3xl overflow-y-auto max-h-[75%]">
+      <div className="bg-orange-100 p-6 mt-10 rounded-lg shadow-lg w-full max-w-3xl overflow-y-auto max-h-[75%]">
         <button
           className="text-gray-500 hover:text-gray-700"
           onClick={handleClose}
@@ -263,6 +264,20 @@ const ModalVisaRequest = ({ user, isEdit, onClose }) => {
               </select>
             </div>
             <div>
+  <label className="block text-sm font-semibold">Age Group</label>
+  <select
+    name="ageGroup"
+    required
+    value={formData.ageGroup}
+    onChange={handleFields}
+    className="w-full p-2 border rounded-lg"
+  >
+    <option value="">Select Age Group</option>
+    <option value="Child">Under 18</option>
+    <option value="Adult">18 and Over</option>
+  </select>
+</div>
+            <div>
               <label className="block text-sm font-semibold">
                 Passport Number
               </label>
@@ -308,7 +323,6 @@ const ModalVisaRequest = ({ user, isEdit, onClose }) => {
                 Passport Valid Till
               </label>
               <input
-                type="date"
                 name="passportValidTill"
                 required
                 value={formData.passportValidTill}
@@ -362,7 +376,7 @@ const ModalVisaRequest = ({ user, isEdit, onClose }) => {
             <div className="flex justify-end">
               <button
                 type="submit"
-                className="bg-blue-500 text-white py-2 px-4 rounded-lg"
+                className="bg-[#F26438] text-white py-2 px-4 rounded-full"
               >
                 Save Changes
               </button>
@@ -382,13 +396,13 @@ const ModalVisaRequest = ({ user, isEdit, onClose }) => {
             <div className="flex justify-end gap-4">
               <button
                 onClick={() => handleConfirmation(false)}
-                className="bg-red-500 text-white py-2 px-4 rounded-lg"
+                className="bg-red-500 text-white py-2 px-4 rounded-full"
               >
                 No
               </button>
               <button
                 onClick={() => handleConfirmation(true)}
-                className="bg-orange-500 text-white py-2 px-4 rounded-lg"
+                className="bg-[#F26438] text-white py-2 px-4 rounded-full"
               >
                 Yes
               </button>

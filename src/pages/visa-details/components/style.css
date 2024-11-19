@@ -1,0 +1,218 @@
+.calendar {
+    width: 300px;
+   
+    background-color: #fff; /* White background */
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    font-family: Arial, sans-serif;
+    border-radius: 20px;
+    padding: 10px;
+    box-sizing: border-box;
+  }
+  
+  .header {
+    text-align: center;
+    padding: 3px;
+    background-color: #fff; /* White background */
+    border-bottom: 1px solid #ccc; /* Gray border-bottom */
+    font-weight: bold;
+    border-radius: 20px 20px 0 0;
+    margin-bottom: 10px; /* Add some spacing below the header */
+  }
+  
+  .header-text {
+    font-size: 15px;
+    text-align: start;
+  }
+  
+  .nav-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  
+    padding: 0 10px;
+    margin-bottom: 10px;
+    display: flex;
+  }
+  
+  .nav-button {
+    border: none;
+    border-radius: 5px;
+    display: flex;
+    text-align: bottom;
+  
+    cursor: pointer;
+    font-size: 12px;
+  }
+  
+  .days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+    padding: 10px;
+    font-size: 13px;
+    background-color: white;
+  }
+  
+  .day {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 30px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  .current-month {
+    background-color: #fff;
+  }
+  
+  .selected {
+    background-color: #007bff;
+    color: #fff;
+  }
+  .non-selected {
+    background-color: #f4f8ff;
+  }
+  
+  /* Add this CSS to your Calendar.css file or your preferred CSS file */
+  
+  /* Styling for different event categories */
+  .category-leaves {
+    background-color: #4ddc12b8; /* Green */
+  
+    color: white;
+  }
+  
+  .leave_circle {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #4ddc12b8;
+    margin-right: 5px;
+    border: 3px solid #ccc;
+  }
+  
+  .category-holidays {
+    background-color: #ffc107; /* Yellow */
+    color: white;
+  }
+  .holiday_circle {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #ffc107;
+    margin-right: 5px;
+    border: 3px solid #ccc;
+  }
+  
+  .category-birthdays {
+    background-color: #eb0df07d; /* Peach */
+    color: white;
+  }
+  
+  .birthday_circle {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #eb0df07d;
+    margin-right: 5px;
+    border: 3px solid #ccc;
+  }
+  
+  .category-project-start {
+    background-color: #1393e5; /* Light Blue */
+    color: white;
+  }
+  
+  .project_start_circle {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #1393e5;
+    margin-right: 5px;
+    border: 3px solid #ccc;
+  }
+  
+  .category-project-end {
+    background-color: #f2b6b6; /* Light Red */
+    color: white;
+  }
+  
+  .project_end_circle {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #f2b6b6;
+    margin-right: 5px;
+    border: 3px solid #ccc;
+  }
+  
+  .catagory {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    font-size: 11px;
+    justify-content: center;
+    align-items: center;
+    width: 250px;
+    margin: 0 auto;
+    background-color: #fff; /* White background */
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    font-family: Arial, sans-serif;
+    border-radius: 20px;
+    padding: 10px;
+    box-sizing: border-box;
+  }
+  
+  .section {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    gap: 5px;
+  }
+  
+  /* Event dot styling */
+  .event-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .event-category {
+    border-radius: 50%;
+    margin-top: 5px;
+  }
+  
+  /* Add specific colors for each category */
+  .event-category.leaves {
+    background-color: #4caf50; /* Dark Green */
+  }
+  
+  .event-category.holidays {
+    background-color: #ffc107; /* Amber */
+  }
+  
+  .event-category.birthdays {
+    background-color: #ff5722; /* Deep Orange */
+  }
+  
+  .event-category.project-start {
+    background-color: #2196f3; /* Blue */
+  }
+  
+  .event-category.project-end {
+    background-color: #f44336; /* Red */
+  }
+  
+  /* Event description styling */
+  .event-description {
+    font-size: 12px;
+    margin-top: 5px;
+    text-align: center;
+  }
+  
+  /* Adjust other styles as needed */
+  .month {
+    font-size: 13px;
+    font-weight: 400;
+  }

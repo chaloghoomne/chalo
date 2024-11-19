@@ -49,7 +49,7 @@ const Packages = ({ plans }) => {
   };
 
   return (
-    <div className="  flex flex-col items-center  mt-[-40px] justify-center md:px-0 px-5 py-20">
+    <div className=" flex flex-col items-center  mt-[-40px] justify-center md:px-0 px-5 pt-20">
       <p className="text-md text-[#F26337] poppins-seven  font-bold mb-2">
         RECOMMENDATIONS
       </p>
@@ -79,7 +79,7 @@ const Packages = ({ plans }) => {
             )}
             <div className="flex  justify-between w-full px-4">
               <h2 className="text-lg md:text-[27px] poppins-five font-semibold">
-                {option?.period} Days {option?.entryType}
+                {option?.visaTypeHeading}
               </h2>
               <p className="text-lg md:text-[27px] poppins-five font-bold">
                 ₹{option?.price}
@@ -111,7 +111,7 @@ const Packages = ({ plans }) => {
       </div>
       <button
         onClick={handleRedirect}
-        className=" bg-orange-500 text-white py-2 px-8 mt-12 text-lg poppins-three rounded"
+        className=" bg-[#F26438] text-white py-2 px-8 mt-12 text-lg poppins-three rounded-full"
       >
         Continue
       </button>

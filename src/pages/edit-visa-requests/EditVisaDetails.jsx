@@ -22,6 +22,7 @@ const EditVisaDetails = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [isEdit, setIsEdit] = useState(false);
   const [price, setPrice] = useState(null);
+  const [childPrice,setChildPrice] = useState(null)
   const [discount, setDiscount] = useState();
   const [applicationType, setApplicationType] = useState();
   const [insurance, setInsurance] = useState(true);
@@ -76,13 +77,17 @@ const EditVisaDetails = () => {
 
               if (response?.data?.visaOrder?.applicationType === "normal") {
                 setPrice(responseData?.data?.price);
+                setChildPrice(responseData?.data?.childPrice);
               } else if (
                 response?.data?.visaOrder?.applicationType === "express"
+                
               ) {
+                setChildPrice(responseData?.data?.childPrice);
                 setPrice(responseData?.data?.expressPrice);
               } else if (
                 response?.data?.visaOrder?.applicationType === "instant"
               ) {
+                setChildPrice(responseData?.data?.childPrice);
                 setPrice(responseData?.data?.instantPrice);
               }
             }
@@ -228,19 +233,32 @@ const EditVisaDetails = () => {
   const handleSubmit = async () => {};
 
   const calculateTotalPrice = () => {
-    const basePrice = price * users.length;
+    let amount = 0
+     const nnn = users.map((item)=>{
+      console.log(item.ageGroup,"kkk")
+      if(item.ageGroup === "Child"){
+        amount += Number(childPrice)
+      }else{
+        amount += Number(price)
+      }
+      return  
+     });
+     console.log(nnn,'jnkdjdj')
+    const basePrice = amount
     const discountAmount = discount || 0;
     // const remainingAmount = basePrice - discountAmount;
     const gstAmount = basePrice * 0.18;
-    const insuranceAmount = insurance ? insurancePrice : 0; // Assuming a fixed insurance price
-    const totalAmount = basePrice + gstAmount + insuranceAmount;
-    return { totalAmount, discount: discountAmount, gst: gstAmount };
+ const newnum = Number(insurancePrice)
+    const insuranceAmount = isNaN(newnum) ? 0 : Number(insurancePrice) ; // Assuming a fixed insurance price
+    console.log(insuranceAmount,"insuranceAmount")
+    const totalAmount = basePrice + gstAmount + insuranceAmount ;
+    return { totalAmount, discount: discountAmount, gst: gstAmount, basePrice:basePrice };
   };
 
   const totalPrice = calculateTotalPrice();
 
   return (
-    <div className="container mx-auto px-4 flex flex-col py-14">
+    <div className="container mx-auto px-4 flex flex-col pt-20">
       <div className="flex flex-col justify-between items-center mb-5">
         <button className="bg-orange-500 text-xl font-bold text-white py-3 mt-5 px-10 rounded-[25px]">
           View on {new Date(from).toDateString()}
@@ -314,6 +332,8 @@ const EditVisaDetails = () => {
         <thead>
           <tr className="bg-orange-500 text-white">
             <th className="py-2">Traveler Name</th>
+            <th className="py-2">Age Group</th>
+            <th className="py-2">Price</th>
             <th className="py-2">Actions</th>
           </tr>
         </thead>
@@ -323,9 +343,15 @@ const EditVisaDetails = () => {
               <td className="py-2 text-lg poppins-four font-medium ">
                 {user?.firstName} {user?.lastName}
               </td>
-              <td className="py-2">
+              <td className="py-2 text-lg poppins-four font-medium ">
+                {user?.ageGroup} 
+              </td>
+              <td className="py-2 text-lg poppins-four font-medium ">
+                {user?.ageGroup === "Child"?childPrice:price} 
+              </td>
+              <td className="py-2 flex sm:flex-row  flex-col justify-center items-center gap-2 ">
                 <button
-                  className="mr-5 text-blue-500"
+                  className=" text-blue-500"
                   onClick={() => handleView(user?._id)}
                 >
                   <FaEye size={22} color="orange" />
@@ -346,7 +372,7 @@ const EditVisaDetails = () => {
         <div className="w-full flex justify-between mb-2">
           <span>Total Price:</span>
           <span>
-            ₹{price} * {users.length}{" "}
+            ₹{totalPrice?.basePrice}
           </span>
         </div>
         {/* <div className="w-full flex justify-between mb-2">
@@ -364,7 +390,7 @@ const EditVisaDetails = () => {
           <span>GST (18%):</span>
           <span>₹{Math.floor(totalPrice.gst)} </span>
         </div>
-        {insurancePrice && (
+        {/* {insurancePrice > 0 && (
           <div className="w-full flex justify-between mb-2 items-center">
             <label
               htmlFor="insurance-checkbox"
@@ -379,18 +405,23 @@ const EditVisaDetails = () => {
               />
               Insurance
             </label>
-            {/* <span>{insurance ? `₹${insurancePrice} ` : "0 "}</span> */}
+            <span>{insurance ? `₹${insurancePrice} ` : "0 "}</span>
           </div>
-        )}
+        )} */}
         <div className="w-full flex justify-between font-bold">
           <span>Total Amount:</span>
           <span>₹{Math.floor(totalPrice.totalAmount)} </span>
         </div>
+        <div className="w-full flex justify-between relative top-4 font-normal text-xs">
+          <span>{insurancePrice}</span>
+          {/* <span>₹{Math.floor(totalPrice.totalAmount)} </span> */}
+        </div>
       </div>
+      
       <div className="flex justify-center my-4">
         <button
           onClick={() => handlePayment()}
-          className="bg-orange-500 text-white py-2 px-4 rounded-lg"
+          className="bg-[#F26438] poppins-four text-white py-2 px-4 rounded-full "
         >
           Make Payment
         </button>

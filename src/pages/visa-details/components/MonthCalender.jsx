@@ -4,9 +4,13 @@ import { calenderDate } from "../../../redux/actions/calender-date-action";
 import { useDispatch, useSelector } from "react-redux";
 import { CalenderReducer } from "./../../../redux/reducers/calender-date-reducer";
 import { toast } from "react-toastify";
+import ReturnCalender from "./ReturnCalendar";
 
 const MonthCalender = ({ onClose }) => {
   const visaDate = useSelector((state) => state.CalenderReducer.visaDate);
+  const returnDate = useSelector(
+    (state) => state.ReturnCalenderReducer.returnDate
+  );
   console.log(visaDate, "vsaDate");
   const [selectedDate, setSelectedDate] = useState("");
   const [isFixed, setIsFixed] = useState(true);
@@ -78,35 +82,35 @@ const MonthCalender = ({ onClose }) => {
   };
 
   const proceedFunc = () => {
-    if (visaDate) {
+    if (visaDate && returnDate) {
       onClose();
     } else {
-      toast.error("First Fill the Date");
+      toast.error("First Select Travel and Return  Date");
     }
   };
 
   return (
-    <div className="w-full bg-white rounded-lg shadow-lg p-4">
+    <div className="w-full bg-white rounded-lg max-h-[500px] overflow-auto shadow-lg py-2 px-4">
       <h2 className="text-lg font-semibold mb-4">Select your departure date</h2>
-      <div className="flex mb-4">
+      <div className="flex gap-5 mb-4">
         <button
-          className={`flex-1 py-2 text-center rounded-l-full rounded-r-full ${
+          className={`flex-1 py-2 text-center rounded-full ${
             isFixed ? "bg-blue-500 text-white" : "bg-gray-200"
           }`}
           onClick={() => setIsFixed(true)}
         >
-          Fixed Dates
+          Travel Date
         </button>
         <button
-          className={`flex-1 py-2 text-center rounded-l-full rounded-r-full ${
+          className={`flex-1 py-2 text-center rounded-full ${
             !isFixed ? "bg-blue-500 text-white" : "bg-gray-200"
           }`}
           onClick={() => setIsFixed(false)}
         >
-          Flexible
+          Return Date
         </button>
       </div>
-      {!isFixed && (
+      {/* {!isFixed && (
         <input
           type="text"
           value={selectedDate}
@@ -115,13 +119,11 @@ const MonthCalender = ({ onClose }) => {
           placeholder="Selected Date"
           className="w-full p-2 border rounded mb-4"
         />
-      )}
-      <div className="mb-4 max-h-52 overflow-y-auto">
-        {isFixed ? <Calendar /> : renderMonthCards()}
-      </div>
+      )} */}
+      <div className="mb-4 ">{isFixed ? <Calendar /> : <ReturnCalender />}</div>
       <button
         onClick={() => proceedFunc()}
-        className="w-full bg-blue-500 text-white py-2 rounded"
+        className="w-full bg-blue-500 text-white py-2 rounded-full"
       >
         Proceed to Application
       </button>

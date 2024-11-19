@@ -65,7 +65,7 @@ const HomeThird = () => {
   const { name, rating, image, review } = reviews[currentIndex];
 
   return (
-    <div className="flex flex-col items-center justify-center px-4 md:px-10 mt-[-12px] pb-8">
+    <div className="flex flex-col container items-center mx-auto justify-center py-20 px-4 md:px-10  ">
       <h2 className="text-[22px] text-orange-500 text-center poppins-five mb-2">
         {data?.heading}
       </h2>

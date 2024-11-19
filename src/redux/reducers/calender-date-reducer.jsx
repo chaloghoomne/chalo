@@ -10,3 +10,16 @@ export const CalenderReducer = (state = { visaDate: "" }, actions) => {
       return state;
   }
 };
+
+export const ReturnCalenderReducer = (state = { returnDate: "" }, actions) => {
+  const { type, payload } = actions;
+  switch (type) {
+    case "RETURN_CALENDER_DATE":
+      return {
+        returnDate: payload,
+      };
+
+    default:
+      return state;
+  }
+};

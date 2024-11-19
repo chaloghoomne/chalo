@@ -5,6 +5,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import React, { useEffect, useRef, useState } from "react";
 import Calendar from "./components/Calender";
+import { RxCross1 } from "react-icons/rx";
 import MonthCalender from "./components/MonthCalender";
 import { fetchDataFromAPI } from "../../api-integration/fetchApi";
 import { BASE_URL } from "../../api-integration/urlsVariable";
@@ -13,20 +14,36 @@ import { useDispatch, useSelector } from "react-redux";
 import { CiLocationOn } from "react-icons/ci";
 import { MdChevronRight } from "react-icons/md";
 import { numberofCoTravelers } from "./../../redux/actions/numberoftravelers-actions";
-import { coTraveler, PackageId } from "../../redux/actions/package-id-actions";
+import {
+  coTraveler,
+  PackageId,
+  setChildShowId,
+  setVisaId,
+} from "../../redux/actions/package-id-actions";
 import DescriptionModal from "../home/components/DescriptionModal";
 import { GoDotFill } from "react-icons/go";
 import { CiWallet } from "react-icons/ci";
+import ReturnCalender from "./components/ReturnCalendar";
+import FAQs from "./components/Faqs";
+import VisaProcessSteps from "./components/Steps";
 
 const VisaDetails = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
+  const countryId = useSelector((state) => state.CountryIdReducer.countryId);
+  const [isReturnModalOpen, setIsReturnModalOpen] = useState(false);
+  const [selectedType, setSelectedType] = useState(null);
   const selectedCountry = useSelector(
     (state) => state.SelectedCountryReducer.selectedCountry
   );
+  const returnDate = useSelector(
+    (state) => state.ReturnCalenderReducer.returnDate
+  );
+  const [faqData,setfaqData] = useState([])
   const fromDate = useSelector((state) => state.CalenderReducer.visaDate);
+  const toDate = useSelector((state) => state.ReturnCalenderReducer.returnDate);
   const visaType = useSelector((state) => state.GetVisaTypeReducer.visaType);
-  console.log(fromDate, "zxcvbndfgh");
+
   const datePickerRef = useRef(null);
   const [numberOfTravelers, setNumberOfTravelers] = useState(1);
   const [isApplicationModalOpen, setApplicationModalOpen] = useState(false);
@@ -36,6 +53,115 @@ const VisaDetails = () => {
   const [important, setImportantPoints] = useState();
   const [partners, setPartners] = useState([]);
   const [data, setData] = useState({});
+
+  const applyNowRef = useRef(null);
+  const faqRef = useRef(null);
+  const [isCardFixed, setIsCardFixed] = useState(false);
+  const [isLargeScreen, setIsLargeScreen] = useState(false);
+  
+  const mainImageRef = useRef(null);
+  const cardRef = useRef(null);
+  const contentRef = useRef(null);
+
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsLargeScreen(window.innerWidth >= 1024);
+    };
+  
+    checkScreenSize();
+    window.addEventListener('resize', checkScreenSize);
+  
+    return () => window.removeEventListener('resize', checkScreenSize);
+  }, []);
+
+  useEffect(() => {
+    const fetchShowCoTraveler = async () => {
+      try {
+        const response = await fetchDataFromAPI(
+          "GET",
+          `${BASE_URL}place/${countryId}`
+        );
+   
+        if (response) {
+          setfaqData(response?.data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchShowCoTraveler();
+  }, [countryId]);
+
+  const [cardPosition, setCardPosition] = useState({ top: 0, right: 0 });
+  
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsLargeScreen(window.innerWidth >= 1024);
+    };
+  
+    checkScreenSize();
+    window.addEventListener('resize', checkScreenSize);
+  
+    return () => window.removeEventListener('resize', checkScreenSize);
+  }, []);
+
+  const footerRef = useRef(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!isLargeScreen || !mainImageRef.current || !cardRef.current || !footerRef.current) return;
+
+      const imageBottom = mainImageRef.current.getBoundingClientRect().bottom;
+      const footerTop = footerRef.current.getBoundingClientRect().top;
+      const cardHeight = cardRef.current.offsetHeight;
+      const windowHeight = window.innerHeight;
+      const cardBottom = cardHeight + 80; // 80px is the top offset we're using
+
+      // Calculate when card would overlap footer
+      const wouldOverlapFooter = (windowHeight - footerTop) + cardBottom > windowHeight;
+
+      // If we've scrolled past the main image but not into footer territory
+      if (imageBottom <= 0 && !wouldOverlapFooter) {
+        cardRef.current.style.position = 'fixed';
+        cardRef.current.style.top = '60px';
+        cardRef.current.style.right = '47px';
+        cardRef.current.style.width = '26rem';
+        cardRef.current.style.opacity = '1';
+        cardRef.current.style.visibility = 'visible';
+      } else if (wouldOverlapFooter) {
+        // Hide card when it would overlap footer
+        cardRef.current.style.opacity = '0';
+        cardRef.current.style.visibility = 'hidden';
+      } else {
+        // Reset to original position when above the image
+        cardRef.current.style.position = 'relative';
+        cardRef.current.style.top = '20px';
+        cardRef.current.style.right = '-80px';
+        cardRef.current.style.width = '26rem';
+        cardRef.current.style.opacity = '1';
+        cardRef.current.style.visibility = 'visible';
+      }
+    };
+
+    if (isLargeScreen) {
+      window.addEventListener('scroll', handleScroll);
+      handleScroll(); // Initial position check
+    } else {
+      // Reset styles for mobile view
+      if (cardRef.current) {
+        cardRef.current.style.position = 'relative';
+        cardRef.current.style.top = 'auto';
+        cardRef.current.style.right = 'auto';
+        cardRef.current.style.width = '100%';
+        cardRef.current.style.opacity = '1';
+        cardRef.current.style.visibility = 'visible';
+      }
+    }
+
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [isLargeScreen]);
+
   console.log(important, "important data");
   const navigate = useNavigate();
 
@@ -53,6 +179,13 @@ const VisaDetails = () => {
     };
     fetchProfileImage();
   }, []);
+
+  const handleApplicationType = (type, date) => {
+    setSelectedType(type);
+    // setIsReturnModalOpen(true);
+    setCalendarModalOpen(true);
+
+  };
 
   useEffect(() => {
     const fetchProfileImage = async () => {
@@ -84,10 +217,12 @@ const VisaDetails = () => {
         console.log(response, "response data");
         if (response) {
           setData(response.data);
+          dispatch(setChildShowId(id))
         }
       } catch (error) {
         console.log(error);
       }
+      dispatch(setVisaId(id));
     };
     fetchProfileImage();
   }, [id]);
@@ -114,11 +249,17 @@ const VisaDetails = () => {
       console.log("hit3");
     }
   };
+console.log({partners},"Partnerts")
+ 
 
-  const handleApplicationType = async (type, date) => {
-    console.log(date, "date");
-    const newDate = new Date(date).toISOString();
-
+  const proceedFunc = async () => {
+    // if (!returnDate) {
+    //   // Show an error if return date is not selected
+    //   alert("Please select a return date");
+    //   return;
+    // }
+    setCalendarModalOpen(false);
+    const newDate = new Date(returnDate).toISOString();
     try {
       const response = await fetchDataFromAPI(
         "POST",
@@ -126,20 +267,24 @@ const VisaDetails = () => {
         {
           visaCategory: id,
           travellersCount: numberOfTravelers,
-          from: newDate,
-          applicationType: type,
+          // from: new Date(data[`${selectedType}Date`]).toISOString(),
+          // to: newDate,
+          from: fromDate,
+          to: toDate,
+          applicationType: selectedType,
         }
       );
-      console.log(response?.data?._id, "response Id ");
+
       if (response) {
         dispatch(PackageId(response?.data?.visaOrder?._id));
         dispatch(numberofCoTravelers(numberOfTravelers));
         dispatch(coTraveler(response?.data?.orderDetails?._id));
       }
+      setIsModalOpen(false);
+      navigate("/persons-details");
     } catch (error) {
       console.log(error);
     }
-    navigate("/upload-image");
   };
 
   const proceedApplication = async () => {
@@ -152,6 +297,7 @@ const VisaDetails = () => {
           visaCategory: id,
           travellersCount: numberOfTravelers,
           from: fromDate,
+          to: toDate,
           applicationType: "normal",
         }
       );
@@ -164,7 +310,7 @@ const VisaDetails = () => {
     } catch (error) {
       console.log(error);
     }
-    navigate("/upload-image");
+    navigate("/persons-details");
   };
 
   const handleCalendarChoice = (choice) => {
@@ -180,7 +326,7 @@ const VisaDetails = () => {
   const handleFlexibleChoice = () => {
     setFlexibleModalOpen(false);
     // Handle flexible date choice
-    navigate("/upload-image");
+    navigate("/persons-details");
   };
 
   const renderCalendar = () => {
@@ -223,13 +369,13 @@ const VisaDetails = () => {
   };
 
   return (
-    <div className="w-full h-full mx-auto py-10">
+    <div ref={contentRef} className="w-full h-full mx-auto container py-10">
       {/* Main Image */}
-      <div className="w-full relative mt-12 rounded-xl bg-cover flex h-[500px] justify-center items-center mb-10">
+      <div ref={mainImageRef} className="w-full relative mt-12 rounded-xl bg-cover flex h-[500px] justify-center items-center mb-10">
         <div className="px-16 w-full relative ">
           <img
             src={data?.image}
-            alt="Gramado, Brazil"
+            alt={selectedCountry}
             className="w-full bg-cover   h-[450px] rounded-2xl"
           />
           <div className="absolute lg:block hidden inset-0 left-28 -z-10 w-[85%] rounded-2xl bg-gradient-to-r from-blue-600 to-purple-600 blur-md opacity-65"></div>
@@ -240,13 +386,14 @@ const VisaDetails = () => {
       </div>
 
       {/* Apply Section */}
-      <div className="w-full flex md:flex-row flex-col justify-between  md:px-10 px-5 ">
-        <div className="mb-6 md:w-[50%] w-full">
+
+      <div className="w-full flex md:flex-row flex-col justify-between  md:px-10 px-5  ">
+        <div ref={applyNowRef} className="mb-6 md:w-[50%] ml-6 w-full">
           <h2 className="text-3xl font-bold mt-3 mb-2">
             Apply now for guaranteed visa on{" "}
           </h2>
           <span className="text-blue-500 font-bold text-3xl">
-            {new Date(data?.expressDate).toDateString()?.slice(4, 100)}
+            {new Date().toDateString()?.slice(4, 100)}
           </span>
 
           <div className="mb-6 w-full">
@@ -269,7 +416,7 @@ const VisaDetails = () => {
                       .map((point) => point.trim());
                     return (
                       <React.Fragment key={index}>
-                        {pointsArray.map((point, pointIndex) => (
+                        {pointsArray?.map((point, pointIndex) => (
                           <p
                             key={pointIndex}
                             className="flex justify-start gap-2 items-center text-gray-400 poppins-four text-sm"
@@ -282,47 +429,27 @@ const VisaDetails = () => {
                     );
                   })}
                 </ul>
-
-                {/* <p className="flex justify-start gap-2 items-center text-gray-400   poppins-four text-sm">
-                  <GoDotFill color="black" size={5} />
-                  Valid Passport
-                </p>
-                <p className="flex justify-start gap-2 items-center text-gray-400   poppins-four text-sm">
-                  <GoDotFill color="black" size={5} />
-                  Valid Passport
-                </p>
-                <p className="flex justify-start gap-2 items-center text-gray-400  poppins-four text-sm">
-                  <GoDotFill color="black" size={5} />
-                  Valid Passport
-                </p>
-                <p className="flex justify-start gap-2 items-center text-gray-400   poppins-four text-sm">
-                  <GoDotFill color="black" size={5} />
-                  Valid Passport
-                </p>
-                <p className="flex justify-start gap-2 items-center text-gray-400   poppins-four text-sm">
-                  <GoDotFill color="black" size={5} />
-                  Valid Passport
-                </p>
-                <p className="flex justify-start gap-2 items-center text-gray-400   poppins-four text-sm">
-                  <GoDotFill color="black" size={5} />
-                  Valid Passport
-                </p> */}
               </div>
+              <VisaProcessSteps country={selectedCountry} />
             </div>
           </div>
         </div>
         <div className=" md:w-[50%] md:px-10 relative w-full ">
-          <div
-            style={{ backgroundImage: `url(${card})` }}
-            className="w-full bg-cover fixed z-30 mt-7  bottom-16 lg:right-5 right-5  mx-auto bg-transparent max-w-[29rem] md:max-w-[29rem] md:p-10 p-6 "
+        <div
+            ref={cardRef}
+            style={{ 
+              backgroundImage: `url(${card})`,
+              // transition: 'all 0.3s ease-in-out'
+            }}
+            className="w-full bg-cover z-30 pb-16 mx-auto mt-7 bg-transparent md:p-10 p-6"
           >
             <div className="flex justify-between px-5 items-center  mb-4">
-              <h2 className="text-2xl poppins-six relative top-5 font-semibold ">
-                {" "}
+              <h2 className="text-2xl flex flex-row poppins-six relative top-5 font-semibold ">
+              Travellers
                 <RiContactsLine size={30} style={{ fontWeight: "bold" }} />
-                Travellers
+              
               </h2>
-              <div className="flex items-center relative top-10 space-x-2 p-b8">
+              <div className="flex items-center relative top-5 space-x-2 p-b8">
                 <button
                   onClick={() => handletravelerNumber("sub")}
                   className="bg-white border border-black  text-lg flex cursor-pointer justify-center items-center w-4 h-4 rounded-full"
@@ -338,7 +465,7 @@ const VisaDetails = () => {
                 </button>
               </div>
             </div>
-            <div className="w-full px-5 rounded-xl  relative top-3 border-gray-300 border bg-gray-800/60 "></div>
+            <div className="w-full px-5 rounded-xl  relative top-3 border-gray-400 border-dashed border-[1px] "></div>
             {/* <hr className="border-black " /> */}
             <div className="mb-4 pt-3 px-5">
               <h3 className="text-xl poppins-six relative top-3 font-semibold">
@@ -357,7 +484,7 @@ const VisaDetails = () => {
             <div className="mb-4 px-10 relative top-3 ">
               <div
                 style={{}}
-                className="flex w-full flex-wrap gap-6 justify-evenly "
+                className="flex w-full flex-wrap gap-3 justify-between "
               >
                 <div className="text-center">
                   <p className="font-semibold poppins-six text-[12px]">
@@ -377,29 +504,32 @@ const VisaDetails = () => {
                   </p>
                   <p className="text-xs text-start">{data?.processingTime}</p>
                 </div>
-                <div className="text-center">
+                <div className="flex flex-row gap-16 justify-between">
+                <div className="">
                   <p className="font-semibold poppins-six text-[12px]">STAY</p>
                   <p className="text-xs text-start">{data?.period}</p>
                 </div>
-                <div className="text-center">
+                <div >
                   <p className="poppins-six text-[12px] font-semibold">
                     ENTRY TYPE
                   </p>
                   <p className="text-xs text-start">{data?.entryType}</p>
                 </div>
+                </div>
               </div>
             </div>
-            <div className="mb-4 flex px-5 justify-between w-full">
-              <h3 className="text-xl poppins-six font-medium">Total Amount</h3>
-              <p className="text-xl poppins-six font-medium">
+            <div className="mb-[6px] flex  px-5 justify-between w-full">
+              <h3 className="text-xl poppins-six font-medium " >Total Amount</h3>
+              <p className="text-xl poppins-six font-medium ">
                 ₹{data?.price * numberOfTravelers}
               </p>
             </div>
-            <div className="w-full border-dashed border px-5  my-2 border-black"></div>
+            <div className="w-full px-5 rounded-xl  relative top-3 border-gray-400 border-dashed border-[1px] "></div>
+            {/* <div className="w-full border-dashed border px-5  my-2 border-black"></div> */}
             <div className="flex justify-center items-center">
               <button
                 onClick={handleStartApplication}
-                className="bg-gradient-to-r relative cursor-pointer top-2 from-[#3180CA] to-[#7AC7F9] text-white py-3 px-4 rounded-2xl text-2xl poppins-six w-[80%]"
+                className="bg-gradient-to-r mt-[10px] relative cursor-pointer top-2 from-[#3180CA] to-[#7AC7F9] text-white py-3 px-4 rounded-full text-2xl poppins-six w-[80%]"
               >
                 Start Application
               </button>
@@ -411,51 +541,59 @@ const VisaDetails = () => {
       {/* Options Section */}
       <div className="mb-6  md:px-10 px-5">
         <div className="flex justify-center my-2 md:justify-start items-center mb-4">
-          <hr className="border-gray-400 h-[2px] bg-gray-400  w-[28%]" />
+          <hr className="border-gray-400 border-dashed border   w-[28%]" />
           <span className="mx-4 poppins-six text-xl">OR</span>
-          <hr className="border-gray-400 h-[2px] bg-gray-400  w-[28%]" />
+          <hr className="border-gray-400 border-dashed border   w-[28%]" />
         </div>
         <div className="flex flex-wrap   gap-4">
-          <button
-            onClick={() => handleApplicationType("instant", data?.instantDate)}
-            className="bg-gradient-to-r from-[#3180CA] to-[#7AC7F9] md:min-w-[60%] text-white p-4  relative md:px-8 md:pb-6 rounded-2xl shadow-md shadow-gray-400 flex justify-between items-center"
-          >
-            <div className="flex flex-col self-start">
-              <span className="text-2xl poppins-five text-start">
-                {data?.instantHeading}{" "}
-              </span>
-              <span className="text-2xl poppins-five text-start">
-                Visa on {data?.instantDate}{" "}
-              </span>
-            </div>
-            <span className="bg-white relative text-start md:pl-4 md:min-w-56 text-sm md:relative md:top-2  text-gray-500 p-2  rounded-lg">
-              Chalo Ghoomne Instant
-              <p className="text-start ">₹{data?.instantPrice}</p>
-              <div className="absolute hidden md:block top-5 right-2">
-                <MdChevronRight size={20} color="gray" />
+          {data?.instantHeading && data?.instantPrice && (
+            <button
+              onClick={() =>
+                handleApplicationType("instant", data?.instantDate)
+              }
+              className="bg-gradient-to-r from-[#3180CA] to-[#7AC7F9] md:min-w-[60%] text-white p-4  relative md:px-8 md:pb-6 rounded-2xl shadow-md shadow-gray-400 flex justify-between items-center"
+            >
+              <div className="flex flex-col self-start">
+                <span className="text-2xl poppins-five text-start">
+                  {data?.instantHeading}{" "}
+                </span>
+                <span className="text-2xl poppins-five text-start">
+                  Visa on {data?.instantDate}{" "}
+                </span>
               </div>
-            </span>
-          </button>
-          <button
-            onClick={() => handleApplicationType("express", data?.expressDate)}
-            className="bg-gradient-to-r from-[#3180CA] to-[#7AC7F9] md:min-w-[60%] text-white p-4 md:px-8 md:pb-6 rounded-2xl shadow-md shadow-gray-400 flex justify-between items-center"
-          >
-            <div className="flex flex-col">
-              <span className="text-2xl poppins-five text-start">
-                {data?.expressHeading}{" "}
+              <span className="bg-white relative text-start md:pl-4 md:min-w-56 text-sm md:relative md:top-2  text-gray-500 p-2  rounded-lg">
+                Chalo Ghoomne Instant
+                <p className="text-start ">₹{data?.instantPrice}</p>
+                <div className="absolute hidden md:block top-5 right-2">
+                  <MdChevronRight size={20} color="gray" />
+                </div>
               </span>
-              <span className="text-2xl poppins-five text-start">
-                Visa on {data?.expressDate}{" "}
-              </span>
-            </div>
-            <span className="bg-white relative text-start md:pl-4 md:min-w-56 text-sm md:relative md:top-2  text-gray-500 p-2  rounded-lg">
-              Chalo Ghoomne Express
-              <p className="text-start ">₹{data?.expressPrice}</p>
-              <div className="absolute hidden md:block top-5 right-2">
-                <MdChevronRight size={20} color="gray" />
+            </button>
+          )}
+          {data?.expressPrice && data?.expressHeading && (
+            <button
+              onClick={() =>
+                handleApplicationType("express", data?.expressDate)
+              }
+              className="bg-gradient-to-r from-[#3180CA] to-[#7AC7F9] md:min-w-[60%] text-white p-4 md:px-8 md:pb-6 rounded-2xl shadow-md shadow-gray-400 flex justify-between items-center"
+            >
+              <div className="flex flex-col">
+                <span className="text-2xl poppins-five text-start">
+                  {data?.expressHeading}{" "}
+                </span>
+                <span className="text-2xl poppins-five text-start">
+                  Visa on {data?.expressDate}{" "}
+                </span>
               </div>
-            </span>
-          </button>
+              <span className="bg-white relative text-start md:pl-4 md:min-w-56 text-sm md:relative md:top-2  text-gray-500 p-2  rounded-lg">
+                Chalo Ghoomne Express
+                <p className="text-start ">₹{data?.expressPrice}</p>
+                <div className="absolute hidden md:block top-5 right-2">
+                  <MdChevronRight size={20} color="gray" />
+                </div>
+              </span>
+            </button>
+          )}
         </div>
       </div>
 
@@ -484,11 +622,15 @@ const VisaDetails = () => {
           </div>
         </div>
       </div>
-
+      <div className="md:w-[60%] w-full"><FAQs ref={faqRef} data={faqData?.faq} /></div>
+    
+      <div className="text-md w-full md:w-[60%] poppins-four py-5 text-black px-10">
+        {data?.longDescription} 
+      </div>
       {/* Partners Section */}
-      <div>
-        <h2 className="text-2xl font-bold px-5  mb-4">Partners we work with</h2>
-        <div className="overflow-x-auto px-5">
+      <div className="w-full md:w-[60%] p-6 ml-[8px]">
+        <h2 className="text-3xl font-bold  mb-6">Partners we work with</h2>
+        <div className="overflow-x-auto">
           <div className="flex space-x-4 py-5">
             {partners?.map((partner) => {
               return (
@@ -499,41 +641,23 @@ const VisaDetails = () => {
                     rel="noopener noreferrer"
                   >
                     {" "}
-                    <div className="min-w-[300px] drop-shadow-lg max-w-[300px] bg-white p-4 rounded-lg border shadow-md">
+                    <div className="min-w-[200px] drop-shadow-lg max-w-[300px] bg-white p-4 rounded-lg border shadow-md">
                       <img
                         src={partner?.image}
                         alt="India"
-                        className="w-full h-[200px] bg-cover rounded-lg mb-2"
+                        className="w-full h-[160px] bg-cover rounded-lg mb-2"
                       />
+                      <div className="h-[50px] overflow-scroll">
                       <p
                         style={{
                           overflowWrap: "anywhere",
                         }}
-                        className="font-semibold max-w-[300px]"
+                        className="font-semibold max-w-[200px]"
                       >
-                        {partner?.title}
+                        {partner?.heading}
                       </p>
-                      <p
-                        style={{
-                          overflowWrap: "anywhere",
-                        }}
-                        className="text-gray-500"
-                      >
-                        {partner?.heading < 20
-                          ? partner?.heading
-                          : `${partner?.heading?.slice(0, 20)}...`}
-                        {partner?.heading?.length > 20 && (
-                          <span
-                            onClick={() => setIsModalOpen(true)}
-                            className="text-blue-500 cursor-pointer"
-                          >
-                            see more
-                          </span>
-                        )}
-                      </p>
-                      <p className="text-gray-500">
-                        {partner?.travellersCount} travelers
-                      </p>
+                      </div>
+                    
                     </div>
                   </Link>
                 </>
@@ -542,7 +666,9 @@ const VisaDetails = () => {
           </div>
         </div>
       </div>
-
+      <div ref={footerRef}>
+        {/* Your footer content */}
+      </div>
       {isApplicationModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-11/12 max-w-md">
@@ -571,22 +697,17 @@ const VisaDetails = () => {
       {/* Calendar Modal */}
       {isCalendarModalOpen && (
         <div className="fixed inset-0 flex z-50 items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white m-4 mt-16 rounded-lg shadow-lg w-full max-w-md">
+          <div className="bg-white relative m-4 mt-5 max-h-[600px] overflow-auto rounded-lg shadow-lg w-full max-w-md">
             <h2 className="text-xl poppins-four font-bold text-center my-2">
               Select Departure Date
             </h2>
-            {/* <div className="mb-4 flex ">
-              <button className="bg-gray-200 py-2 px-4 rounded-lg w-full mb-2" onClick={() => handleCalendarChoice('fixed')}>Fixed</button>
-              <button className="bg-gray-200 py-2 px-4 rounded-lg w-full" onClick={() => handleCalendarChoice('flexible')}>Flexible</button>
-            </div>
-
-             <DatePicker ref={datePickerRef} selected={startDate} onChange={(date) => setStartDate(date)} /> */}
-            <MonthCalender onClose={proceedApplication} />
+           
+            <MonthCalender onClose={!selectedType ? proceedApplication:proceedFunc} />
             <button
               onClick={() => setCalendarModalOpen(false)}
-              className="absolute right-2 top-20 text-2xl font-bold"
+              className="absolute right-2 top-3 text-2xl font-bold"
             >
-              ❌
+             <RxCross1 size={20} color="red" />
             </button>
           </div>
         </div>
@@ -622,10 +743,29 @@ const VisaDetails = () => {
               </div>
             </div>
             <button
-              className="bg-blue-500 text-white py-2 px-4 rounded-lg w-full"
+              className="bg-blue-500 text-white py-2 px-4 rounded-full w-full"
               onClick={handleFlexibleChoice}
             >
               Continue
+            </button>
+          </div>
+        </div>
+      )}
+
+      {isReturnModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-30 flex justify-center items-center">
+          <div className="bg-white cursor-pointer relative p-6 rounded-lg">
+            <div onClick={() => setIsReturnModalOpen(false)} className=" py-2">
+              ❌
+            </div>
+            <h2 className="text-xl mb-4">Select Return Date</h2>
+
+            <ReturnCalender />
+            <button
+              onClick={proceedFunc}
+              className="w-full bg-blue-500 text-white py-2 rounded mt-4"
+            >
+              Proceed to Application
             </button>
           </div>
         </div>

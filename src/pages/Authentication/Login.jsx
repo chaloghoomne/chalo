@@ -71,6 +71,7 @@ const Login = () => {
       const response = await fetchDataFromAPI("POST", `${BASE_URL}user-login`, {
         credential: emailOrPhone,
         password,
+        deviceToken: token,
       });
       console.log("response", response);
       if (response.success) {
@@ -88,7 +89,7 @@ const Login = () => {
       console.log("Login successful:", response);
     } catch (err) {
       console.error("Login failed:", err);
-      setError("Login failed. Please try again.");
+      setError("Login failed, Wrong Credentials.");
     }
   };
 
@@ -121,7 +122,7 @@ const Login = () => {
       }
     } catch (err) {
       console.error("Google login failed:", err);
-      toast.error(err);
+      toast.error(err.message);
     }
   };
 
@@ -138,15 +139,15 @@ const Login = () => {
     <div
       className="flex items-center justify-center h-[100%] py-8 min-h-screen bg-center bg-cover"
       style={{
-        backgroundImage: `url(https://img.lovepik.com/background/20211022/large/lovepik-simple-technology-background-image_401740828.jpg)`,
+        backgroundImage: `url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTw0uAVzEIqlrCrLkFz9KLzU0FGUFppxUP5wRg1JOO7MUUEtBvroKMzt_xYVedz3VERd_I&usqp=CAU)`,
       }}
     >
-      <div className="bg-gray-800 bg-opacity-70 p-10 rounded-xl shadow-lg text-white w-full max-w-md">
+      <div className="bg-white/30  p-10 rounded-xl shadow-lg text-white w-full max-w-md">
         <Link to="/" className="text-center mb-6">
-          <img src={logo} alt="Logo" className="mx-auto h-20" />
+          <img src={logo} alt="Logo" className="mx-auto w-48" />
         </Link>
         <h2 className="text-2xl font-bold text-center mb-6">LOGIN</h2>
-        <p className="text-center mb-6">You're so close to leveling up!</p>
+        <p className="text-center  mb-6">You're so close to leveling up!</p>
 
         {error && <p className="text-center text-red-500 my-3">{error}</p>}
         <form className="space-y-6" onSubmit={handleSubmit}>

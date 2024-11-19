@@ -12,19 +12,25 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { coTraveler, PackageId } from "../../redux/actions/package-id-actions";
 import { toast } from "react-toastify";
+import ImageUpload from "../upload-image/ImageUpload";
 
-const PersonDetails = ({ save }) => {
+const PersonDetails = () => {
+ 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const buttonShow = useSelector((state)=>state.ShowButtonReducer.buttonShow)
+  console.log(buttonShow,"kdijeio")
   const countryId = useSelector((state) => state.CountryIdReducer.countryId);
+  const childId = useSelector((state) => state.ChildSHowIdReducer.childId);
   const [showCoTravler, setShowCoTravler] = useState();
-  console.log(showCoTravler, "showCoTravler");
+   const [childData,setChildData] = useState()
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     fatherName: "",
     motherName: "",
     gender: "",
+    ageGroup:"",
     passportNumber: "",
     dob: "",
     passportIssueDate: "",
@@ -44,7 +50,7 @@ const PersonDetails = ({ save }) => {
           "GET",
           `${BASE_URL}place/${countryId}`
         );
-        console.log(response?.data, "response daya");
+   
         if (response) {
           setShowCoTravler(response?.data?.showCoTraveller);
         }
@@ -56,6 +62,27 @@ const PersonDetails = ({ save }) => {
     fetchShowCoTraveler();
   }, []);
 
+  useEffect(() => {
+    const fetchProfileImage = async () => {
+      try {
+        const response = await fetchDataFromAPI(
+          "GET",
+          `${BASE_URL}visa-category/${childId}`
+        );
+        console.log(response, "response data");
+        if (response) {
+          setChildData(response.data);
+         
+        }
+      } catch (error) {
+        console.log(error);
+      }
+     
+    };
+    fetchProfileImage();
+  }, [childId]);
+
+
   const [importantPoints, setImportantPoints] = useState([]);
   const [packageData, setPackageData] = useState({});
   const selectedDate = useSelector((state) => state.CalenderReducer.visaDate);
@@ -66,12 +93,6 @@ const PersonDetails = ({ save }) => {
     (state) => state.CotravelerIdReducer.cotravlerId
   );
   const packageId = useSelector((state) => state.PackageIdReducer.packagedId);
-  console.log(
-    packageId,
-    travlersCount,
-    "travlersCount",
-    packageData?.orderDetails
-  );
 
   useEffect(() => {
     const fetchData = async () => {
@@ -186,12 +207,13 @@ const PersonDetails = ({ save }) => {
     e.preventDefault();
 
     if (!validatePassportDetails()) {
+      toast.error(`All Fields are Required`)
       return;
     }
 
-    const kuchaayega = save();
-    console.log(kuchaayega, "kuchaayega");
-    if (kuchaayega) {
+    // const kuchaayega = save();
+    // console.log(kuchaayega, "kuchaayega");
+    // if (kuchaayega) {
       if (packageData?.orderDetails === travlersCount) {
         try {
           const response = await fetchDataFromAPI(
@@ -237,27 +259,32 @@ const PersonDetails = ({ save }) => {
           console.log(error);
           toast.error("Network error! Try again Later");
         }
-        window.location.href = "/upload-image";
+        window.location.href = "/persons-details";
         // navigate("/upload-image");
       }
-    }
+    // }
     console.log("hhh");
   };
 
+ 
+
   return (
-    <div className="flex flex-col lg:flex-row px-3 justify-center items-center py-10 min-h-screen sm:bg-gray-200 bg-white ">
-      <div className=" lg:w-[70%] w-full flex h-full mx-5 border-gray-300 border py-2 bg-white justify-center items-center ">
-        <div className="bg-white p-8 px-10  rounded-lg  w-full max-w-2xl">
+    <div className="flex flex-col lg:flex-row px-3 justify-center items-center pt-20 min-h-screen  bg-white">
+      <div className=" lg:w-full w-full flex h-full rounded-lg mx-5 border-gray-300 mx-auto container py-2 bg-white justify-center items-center w-[90%] mx-[5%]  ">
+        <div className="bg-white pt-12  px-3 sm:px-10 rounded-lg  w-full ">
           {/* Visa Validity */}
           <div className="flex flex-col justify-between items-center mb-5">
             <button className="bg-orange-500 text-xl font-bold text-white py-3 mt-5 px-10 rounded-[25px]">
               View on {new Date(packageData?.visaOrder?.from).toDateString()}
             </button>
-            <h1 className="text-lg font-semibold">Review your information</h1>
+            {/* <h1 className="text-lg font-semibold">Review your information</h1> */}
+            <h1 className="text-xl poppins-four mt-3 text-center self-center text-orange-500 ">
+            {`Traveler Information: Applicant #${packageData?.orderDetails} of ${travlersCount}`}
+          </h1>
           </div>
 
-          <div className=" p-4 flex flex-col rounded-lg mb-4">
-            <button className="text-xl py-2 rounded-2xl px-5 flex justify-start gap-2 items-center bg-blue-500 text-white font-semibold">
+          <div className=" p-4 relative flex flex-col w-full rounded-lg mb-4">
+            <button className="text-xl z-30 w-full py-2 rounded-2xl px-5 flex justify-start gap-2 items-center bg-blue-500 text-white font-semibold">
               <IoMdCalendar size={25} color="white" /> Traveller Information
             </button>
             <div className="flex relative justify-between mt-2">
@@ -270,11 +297,12 @@ const PersonDetails = ({ save }) => {
                   disabled
                 />
               </div>
+              <div>
               <img
-                src="https://i.pinimg.com/originals/8d/d0/25/8dd0251b583a044fa7f5c40c9c978d06.png"
-                className="w-44 hidden lg:block absolute right-48 top-[-48px] "
+                src="https://t3.ftcdn.net/jpg/05/69/35/72/360_F_569357280_YSngXd8RPso9rI1D3YxakFBAnfVgxkwn.jpg"
+                className="w-[290px] z-0 hidden lg:block absolute right-[40%] top-[-45px] "
                 alt=""
-              />
+              /></div>
               <div className="flex flex-col gap-2">
                 <span>Return Date</span>
                 <input
@@ -288,12 +316,12 @@ const PersonDetails = ({ save }) => {
           </div>
 
           {/* Personal Information */}
-
-          <button className="text-xl  py-2 w-[95%] mx-3 mb-5 rounded-2xl px-5 flex justify-start gap-2 items-center bg-blue-500 text-white font-semibold">
+          <div className=" px-4 relative flex flex-col w-full rounded-lg my-4">
+          <button className="text-xl z-30 py-2 w-full rounded-2xl px-5   flex justify-start gap-2 items-center bg-blue-500 text-white font-semibold">
             <MdOutlinePersonAdd size={25} color="white" />
             Personal Information
           </button>
-
+</div>
           <form onSubmit={handleSubmit}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 px-10 mb-4">
               <div>
@@ -357,6 +385,20 @@ const PersonDetails = ({ save }) => {
                 </select>
               </div>
               <div>
+  <label className="block text-sm font-semibold">Age Group</label>
+  <select
+    name="ageGroup"
+    required
+    value={formData.ageGroup}
+    onChange={handleFields}
+    className="w-full p-2 border rounded-lg"
+  >
+    <option value="">Select Age Group</option>
+    {childData?.childPrice >0 && <option value="Child">Under 18</option>}
+   <option value="Adult">18 and Over</option>
+  </select>
+</div>
+              <div>
                 <label className="block text-sm font-semibold">
                   Passport Number
                 </label>
@@ -376,6 +418,7 @@ const PersonDetails = ({ save }) => {
                   type="date"
                   name="dob"
                   required
+                  max={new Date().toISOString().split('T')[0]}
                   value={formData.dob}
                   onChange={handleFields}
                   className="w-full p-2 border rounded-lg"
@@ -409,40 +452,9 @@ const PersonDetails = ({ save }) => {
                 />
               </div>
             </div>
-            {/* Documents Submitted */}
-            {/* <button className="text-xl  py-3 w-[95%] mx-3 mb-5 rounded-2xl px-5 flex justify-start gap-2 items-center bg-blue-500 text-white font-semibold">
-              <IoDocumentsSharp size={25} color="white" />
-              Documents Submitted
-            </button> */}
-            {/* <div className="flex justify-between md:px-10 mb-4 ">
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-4">
-                <input
-                  type="file"
-                  className="md:w-24 md:h-24 w-20 h-20 object-cover rounded-lg"
-                />
-              </div>
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-4">
-                <input
-                  type="file"
-                  className="md:w-24 md:h-24 w-20 h-20 object-cover rounded-lg"
-                />
-              </div>
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-4">
-                <input
-                  type="file"
-                  className="md:w-24 md:h-24 w-20 h-20 object-cover rounded-lg"
-                />
-              </div>
-            </div> */}
-            {/* <div className="my-6 w-full flex justify-center items-center">
-              <input
-                {...register("Name")}
-                defaultValue="Name"
-                className="w-[70%] font-semibold text-2xl p-4 border rounded-[25px]"
-              />
-              <p className="text-red-500 text-sm">{errors.name?.message}</p>
-            </div> */}
-            {/* Co-Traveller */}
+           
+
+            <ImageUpload  />
             {showCoTravler && (
               <>
                 <div className=" text-black p-4 flex justify-start font-bold  items-center mb-4">
@@ -470,22 +482,22 @@ const PersonDetails = ({ save }) => {
             )}
             {/* Proceed to Checkout */}
             <div className="text-center">
-              <button
+             { buttonShow && <button
                 type="submit"
-                className="bg-green-500 text-white py-2 px-4 rounded-lg"
+                className="bg-[#F26438] text-white py-2 px-8 mt-12 text-lg poppins-three rounded-full"
               >
                 {packageData?.orderDetails === travlersCount
                   ? "Proceed to Checkout"
                   : `Add Traveler ${
                       packageData?.orderDetails + 1
                     }/${travlersCount}`}
-              </button>
+              </button>}
             </div>
           </form>
         </div>
       </div>
 
-      <div className="flex w-full mt-10 flex-col md:w-[30%] bg-white sm:bg-gray-200 h-full justify-start  md:flex-col">
+      {/* <div className="flex w-full mt-10 flex-col md:w-[30%] bg-white sm:bg-gray-200 h-full justify-start  md:flex-col">
         <div className="self-start p-4 rounded-lg gap-5 mb-4 md:mb-0">
           {importantPoints?.map((item) => {
             return (
@@ -498,18 +510,13 @@ const PersonDetails = ({ save }) => {
                     {item?.heading}
                   </h2>
                   <p className="text-gray-600 mb-4">{item?.description}</p>
-                  {/* <ul className="text-left space-y-2">
-              <li>✔️ Position your head in the oval</li>
-              <li>✔️ Make sure you're in a well-lit area</li>
-              <li>✔️ Remove glasses</li>
-              <li>✔️ Avoid glares and blurs</li>
-            </ul> */}
+                 
                 </div>
               </>
             );
           })}
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

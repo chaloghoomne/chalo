@@ -39,3 +39,24 @@ export const getCountryId = (value) => {
     payload: value,
   };
 };
+
+export const setVisaId = (value) => {
+  return {
+    type: "VISA_ID",
+    payload: value,
+  };
+};
+
+export const setChildShowId = (value) => {
+  return {
+    type: "CHILD_SHOW_ID",
+    payload: value,
+  };
+};
+
+export const showButton = (value) => {
+  return {
+    type: "SHOW_BUTTON",
+    payload: value,
+  };
+};

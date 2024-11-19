@@ -78,3 +78,42 @@ export const CountryIdReducer = (state = { countryId: "" }, actions) => {
       return state;
   }
 };
+
+export const VisaIdReducer = (state = { visaId: "" }, actions) => {
+  const { type, payload } = actions;
+  switch (type) {
+    case "VISA_ID":
+      return {
+        visaId: payload,
+      };
+
+    default:
+      return state;
+  }
+};
+
+export const ChildSHowIdReducer = (state = { childId: "" }, actions) => {
+  const { type, payload } = actions;
+  switch (type) {
+    case "CHILD_SHOW_ID":
+      return {
+        childId: payload,
+      };
+
+    default:
+      return state;
+  }
+};
+
+export const ShowButtonReducer = (state = { buttonShow: false }, actions) => {
+  const { type, payload } = actions;
+  switch (type) {
+    case "SHOW_BUTTON":
+      return {
+        buttonShow: payload,
+      };
+
+    default:
+      return state;
+  }
+};

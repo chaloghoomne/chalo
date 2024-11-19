@@ -4,3 +4,10 @@ export const calenderDate = (value) => {
     payload: value,
   };
 };
+
+export const returnCalenderDate = (value) => {
+  return {
+    type: "RETURN_CALENDER_DATE",
+    payload: value,
+  };
+};

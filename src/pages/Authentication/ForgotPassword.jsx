@@ -4,6 +4,8 @@ import { toast } from "react-toastify";
 import logo from "../../assets/loginlogo.png";
 import { fetchDataFromAPI } from "../../api-integration/fetchApi";
 import { BASE_URL } from "../../api-integration/urlsVariable";
+import { IoEye } from "react-icons/io5";
+import { IoMdEyeOff } from "react-icons/io";
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
@@ -15,7 +17,8 @@ const ForgotPassword = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
-
+  const [show2, setShow2] = useState(true);
+  const [show3, setShow3] = useState(true);
   useEffect(() => {
     if (showOtpInput && timer > 0) {
       const countdown = setInterval(() => {
@@ -222,23 +225,43 @@ const ForgotPassword = () => {
 
         {otpVerified && (
           <form className="space-y-6" onSubmit={handlePasswordSubmit}>
-            <div>
+            <div className="relative" >
               <input
-                type="password"
+                 type={`${show2 ? "password" : "text"}`}
                 placeholder="New Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full p-3 rounded-xl text-black bg-white border border-gray-600 placeholder-gray-400"
               />
+               <div
+                onClick={() => setShow2(!show2)}
+                className="absolute cursor-pointer right-3 top-4"
+              >
+                {show2 ? (
+                  <IoMdEyeOff size={22} color="black" />
+                ) : (
+                  <IoEye size={22} color="black" />
+                )}
+              </div>
             </div>
-            <div>
+            <div className="relative">
               <input
-                type="password"
+                 type={`${show3 ? "password" : "text"}`}
                 placeholder="Confirm New Password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 className="w-full p-3 rounded-xl text-black bg-white border border-gray-600 placeholder-gray-400"
               />
+               <div
+                onClick={() => setShow3(!show3)}
+                className="absolute cursor-pointer right-3 top-4"
+              >
+                {show3 ? (
+                  <IoMdEyeOff size={22} color="black" />
+                ) : (
+                  <IoEye size={22} color="black" />
+                )}
+              </div>
             </div>
             <button
               type="submit"
