@@ -18,6 +18,8 @@ import { IoMdEyeOff } from "react-icons/io";
 import { login } from "../../redux/actions/login-actions";
 import { useDispatch } from "react-redux";
 
+import signupBgImage from "../../assets/signupBgImage.jpg"
+
 const SignUp = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch()
@@ -228,7 +230,7 @@ const SignUp = () => {
     <div
       className="min-h-screen flex py-8 items-center object-contain justify-center bg-cover bg-center"
       style={{
-        backgroundImage: `url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTw0uAVzEIqlrCrLkFz9KLzU0FGUFppxUP5wRg1JOO7MUUEtBvroKMzt_xYVedz3VERd_I&usqp=CAU)`,
+        backgroundImage:  `url(${signupBgImage})`,
       }}
     >
       <div className="bg-white/30 h-[80%] text-white p-8 rounded-lg shadow-lg max-w-md w-full">

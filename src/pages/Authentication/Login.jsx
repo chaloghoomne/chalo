@@ -19,6 +19,7 @@ import { BASE_URL } from "../../api-integration/urlsVariable";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { login } from "../../redux/actions/login-actions";
+import signupBgImage from "../../assets/signupBgImage.jpg"
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -139,7 +140,7 @@ const Login = () => {
     <div
       className="flex items-center justify-center h-[100%] py-8 min-h-screen bg-center bg-cover"
       style={{
-        backgroundImage: `url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTw0uAVzEIqlrCrLkFz9KLzU0FGUFppxUP5wRg1JOO7MUUEtBvroKMzt_xYVedz3VERd_I&usqp=CAU)`,
+        backgroundImage: `url(${signupBgImage})`,
       }}
     >
       <div className="bg-white/30  p-10 rounded-xl shadow-lg text-white w-full max-w-md">
