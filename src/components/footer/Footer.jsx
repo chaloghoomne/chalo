@@ -230,11 +230,11 @@ const Footer = () => {
         <ul className="mt-4 space-y-2 text-white">
           <p className="flex items-center gap-2" style={{ lineHeight: "2rem" }}>
             <FaMapMarkerAlt className="w-4 h-4" />
-            { formData.addressLine1 ||"Siri Fort, New Delhi - 110049"}
+            { formData?.addressLine1 ||"Siri Fort, New Delhi - 110049"}
           </p>
           <p className="flex items-center gap-2" style={{ lineHeight: "2rem" }}>
             <FaMapMarkerAlt className="w-4 h-4" />
-            { formData.addressLine2 ||"Siri Fort, New Delhi - 110049"}
+            { formData?.addressLine2 ||"Siri Fort, New Delhi - 110049"}
           </p>
           <p className="flex items-center gap-2" style={{ lineHeight: "2rem" }}>
             <FaGlobe className="inline-block w-4 h-4 mr-2" />
