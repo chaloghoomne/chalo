@@ -27,7 +27,7 @@ const HomeSecond = forwardRef((props, ref) => {
           "GET",
           `${BASE_URL}${NetworkConfig.GET_HEADING_BY_ID}/Main`
         );
-        console.log(response,"responseOfDATA");
+        console.log(response, "responseOfDATA");
         if (response) {
           setData(response.data);
         }
@@ -53,6 +53,7 @@ const HomeSecond = forwardRef((props, ref) => {
         if (response) {
           console.log(response.data, "response");
           setPackages(response.data);
+          console.log("response",response.data.length);
         }
       } catch (error) {
         console.log(error);
@@ -70,11 +71,11 @@ const HomeSecond = forwardRef((props, ref) => {
       {data?.title}
       </h2> */}
       <h1 className="text-5xl poppins-six text-center  font-bold mb-6">
-      {data?.heading}
+        {data?.heading}
       </h1>
       
       <div className="max-w-8xl mx-auto grid gap-6 sm:grid-cols-2 md:grid-cols-2 md:gap-6 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
-        {packages?.slice(0, finalValue)?.map((visa, index) => (
+        {packages?.map((visa, index) => (
           <VisaCard
             key={index}
             image={visa?.image}

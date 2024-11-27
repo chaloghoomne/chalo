@@ -5,6 +5,7 @@ import { FcGoogle } from "react-icons/fc";
 import { Link, useNavigate } from "react-router-dom";
 import { RiVerifiedBadgeFill } from "react-icons/ri";
 import { fetchDataFromAPI } from "../../api-integration/fetchApi";
+import backgroundImage from "../../assets/signupbackground.jpg";
 import {
   auth,
   googleProvider,

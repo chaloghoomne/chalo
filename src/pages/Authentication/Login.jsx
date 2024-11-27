@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import logo from "../../assets/loginlogo.png";
-import whitelogo from "../../assets/whitelogo.png";
+import backgroundImage from "../../assets/signupbackground.jpg";
 import { ImFacebook2 } from "react-icons/im";
 import { FcGoogle } from "react-icons/fc";
 import { Link, useLocation, useNavigate } from "react-router-dom";

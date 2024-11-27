@@ -29,24 +29,7 @@ const HomeFirst = ({ homeSecondRef }) => {
     fetchProfileImage();
   }, []);
 
-  // useEffect(() => {
-  //   const fetchProfile = async () => {
-  //     try {
-  //       const response = await fetchDataFromAPI(
-  //         "GET",
-  //         `${BASE_URL}user-profile`
-  //       );
-
-  //       if (response) {
-  //         console.log(response, "response profile");
-  //         localStorage.setItem("userId", response?.data?._id);
-  //       }
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   };
-  //   fetchProfile();
-  // }, []);
+  
 
   const handleInputValue = (e) => {
     setInputValue(e.target.value);
@@ -64,7 +47,7 @@ const HomeFirst = ({ homeSecondRef }) => {
   };
 
   return (
-    <div className="flex flex-col shadow-md shadow-[#00000036] mt-14 md:flex-row items-center gap-4 md:justify-between h-auto md:h-auto px-6  bg-gradient-to-r from-[#3180CA] to-[#7AC7F9]">
+    <div className="flex flex-col shadow-md shadow-[#00000036] mt-10 md:flex-row items-center gap-4 md:justify-between h-auto md:h-auto px-6  bg-gradient-to-r from-[#3180CA] to-[#7AC7F9]">
       <div className="md:flex  hidden text-white flex-col items-start  w-full md:w-[55%] text-left p-2 md:pt-20 md:pb-4 ">
         <h1
           style={{ textShadow: "1px 0px 0px rgba(0,0,0,0.8)" }}
@@ -100,7 +83,7 @@ const HomeFirst = ({ homeSecondRef }) => {
         </p>
       </div>
       <div className="flex items-center md:justify-end  justify-center w-full md:w-[45%] p-2 md:px-4">
-        <img src={homefirst} alt="Travel Image" className="max-w-[80%] relative top-3 " />
+        <img src={homefirst} alt="Travel Image" className="max-w-[80%] relative top-7" />
       </div>
       <div className="flex md:hidden text-white  flex-col items-start justify-center w-full md:w-1/2 text-left p-2 md:p-4">
         <h1 className="text-2xl poppins-six md:text-5xl font-bold mb-4">

@@ -50,10 +50,16 @@ const VisaCard = ({ image, city, country, price, rating, description, id }) => {
         </div> */}
       </div>
       <div className="w-full">
-        <h3 onClick={() => handleRedirect(id, country)} className="text-lg px-4 py-1 mt-2 poppins-seven font-bold">
+        <h3
+          onClick={() => handleRedirect(id, country)}
+          className="text-lg px-4 py-1 mt-2 poppins-seven font-bold"
+        >
           {country}
         </h3>
-        <p onClick={() => handleRedirect(id, country)} className="text-gray-500 text-sm poppins-three min-h-14 max-h-14 overflow-auto py-2 px-4 mb-4">
+        <p
+          onClick={() => handleRedirect(id, country)}
+          className="text-gray-500 text-sm poppins-three min-h-14 max-h-14 overflow-auto py-2 px-4 mb-4"
+        >
           {description?.length < finalValue
             ? description
             : `${description?.slice(0, 50)}...`}
@@ -86,7 +92,7 @@ const VisaCard = ({ image, city, country, price, rating, description, id }) => {
           </div>
 
           <button
-           onClick={() => handleRedirect(id, country)}
+            onClick={() => handleRedirect(id, country)}
             className="bg-gradient-to-r from-[#3180CA] to-[#7AC7F9] text-white py-2 px-6 rounded-full self-center text-xs shadow-lg poppins-five shadow-[#a4d3f3] transition-colors duration-300"
           >
             Apply
