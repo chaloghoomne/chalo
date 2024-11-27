@@ -36,7 +36,7 @@ const VisaCard = ({ image, city, country, price, rating, description, id }) => {
         <div className="relative w-full">
           {imageLoaded ? (
             <img
-              className="h-[300px] w-full rounded-t-brand rounded-2xl object-cover md:h-[280px] md:transition-all md:ease-in-out 2xl:h-[270px]"
+              className="w-full rounded-t-brand rounded-2xl object-cover md:h-[200px] md:transition-all md:ease-in-out 2xl:h-[200px] max-h-[200px]"
               src={image}
               alt={country}
             />
