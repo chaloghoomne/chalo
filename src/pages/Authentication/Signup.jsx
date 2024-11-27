@@ -5,6 +5,7 @@ import { FcGoogle } from "react-icons/fc";
 import { Link, useNavigate } from "react-router-dom";
 import { RiVerifiedBadgeFill } from "react-icons/ri";
 import { fetchDataFromAPI } from "../../api-integration/fetchApi";
+import backgroundImage from "../../assets/signupbackground.jpg";
 import {
   auth,
   googleProvider,
@@ -228,7 +229,7 @@ const SignUp = () => {
     <div
       className="min-h-screen flex py-8 items-center object-contain justify-center bg-cover bg-center"
       style={{
-        backgroundImage: `url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTw0uAVzEIqlrCrLkFz9KLzU0FGUFppxUP5wRg1JOO7MUUEtBvroKMzt_xYVedz3VERd_I&usqp=CAU)`,
+        backgroundImage: `url(${backgroundImage})`,
       }}
     >
       <div className="bg-white/30 h-[80%] text-white p-8 rounded-lg shadow-lg max-w-md w-full">
