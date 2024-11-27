@@ -33,7 +33,8 @@ const VisaTypes = () => {
           `${BASE_URL}place/${id}`
         );
         if (response) {
-          setVisaTypes(response.data.tourTypes);
+          console.log("Responded : ", response?.data?.tourTypes)
+          setVisaTypes(response?.data?.tourTypes);
           setSelectedVisa(response?.data?.tourTypes[0]?._id);
           handleplans(
             response?.data?.tourTypes[0]?._id,
@@ -59,7 +60,7 @@ const VisaTypes = () => {
           "GET",
           `${BASE_URL}${NetworkConfig.GET_HEADING_BY_ID}/VisaTypes`
         );
-        console.log(response);
+        console.log("Datta : ",response);
         if (response) {
           setData(response.data);
         }
@@ -92,7 +93,7 @@ const VisaTypes = () => {
   return (
     <div className="flex flex-col  items-center justify-center py-20 px-4 bg-white">
       <h2 className="text-3xl poppins-six text-center  font-bold my-4">
-        {selectedCountry} Visa Application
+        {selectedCountry} Visa Application 
       </h2>
       <p className="text-orange-500 poppins-four  text-xl mb-6">{data?.description }</p>
       <div className="flex flex-wrap md:justify-evenly justify-center gap-8 mb-6">
@@ -106,15 +107,6 @@ const VisaTypes = () => {
             }`}
             onClick={() => handleplans(visa?._id, visa?.name)}
           >
-            {/* <div
-              className={`w-4 h-4 absolute left-2 top-5 mb-4 mx-auto rounded-full  `}
-            >
-              {" "}
-              <FaCircleDot
-                size={15}
-                color={`${selectedVisa === visa?._id ? "orange" : "gray"}`}
-              />
-            </div> */}
             <img
               src={visa?.image}
               alt={visa?.name}
@@ -130,12 +122,6 @@ const VisaTypes = () => {
         </span>{" "}
         Chalo Ghoomne has brought joy to over 100,000 happy travellers!
       </p>
-      {/* <button
-        onClick={handleRedirect}
-        className="bg-orange-500 text-white py-2 px-6 rounded-full"
-      >
-        Continue
-      </button> */}
       {plans?.length < 1 ? (
         <div className=" mt-8 ">
           <p className="text-md text-[#F26337] poppins-seven text-center  font-bold mb-2">

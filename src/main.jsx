@@ -15,7 +15,7 @@ const store = createStore(persistedReducer, applyMiddleware(thunk, logger));
 const persistor = persistStore(store);
 
 //remove all consoles
-window.console.log = () => {};
+// window.console.log = () => {};
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>

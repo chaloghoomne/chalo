@@ -56,7 +56,7 @@ const VisaCard = ({ image, city, country, price, rating, description, id }) => {
         >
           {country}
         </h3>
-        <p
+        {/* <p
           onClick={() => handleRedirect(id, country)}
           className="text-gray-500 text-sm poppins-three min-h-14 max-h-14 overflow-auto py-2 px-4 mb-4"
         >
@@ -79,7 +79,7 @@ const VisaCard = ({ image, city, country, price, rating, description, id }) => {
             // </span>
             <></>
           )}
-        </p>
+        </p> */}
         <div
           style={{ borderRadius: "0px 0px 16px 16px" }}
           className="flex items-center py-2 px-4 w-full bg-[#F7F7F780] justify-between"
