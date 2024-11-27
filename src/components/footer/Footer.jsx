@@ -238,11 +238,11 @@ const Footer = () => {
           </p>
           <p className="flex items-center gap-2" style={{ lineHeight: "2rem" }}>
             <FaGlobe className="inline-block w-4 h-4 mr-2" />
-          { formData.supportEmail ||"  www.chaloghoomne.com"}
+          { formData?.supportEmail ||"  www.chaloghoomne.com"}
           </p>
           <p className="flex items-center gap-2" style={{ lineHeight: "2rem" }}>
             <FaPhone className="inline-block w-4 h-4 mr-2" />
-            { formData.phoneNumber || 9555535252}
+            { formData?.phoneNumber || 9555535252}
           </p>
         </ul>
 
