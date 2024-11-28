@@ -29,7 +29,7 @@ const HomeFirst = ({ homeSecondRef }) => {
     fetchProfileImage();
   }, []);
 
-  
+
 
   const handleInputValue = (e) => {
     setInputValue(e.target.value);

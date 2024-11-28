@@ -70,7 +70,7 @@ const HomeSecond = forwardRef((props, ref) => {
       {/* <h2 className="text-[22px] text-orange-500 text-center poppins-five mb-2">
       {data?.title}
       </h2> */}
-      <h1 className="text-5xl poppins-six text-center  font-bold mb-6">
+      <h1 className="text-5xl poppins-six text-center  font-bold mb-[70px]">
         {data?.heading}
       </h1>
       
