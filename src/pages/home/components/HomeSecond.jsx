@@ -63,14 +63,14 @@ const HomeSecond = forwardRef((props, ref) => {
   }, [inputValue]);
 
   return (
-    <div ref={ref} className="py-20 px-5">
+    <div ref={ref} className="py-[40px] px-5">
       {/* <h1 className="text-3xl poppins-six font-bold text-center mb-12">
         {data?.heading || "World Best Visas Requested Countries"}
       </h1> */}
       {/* <h2 className="text-[22px] text-orange-500 text-center poppins-five mb-2">
       {data?.title}
       </h2> */}
-      <h1 className="text-5xl poppins-six text-center  font-bold mb-[70px]">
+      <h1 className="text-5xl poppins-six text-center  font-bold mb-[40px]">
         {data?.heading}
       </h1>
       

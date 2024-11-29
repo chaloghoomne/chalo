@@ -88,7 +88,7 @@ const HomeFirst = ({ homeSecondRef }) => {
       <div className="flex md:hidden text-white  flex-col items-start justify-center w-full md:w-1/2 text-left p-2 md:p-4">
         <h1 className="text-2xl poppins-six md:text-5xl font-bold mb-4">
         {data?.title || "Get the VISA simple, fast & Reliable"}<br />
-        <p className="text-2xl ">Get your visa with Chalo Ghoomne</p>
+        <p className="text-2xl ">{data?.subHeading||`Get your visa with Chalo Ghoomne`}</p>
         </h1>
         <p className="text-md poppins-three md:text-xl mb-6">
         {data?.description}
