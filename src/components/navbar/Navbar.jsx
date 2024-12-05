@@ -98,6 +98,7 @@ const Navbar = () => {
   };
 
 
+
   return (
     <>
       <nav className={`${bgColor} w-full fixed z-40 top-0`}>
@@ -137,6 +138,7 @@ const Navbar = () => {
                     className={whichLogo ? "w-32" : "w-36"}
                     src={whichLogo ? whitelogo : logo}
                     alt="Logo"
+                    onClick={()=>whichLogo && window.location.reload()}
                   />
                 </div>
               </Link>
