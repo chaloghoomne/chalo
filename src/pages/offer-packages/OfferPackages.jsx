@@ -1,9 +1,15 @@
 import React from 'react';
+import { Helmet } from 'react-helmet';
 import { IoPersonCircleOutline } from 'react-icons/io5';
 
 const OfferPackages = () => {
   return (
     <div className="min-h-screen bg-gray-100 flex pt-20 flex-col  items-center">
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Chalo Ghoomne</title>
+        <link rel="canonical" href="https://chaloghoomne.com/" />   
+      </Helmet>
       {/* Header Image */}
       <div className="w-full relative">
         <img src="https://e0.pxfuel.com/wallpapers/898/938/desktop-wallpaper-travel-tours-and-travels-background-travel-and-tourism.jpg" alt="Eiffel Tower" className="w-full h-96 object-cover" />

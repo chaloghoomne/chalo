@@ -13,6 +13,7 @@ import { FaEdit } from "react-icons/fa";
 import { FaEye } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { GrCheckboxSelected } from "react-icons/gr";
+import { Helmet } from "react-helmet";
 
 const EditVisaDetails = () => {
   const dispatch = useDispatch();
@@ -259,6 +260,11 @@ const EditVisaDetails = () => {
 
   return (
     <div className="container mx-auto px-4 flex flex-col pt-20">
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Chalo Ghoomne</title>
+        <link rel="canonical" href="https://chaloghoomne.com/" />   
+      </Helmet>
       <div className="flex flex-col justify-between items-center mb-5">
         <button className="bg-orange-500 text-xl font-bold text-white py-3 mt-5 px-10 rounded-[25px]">
           View on {new Date(from).toDateString()}

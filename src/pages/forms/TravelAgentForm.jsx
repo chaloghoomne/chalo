@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { BASE_URL } from '../../api-integration/urlsVariable';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { Helmet } from 'react-helmet';
 
 const TravelAgentForm = () => {
   const [formData, setFormData] = useState({
@@ -37,6 +38,11 @@ const TravelAgentForm = () => {
 
   return (
     <div className="bg-orange-100 mx-auto flex flex-col  justify-center items-center min-w-3xl  max-w-3xl container   mt-24 rounded-xl p-8">
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Chalo Ghoomne</title>
+        <link rel="canonical" href="https://chaloghoomne.com/" />   
+      </Helmet>
       <h1 className="text-4xl font-bold poppins-six text-center text-[#F26337] mb-6">Travel Agent Form</h1>
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>

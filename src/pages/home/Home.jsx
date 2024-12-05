@@ -5,6 +5,7 @@ import HomeFirst from "./components/HomeFirst";
 import HomeThird from "./components/HomeThird";
 import HomeFourth from "./components/HomeFourth";
 import { FaWhatsapp } from "react-icons/fa";
+import { Helmet } from "react-helmet";
 
 const Home = () => {
   const homeSecondRef = useRef(null);
@@ -13,12 +14,17 @@ const Home = () => {
   useEffect(() => {
     // If we're coming from the Visa link with the specific state
     if (location.state?.scrollToVisaSection && homeSecondRef.current) {
-      homeSecondRef.current.scrollIntoView({ behavior: 'smooth' });
+      homeSecondRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [location]);
 
   return (
     <div className="min-w-screen">
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Chalo Ghoomne</title>
+        <link rel="canonical" href="https://chaloghoomne.com/" />   
+      </Helmet>
       <HomeFirst homeSecondRef={homeSecondRef} />
       <div id="visa-section">
         <HomeSecond ref={homeSecondRef} />

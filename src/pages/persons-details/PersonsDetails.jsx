@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 import { coTraveler, PackageId } from "../../redux/actions/package-id-actions";
 import { toast } from "react-toastify";
 import ImageUpload from "../upload-image/ImageUpload";
+import { Helmet } from "react-helmet";
 
 const PersonDetails = () => {
  
@@ -270,6 +271,11 @@ const PersonDetails = () => {
 
   return (
     <div className="flex flex-col lg:flex-row px-3 justify-center items-center pt-20 min-h-screen  bg-white">
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Chalo Ghoomne</title>
+        <link rel="canonical" href="https://chaloghoomne.com/" />   
+      </Helmet>
       <div className=" lg:w-full w-full flex h-full rounded-lg mx-5 border-gray-300 mx-auto container py-2 bg-white justify-center items-center w-[90%] mx-[5%]  ">
         <div className="bg-white pt-12  px-3 sm:px-10 rounded-lg  w-full ">
           {/* Visa Validity */}

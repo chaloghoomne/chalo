@@ -12,6 +12,7 @@ import {
   returnCalenderDate,
 } from "../../redux/actions/calender-date-action";
 import { showButton } from "../../redux/actions/package-id-actions";
+import { Helmet } from "react-helmet";
 
 const ImageUpload = () => {
 
@@ -225,6 +226,11 @@ const ImageUpload = () => {
   console.log(step, "step");
   return (
     <>
+    <Helmet>
+        <meta charSet="utf-8" />
+        <title>Chalo Ghoomne</title>
+        <link rel="canonical" href="https://chaloghoomne.com/" />   
+      </Helmet>
       <div className="flex flex-col md:flex-row pb-5 pt-20   h-auto bg-white p-4">
         <div className="flex w-full flex-col mb-5 md:hidden md:w-[27%] md:min-h-full bg-gray-200 h-full justify-between md:flex-col">
           <>

@@ -12,6 +12,7 @@ import {
   calenderDate,
   returnCalenderDate,
 } from "../../redux/actions/calender-date-action";
+import { Helmet } from "react-helmet";
 
 const VisaTypes = () => {
   const [selectedVisa, setSelectedVisa] = useState("Tourist");
@@ -92,6 +93,11 @@ const VisaTypes = () => {
 
   return (
     <div className="flex flex-col  items-center justify-center py-20 px-4 bg-white">
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Chalo Ghoomne</title>
+        <link rel="canonical" href="https://chaloghoomne.com/" />   
+      </Helmet>
       <h2 className="text-3xl poppins-six text-center  font-bold my-4">
         {selectedCountry} Visa Application 
       </h2>

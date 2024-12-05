@@ -5,6 +5,7 @@ import { fetchDataFromAPI } from "../../api-integration/fetchApi";
 import { BASE_URL, NetworkConfig } from "../../api-integration/urlsVariable";
 import { toast } from "react-toastify";
 import { FaCircleDot } from "react-icons/fa6";
+import { Helmet } from "react-helmet";
 
 const Packages = ({ plans }) => {
   const navigate = useNavigate();
@@ -50,6 +51,11 @@ const Packages = ({ plans }) => {
 
   return (
     <div className=" flex flex-col items-center  mt-[-40px] justify-center md:px-0 px-5 pt-20">
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Chalo Ghoomne</title>
+        <link rel="canonical" href="https://chaloghoomne.com/" />   
+      </Helmet>
       <p className="text-md text-[#F26337] poppins-seven  font-bold mb-2">
         RECOMMENDATIONS
       </p>

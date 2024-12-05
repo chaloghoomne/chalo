@@ -8,6 +8,7 @@ import { MdDateRange } from "react-icons/md";
 import { CiLocationOn } from "react-icons/ci";
 import { fetchDataFromAPI } from "../../api-integration/fetchApi";
 import { BASE_URL } from "../../api-integration/urlsVariable";
+import { Helmet } from "react-helmet";
 
 function Profile() {
   const [activeTab, setActiveTab] = useState("travelers");
@@ -34,6 +35,11 @@ function Profile() {
 
   return (
     <div className="flex flex-col mt-16 h-[100%] min-h-screen bg-gray-100">
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Chalo Ghoomne</title>
+        <link rel="canonical" href="https://chaloghoomne.com/" />   
+      </Helmet>
       <div className="w-full h-96 bg-cover object-cover">
         <img
           src="https://images.pexels.com/photos/1450340/pexels-photo-1450340.jpeg?cs=srgb&dl=pexels-asadphoto-1450340.jpg&fm=jpg"

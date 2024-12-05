@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import { BASE_URL } from '../../api-integration/urlsVariable';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 
 const CareerForm = () => {
   const navigate = useNavigate()
@@ -55,6 +56,11 @@ const CareerForm = () => {
 
   return (
     <div className="bg-orange-100 mx-auto flex flex-col justify-center items-center max-w-3xl container mt-24 rounded-xl p-8 shadow-lg">
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Chalo Ghoomne</title>
+        <link rel="canonical" href="https://chaloghoomne.com/" />   
+      </Helmet>
       <h1 className="text-4xl font-bold text-[#F26337] mb-6">Career Form</h1>
       <form onSubmit={handleSubmit} className="space-y-6 w-full">
         <div className="grid md:grid-cols-2 grid-cols-1 gap-6">

@@ -26,6 +26,7 @@ import { CiWallet } from "react-icons/ci";
 import ReturnCalender from "./components/ReturnCalendar";
 import FAQs from "./components/Faqs";
 import VisaProcessSteps from "./components/Steps";
+import { Helmet } from "react-helmet";
 
 const VisaDetails = () => {
   const { id } = useParams();
@@ -370,6 +371,11 @@ console.log({partners},"Partnerts")
 
   return (
     <div ref={contentRef} className="w-full h-full mx-auto container py-10">
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Chalo Ghoomne</title>
+        <link rel="canonical" href="https://chaloghoomne.com/" />   
+      </Helmet>
       {/* Main Image */}
       <div ref={mainImageRef} className="w-full relative mt-12 rounded-xl bg-cover flex h-[500px] justify-center items-center mb-10">
         <div className="px-16 w-full relative ">

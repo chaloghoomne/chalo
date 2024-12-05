@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { BASE_URL } from '../../api-integration/urlsVariable';
+import { Helmet } from 'react-helmet';
 
 const BlogDetails = () => {
   const { id } = useParams();
@@ -17,6 +18,11 @@ const BlogDetails = () => {
 
   return (
     <div className="container mx-auto mt-24  px-20 px-4">
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Chalo Ghoomne</title>
+        <link rel="canonical" href="https://chaloghoomne.com/" />   
+      </Helmet>
       <img src={blog.imageUrl} alt={blog.title} className="w-full h-64 object-cover mb-6 rounded" />
       <div className="flex items-center mb-4">
         <span className="text-gray-600 mr-4">{blog.publisher}</span>

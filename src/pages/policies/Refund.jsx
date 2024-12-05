@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { BASE_URL } from '../../api-integration/urlsVariable';
+import { Helmet } from 'react-helmet';
 
 const RefundPolicyPage = () => {
   const [privacyData, setPrivacyData] = useState(null);
@@ -24,6 +25,11 @@ const RefundPolicyPage = () => {
 
   return (
     <div className="bg-white min-h-screen">
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Chalo Ghoomne</title>
+        <link rel="canonical" href="https://chaloghoomne.com/" />   
+      </Helmet>
       {/* Header Image */}
       <div className="w-full h-96 bg-orange-500 mt-20 flex justify-center bg-cover items-center">
         <img src={privacyData.imageUrl } alt="Privacy Policy" className=" w-full h-full object-cover" />

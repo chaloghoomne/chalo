@@ -14,6 +14,7 @@ import {
   coTraveler,
   PackageId,
 } from "../../../redux/actions/package-id-actions";
+import { Helmet } from "react-helmet";
 
 const ViewApplication = () => {
   const dispatch = useDispatch();
@@ -169,6 +170,11 @@ const ViewApplication = () => {
 
   return (
     <div className="container mx-auto px-4 flex flex-col py-14">
+     <Helmet>
+        <meta charSet="utf-8" />
+        <title>Chalo Ghoomne</title>
+        <link rel="canonical" href="https://chaloghoomne.com/" />   
+      </Helmet>
       <div className="flex flex-col justify-between items-center mb-5">
         <button className="bg-orange-500 text-xl font-bold text-white py-3 mt-5 px-10 rounded-[25px]">
           View on {new Date(from).toDateString()}
