@@ -45,6 +45,11 @@ const PrivacyPolicyPage = () => {
                   <li  key={idx}>{point}</li>
                 ))}
               </ul>
+              <ul className="list-disc poppins-three list-inside mt-2 text-black">
+                {section.summary.map((point, idx) => (
+                  <li  key={idx}>{point}</li>
+                ))}
+              </ul>
             </div>
           ))}
         </div>

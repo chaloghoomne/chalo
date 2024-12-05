@@ -152,25 +152,25 @@ const AppContent = () => {
            <Route
             path="/privacy-policy"
             element={
-              <PrivateRoute>
+              // <PrivateRoute>
                 <PrivacyPolicyPage />
-              </PrivateRoute>
+              // </PrivateRoute>
             }
           />
            <Route
             path="/refund-policy"
             element={
-              <PrivateRoute>
+              // <PrivateRoute>
                 <RefundPolicyPage />
-              </PrivateRoute>
+              // </PrivateRoute>
             }
           />
           <Route
             path="/terms-condition"
             element={
-              <PrivateRoute>
+              // <PrivateRoute>
                 <TermsConditions />
-              </PrivateRoute>
+              // </PrivateRoute>
             }
           />
            <Route
