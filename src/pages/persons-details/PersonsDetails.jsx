@@ -20,7 +20,6 @@ const PersonDetails = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const buttonShow = useSelector((state)=>state.ShowButtonReducer.buttonShow)
-  console.log(buttonShow,"kdijeio")
   const countryId = useSelector((state) => state.CountryIdReducer.countryId);
   const childId = useSelector((state) => state.ChildSHowIdReducer.childId);
   const [showCoTravler, setShowCoTravler] = useState();
@@ -70,7 +69,6 @@ const PersonDetails = () => {
           "GET",
           `${BASE_URL}visa-category/${childId}`
         );
-        console.log(response, "response data");
         if (response) {
           setChildData(response.data);
          
@@ -102,7 +100,6 @@ const PersonDetails = () => {
           "GET",
           `${BASE_URL}user-visa-order/${packageId}`
         );
-        console.log(response?.data, "response daya");
         if (response) {
           setPackageData(response?.data);
         }
@@ -122,12 +119,10 @@ const PersonDetails = () => {
           "GET",
           `${BASE_URL}notes-by-package/${countryId}`
         );
-        console.log(response);
         if (response) {
           const filtered = response?.data?.filter(
             (item) => item.type === "Personal Details"
           );
-          console.log(filtered, "filtered");
 
           setImportantPoints(filtered);
         }
@@ -139,10 +134,8 @@ const PersonDetails = () => {
   }, []);
 
   useEffect(() => {
-    console.log("try enter");
 
     if (formData.dob && formData.passportIssueDate) {
-      console.log("enter");
       calculatePassportValidity(formData.dob, formData.passportIssueDate);
     }
   }, [formData.dob, formData.passportIssueDate]);

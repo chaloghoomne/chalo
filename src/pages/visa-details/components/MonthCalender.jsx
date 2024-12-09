@@ -11,7 +11,6 @@ const MonthCalender = ({ onClose }) => {
   const returnDate = useSelector(
     (state) => state.ReturnCalenderReducer.returnDate
   );
-  console.log(visaDate, "vsaDate");
   const [selectedDate, setSelectedDate] = useState("");
   const [isFixed, setIsFixed] = useState(true);
   const dispatch = useDispatch();
@@ -35,7 +34,6 @@ const MonthCalender = ({ onClose }) => {
     dispatch(calenderDate(`${month} ${year}`));
   };
 
-  console.log(selectedDate, "sdfghjk", ` 2024 Sept `);
 
   const renderMonthCards = () => {
     return (

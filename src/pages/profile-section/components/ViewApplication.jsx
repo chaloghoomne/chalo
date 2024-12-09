@@ -35,8 +35,6 @@ const ViewApplication = () => {
   const [gst, setGst] = useState();
   const [amount,setAmount] = useState()
   const [from, setFrom] = useState();
-  console.log(users, "insurance");
-  console.log(childPrice, "childprice");
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -100,7 +98,6 @@ const ViewApplication = () => {
           // }
           let amount = 0
           const nnn = users.map((item)=>{
-           console.log(item.ageGroup,"kkk")
            if(item.ageGroup === "Child"){
              amount += Number(childPrice)
            }else{

@@ -18,7 +18,6 @@ const HomeFirst = ({ homeSecondRef }) => {
           "GET",
           `${BASE_URL}${NetworkConfig.GET_HEADING_BY_ID}/Main`
         );
-        console.log(response);
         if (response) {
           setData(response.data);
         }

@@ -1,7 +1,6 @@
 import axios from "axios";
 
 export const fetchDataFromAPI = (method, url, body, requestHeaders, form) => {
-  console.log(requestHeaders);
   let contentType;
   if (form === true) {
     contentType = "multipart/form-data";

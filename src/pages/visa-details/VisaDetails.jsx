@@ -163,14 +163,12 @@ const VisaDetails = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [isLargeScreen]);
 
-  console.log(important, "important data");
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProfileImage = async () => {
       try {
         const response = await fetchDataFromAPI("GET", `${BASE_URL}partners`);
-        console.log(response, "response partners");
         if (response) {
           setPartners(response.data);
         }
@@ -192,12 +190,10 @@ const VisaDetails = () => {
     const fetchProfileImage = async () => {
       try {
         const response = await fetchDataFromAPI("GET", `${BASE_URL}notes`);
-        console.log(response);
         if (response) {
           const filtered = response?.data?.find(
             (item) => item.type === "Instructions"
           );
-          console.log(filtered, "filtered");
 
           setImportantPoints(filtered);
         }
@@ -215,7 +211,6 @@ const VisaDetails = () => {
           "GET",
           `${BASE_URL}visa-category/${id}`
         );
-        console.log(response, "response data");
         if (response) {
           setData(response.data);
           dispatch(setChildShowId(id))
@@ -242,15 +237,11 @@ const VisaDetails = () => {
     if (choice === "yes") {
       navigate("/upload-image");
     } else {
-      console.log("hit");
       setCalendarModalOpen(true);
-      console.log("hit2");
       navigate("/upload-image");
       datePickerRef.current.focus();
-      console.log("hit3");
     }
   };
-console.log({partners},"Partnerts")
  
 
   const proceedFunc = async () => {
@@ -302,7 +293,6 @@ console.log({partners},"Partnerts")
           applicationType: "normal",
         }
       );
-      console.log(response?.data?._id, "response Id ");
       if (response) {
         dispatch(PackageId(response?.data?.visaOrder?._id));
         dispatch(numberofCoTravelers(numberOfTravelers));

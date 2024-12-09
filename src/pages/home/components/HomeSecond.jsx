@@ -14,7 +14,6 @@ const HomeSecond = forwardRef((props, ref) => {
     (state) => state.SearchPackageReducer.inputValue
   );
 
-  console.log(inputValue, "dfghj");
 
   const viewAll = () => {
     setFinalVlaue(10000);
@@ -27,7 +26,6 @@ const HomeSecond = forwardRef((props, ref) => {
           "GET",
           `${BASE_URL}${NetworkConfig.GET_HEADING_BY_ID}/Main`
         );
-        console.log(response, "responseOfDATA");
         if (response) {
           setData(response.data);
         }
@@ -49,11 +47,8 @@ const HomeSecond = forwardRef((props, ref) => {
           "GET",
           `${BASE_URL}places?country=${inputValue}`
         );
-        console.log(response, "response partners");
         if (response) {
-          console.log(response.data, "response");
           setPackages(response.data);
-          console.log("response",response.data.length);
         }
       } catch (error) {
         console.log(error);

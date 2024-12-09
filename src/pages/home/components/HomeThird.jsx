@@ -37,7 +37,6 @@ const HomeThird = () => {
           "GET",
           `${BASE_URL}${NetworkConfig.GET_HEADING_BY_ID}/Feedback`
         );
-        console.log(response);
         if (response) {
           setData(response.data);
         }

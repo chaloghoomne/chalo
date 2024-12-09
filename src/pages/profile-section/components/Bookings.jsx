@@ -23,7 +23,6 @@ const Bookings = () => {
           "POST",
           `${BASE_URL}user-visa-orders`
         );
-        console.log(response, "response data");
         if (response) {
           setBookings(response.data);
         }
@@ -35,7 +34,6 @@ const Bookings = () => {
   }, []);
 
   const handleBooking = async (id, travlerscount, cotravlerId, visaType) => {
-    console.log(id, travlerscount, visaType);
     dispatch(PackageId(id));
     dispatch(getVisaType(visaType));
     dispatch(coTraveler(cotravlerId));
@@ -49,7 +47,6 @@ const Bookings = () => {
     cotravlerId,
     visaType
   ) => {
-    console.log(id, travlerscount, visaType);
     dispatch(PackageId(id));
     dispatch(getVisaType(visaType));
     dispatch(coTraveler(cotravlerId));
@@ -58,7 +55,6 @@ const Bookings = () => {
   };
 
   const viewApplication = async (id, travlerscount, cotravlerId, visaType) => {
-    console.log(id, travlerscount, visaType);
     dispatch(PackageId(id));
     dispatch(getVisaType(visaType));
     dispatch(coTraveler(cotravlerId));

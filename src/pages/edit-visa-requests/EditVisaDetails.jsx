@@ -34,7 +34,6 @@ const EditVisaDetails = () => {
   const [period, setPeriod] = useState();
   const [processingTime, setProcessingTime] = useState();
 
-  console.log(applicationType, "applicationType");
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -46,7 +45,6 @@ const EditVisaDetails = () => {
           setUsers(response.data);
         }
       } catch (error) {
-        console.log(error);
       }
     };
     fetchData();
@@ -110,7 +108,6 @@ const EditVisaDetails = () => {
         `${BASE_URL}create-order`,
         { amount: 1 }
       );
-      console.log(response?.data?.amount, "response amount");
       if (response) {
         const options = {
           key: "rzp_live_7jIGrWcWtT3QMW",
@@ -122,7 +119,6 @@ const EditVisaDetails = () => {
           order_id: response?.data?.id,
           callback_url: "https://google.com",
           handler: function (response) {
-            console.log(response, "razorpay response");
             const razorpay_order_id = response.razorpay_payment_id;
             const razorpay_payment_id = response.razorpay_payment_id;
             const razorpay_signature = response?.razorpay_signature;
@@ -138,7 +134,6 @@ const EditVisaDetails = () => {
                   }
                 );
                 if (responseData) {
-                  console.log(responseData, "responseData");
                   try {
                     const response = await fetchDataFromAPI(
                       "GET",
@@ -180,7 +175,6 @@ const EditVisaDetails = () => {
               }
             };
             verifyPayment();
-            console.log("sdfghj");
             // alert(`Payment Successful: ${response.razorpay_payment_id}`);
           },
           prefill: {
@@ -236,7 +230,6 @@ const EditVisaDetails = () => {
   const calculateTotalPrice = () => {
     let amount = 0
      const nnn = users.map((item)=>{
-      console.log(item.ageGroup,"kkk")
       if(item.ageGroup === "Child"){
         amount += Number(childPrice)
       }else{
@@ -244,14 +237,12 @@ const EditVisaDetails = () => {
       }
       return  
      });
-     console.log(nnn,'jnkdjdj')
     const basePrice = amount
     const discountAmount = discount || 0;
     // const remainingAmount = basePrice - discountAmount;
     const gstAmount = basePrice * 0.18;
  const newnum = Number(insurancePrice)
     const insuranceAmount = isNaN(newnum) ? 0 : Number(insurancePrice) ; // Assuming a fixed insurance price
-    console.log(insuranceAmount,"insuranceAmount")
     const totalAmount = basePrice + gstAmount + insuranceAmount ;
     return { totalAmount, discount: discountAmount, gst: gstAmount, basePrice:basePrice };
   };

@@ -38,14 +38,11 @@ const Login = () => {
 
   const generateDeviceToken = async () => {
     const resp = await generateToken();
-    console.log("resp", resp);
     const tken = localStorage.getItem("deviceToken");
     setToken(tken);
   };
-  console.log(token, "devicetoken");
 
   useEffect(() => {
-    console.log("asdasd");
     generateDeviceToken();
   }, []);
 
@@ -74,20 +71,16 @@ const Login = () => {
         password,
         deviceToken: token,
       });
-      console.log("response", response);
       if (response.success) {
         toast.success("Login SuccessFully");
         dispatch(login(true));
         localStorage.setItem("token", response.token);
         if (state?.countryId) {
-          console.log("in");
           navigate(`/visa-types/${state.countryId}`);
         } else {
-          console.log("out");
           navigate("/");
         }
       }
-      console.log("Login successful:", response);
     } catch (err) {
       console.error("Login failed:", err);
       setError("Login failed, Wrong Credentials.");
@@ -98,8 +91,6 @@ const Login = () => {
     const state = location.state;
     try {
       const result = await signInWithPopup(auth, googleProvider);
-      console.log("Google login successful:", result.user.email);
-      console.log("Google login successful:", result.user.displayName);
       const response = await fetchDataFromAPI(
         "POST",
         `${BASE_URL}user-google-login`,
@@ -108,16 +99,13 @@ const Login = () => {
           firstName: result.user.displayName,
         }
       );
-      console.log("response", response);
       if (response.success) {
         toast.success("Login SuccessFully");
         dispatch(login(true));
         localStorage.setItem("token", response.data);
         if (state?.countryId) {
-          console.log("in");
           navigate(`/visa-types/${state.countryId}`);
         } else {
-          console.log("out");
           navigate("/");
         }
       }
@@ -130,7 +118,6 @@ const Login = () => {
   const handleFacebookLogin = async () => {
     try {
       const result = await signInWithPopup(auth, facebookProvider);
-      console.log("Facebook login successful:", result.user);
     } catch (err) {
       console.error("Facebook login failed:", err);
     }

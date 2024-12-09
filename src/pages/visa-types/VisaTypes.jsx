@@ -34,7 +34,6 @@ const VisaTypes = () => {
           `${BASE_URL}place/${id}`
         );
         if (response) {
-          console.log("Responded : ", response?.data?.tourTypes)
           setVisaTypes(response?.data?.tourTypes);
           setSelectedVisa(response?.data?.tourTypes[0]?._id);
           handleplans(
@@ -61,7 +60,6 @@ const VisaTypes = () => {
           "GET",
           `${BASE_URL}${NetworkConfig.GET_HEADING_BY_ID}/VisaTypes`
         );
-        console.log("Datta : ",response);
         if (response) {
           setData(response.data);
         }
@@ -81,9 +79,7 @@ const VisaTypes = () => {
         `${BASE_URL}visa-category-by-package`,
         { package: id, tourType: visaTypeId }
       );
-      console.log(response);
       if (response) {
-        console.log(response.data, "data");
         setPlans(response.data);
       }
     } catch (error) {

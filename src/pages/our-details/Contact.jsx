@@ -16,7 +16,6 @@ const ContactUs = () => {
     // Fetch Contact Data from API
     const fetchData = async()=>{
         const resp = await axios.get(`${BASE_URL}/contact`)
-        console.log(resp,"djjd")
         setContactData(resp.data.data)
         }
         fetchData()

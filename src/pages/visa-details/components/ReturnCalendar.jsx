@@ -42,9 +42,7 @@ const ReturnCalender = () => {
   };
 
   const handleDateClick = (day) => {
-    console.log(day,'dateCLicked')
     const clickedDate = format(day, "yyyy-MM-dd");
-    console.log(clickedDate,"nnn")
       setSelectedDate(clickedDate);
     dispatch(returnCalenderDate(clickedDate));
   };

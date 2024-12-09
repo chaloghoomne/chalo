@@ -13,7 +13,6 @@ const HomeFourth = () => {
           "GET",
           `${BASE_URL}${NetworkConfig.GET_HEADING_BY_ID}/About`
         );
-        console.log(response);
         if (response) {
           setData(response.data);
         }

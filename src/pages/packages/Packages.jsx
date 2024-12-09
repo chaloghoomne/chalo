@@ -26,7 +26,6 @@ const Packages = ({ plans }) => {
           "GET",
           `${BASE_URL}${NetworkConfig.GET_HEADING_BY_ID}/Recommendations`
         );
-        console.log(response);
         if (response) {
           setData(response.data);
         }

@@ -76,7 +76,6 @@ const EditProfile = ({ isOpen, onClose }) => {
       const formDataToSend = new FormData();
       for (const key in formData) {
         if (key === "unreadNotifications") {
-          console.log("abhsihek k liye yahi sahi");
         } else {
           formDataToSend.append(key, formData[key]);
         }

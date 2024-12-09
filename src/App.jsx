@@ -83,7 +83,6 @@ const AppContent = () => {
     setPathName(location.pathname);
   }, [location]);
 
-  console.log(pathName, "pathName");
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -231,7 +230,6 @@ const AppContent = () => {
 const App = () => {
   const dispatch = useDispatch();
   const isLogin = useSelector((state) => state.LoginReducer.isLogin);
-  console.log(isLogin, "login status");
   useEffect(() => {
     const script = document.createElement("script");
     script.src = "https://checkout.razorpay.com/v1/checkout.js";

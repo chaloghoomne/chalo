@@ -64,7 +64,6 @@ const Footer = () => {
 
   useEffect(() => {
     const pathName = location.pathname;
-    console.log(pathName, "pathName");
     if (pathName === "/edit-visa-request" || pathName === "/upload-image" || pathName === "/view-application" || pathName === "/visa-details/:id" ) {
       setShow(false);
     } else {
@@ -87,14 +86,11 @@ const Footer = () => {
         `${BASE_URL}add-subscription`,
         { email: value }
       );
-      console.log(response);
       if (response) {
-        console.log(response.data, "data");
         setValue("");
         toast.success(`Congratulations! You are a Subscriber Now`);
       }
     } catch (error) {
-      console.log(error);
       toast.success(` You are already a Subscriber `);
     }
   };

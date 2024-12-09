@@ -19,7 +19,6 @@ const ImageUpload = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const packageId = useSelector((state) => state.PackageIdReducer.packagedId);
-  console.log(packageId);
   const cotravlerId = useSelector(
     (state) => state.CotravelerIdReducer.cotravlerId
   );
@@ -28,7 +27,6 @@ const ImageUpload = () => {
   );
   const visaId = useSelector((state) => state.VisaIdReducer.visaId);
   const countryId = useSelector((state) => state.CountryIdReducer.countryId);
-  console.log(packageId, "packageId");
 
   const [packageData, setPackageData] = useState();
 
@@ -98,7 +96,6 @@ const ImageUpload = () => {
           "GET",
           `${BASE_URL}visa-category/${visaId}`
         );
-        console.log(response, "response data");
         if (response) {
           const filterDoc = response?.data?.documents.filter(
             (doc) => doc.show === "true" || doc.show === true
@@ -121,7 +118,6 @@ const ImageUpload = () => {
           "GET",
           `${BASE_URL}user-visa-order/${packageId}`
         );
-        console.log(response?.data, "response daya");
         if (response) {
           setPackageData(response?.data);
         }
@@ -144,9 +140,7 @@ const ImageUpload = () => {
           "GET",
           `${BASE_URL}order-detail/${cotravlerId}`
         );
-        console.log(response, "response daya");
         if (response) {
-          console.log(response, "sxdfghjkl");
         }
       } catch (error) {
         console.log(error);
@@ -179,16 +173,13 @@ const ImageUpload = () => {
   // }, []);
 
   const uploadImage = async (data) => {
-    console.log(data);
     try {
       const response = await fetchDataFromAPI(
         "PUT",
         `${BASE_URL}edit-order-details/${cotravlerId}`,
         data
       );
-      console.log(response);
       if (response) {
-        console.log(response);
         return response;
       }
     } catch (error) {
@@ -218,12 +209,9 @@ const ImageUpload = () => {
     });
     dispatch(showButton(true))
     const getData = uploadImage(formData);
-    console.log(getData, "getdatatata");
     return getData;
   };
 
-  console.log(data, "datatata");
-  console.log(step, "step");
   return (
     <>
     <Helmet>

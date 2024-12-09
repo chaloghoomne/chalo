@@ -53,10 +53,8 @@ const ModalVisaRequest = ({ user, isEdit, onClose }) => {
   // };
 
   useEffect(() => {
-    console.log("try enter");
 
     if (formData.dob && formData.passportIssueDate) {
-      console.log("enter");
       calculatePassportValidity(formData.dob, formData.passportIssueDate);
     }
   }, [formData.dob, formData.passportIssueDate]);

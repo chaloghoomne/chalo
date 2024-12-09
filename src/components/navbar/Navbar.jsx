@@ -61,7 +61,7 @@ const Navbar = () => {
             localStorage.setItem("userId", data?._id);
           }
         } catch (err) {
-          console.log(err);
+          
         }
       };
       fetchData();

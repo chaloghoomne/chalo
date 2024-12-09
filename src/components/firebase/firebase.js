@@ -18,7 +18,6 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-console.log(app);
 const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
 const facebookProvider = new FacebookAuthProvider();
@@ -27,7 +26,6 @@ const messaging = getMessaging(app);
 
 const VITE_APP_VAPID_KEY =
   "BGF_EOWSTdrqTErGAr-ORoVfIJY5XdXj279ITME_svm-fTyoLgoBlHcVcLJcr9vyCeLtHmD2I2duSxIfDpqc9Uk";
-console.log(VITE_APP_VAPID_KEY, "VITE_APP_VAPID_KEY/////////////");
 
 export async function generateToken() {
   const permission = await Notification.requestPermission();
@@ -38,15 +36,9 @@ export async function generateToken() {
     });
 
     if (token) {
-      console.log("current token for client: ", token);
       localStorage.setItem("deviceToken", token);
       return token;
-    } else {
-      console.log(
-        "No registration token available. Request permission to generate one."
-      );
-    }
-    console.log("Token generated : ", token);
+    } 
   } else if (permission === "denied") {
     alert("You denied for the notification");
   }
@@ -54,7 +46,6 @@ export async function generateToken() {
 export const onMessageListener = () =>
   new Promise((resolve) => {
     onMessage(messaging, (payload) => {
-      console.log("payload", payload);
       resolve(payload);
     });
   });
