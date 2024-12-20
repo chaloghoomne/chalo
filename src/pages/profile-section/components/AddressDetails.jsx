@@ -1,7 +1,6 @@
 import React from "react";
 
 function AddressDetails({ user }) {
-  console.log(user, "user");
   return (
     <div className="bg-white shadow-lg rounded-lg p-4">
       <div className="p-4 flex flex-col md:flex-row items-center md:items-start">

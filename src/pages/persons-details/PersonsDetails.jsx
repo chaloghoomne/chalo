@@ -215,9 +215,7 @@ const PersonDetails = () => {
             `${BASE_URL}edit-order-details/${cotravlerId}`,
             { ...formData, detailsFulfilled: true }
           );
-          console.log(response);
           if (response) {
-            console.log(response);
             navigate("/edit-visa-request");
           }
         } catch (error) {
@@ -231,7 +229,6 @@ const PersonDetails = () => {
             `${BASE_URL}edit-order-details/${cotravlerId}`,
             { ...formData, detailsFulfilled: true }
           );
-          console.log(response);
           if (response) {
             try {
               const response = await fetchDataFromAPI(
@@ -239,25 +236,19 @@ const PersonDetails = () => {
                 `${BASE_URL}add-order-details`,
                 { visaOrder: packageId }
               );
-              console.log(response.data._id, "responsecotravler");
               if (response) {
-                console.log();
                 dispatch(coTraveler(response?.data?._id));
               }
             } catch (error) {
               console.log(error);
             }
-            console.log(response);
           }
         } catch (error) {
-          console.log(error);
           toast.error("Network error! Try again Later");
         }
         window.location.href = "/persons-details";
         // navigate("/upload-image");
       }
-    // }
-    console.log("hhh");
   };
 
  

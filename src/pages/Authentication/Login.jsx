@@ -15,7 +15,7 @@ import {
 import { signInWithPopup } from "firebase/auth";
 
 import { fetchDataFromAPI } from "../../api-integration/fetchApi";
-import { BASE_URL } from "../../api-integration/urlsVariable";
+import { BASE_URL, NEXT_URL } from "../../api-integration/urlsVariable";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { login } from "../../redux/actions/login-actions";
@@ -78,7 +78,11 @@ const Login = () => {
         if (state?.countryId) {
           navigate(`/visa-types/${state.countryId}`);
         } else {
-          navigate("/");
+          // navigate("/");
+          
+          //redirecting to the home page of nextJs
+          window.location.href = `${NEXT_URL}/?id=${response.userId}`;
+          console.log("Response after login : ",response.userId)
         }
       }
     } catch (err) {
@@ -106,7 +110,8 @@ const Login = () => {
         if (state?.countryId) {
           navigate(`/visa-types/${state.countryId}`);
         } else {
-          navigate("/");
+          // navigate("/");
+          window.location.href = `${NEXT_URL}/?id=${response.userId}`;
         }
       }
     } catch (err) {

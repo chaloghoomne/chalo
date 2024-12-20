@@ -152,9 +152,7 @@ const ModalVisaRequest = ({ user, isEdit, onClose }) => {
         `${BASE_URL}edit-order-details/${user?._id}`,
         newformData
       );
-      console.log(response);
       if (response) {
-        console.log(response);
         onClose();
       }
     } catch (error) {
