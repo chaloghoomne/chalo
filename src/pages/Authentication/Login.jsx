@@ -43,6 +43,7 @@ const Login = () => {
   };
 
   useEffect(() => {
+    localStorage.removeItem("token");
     generateDeviceToken();
   }, []);
 

@@ -1,6 +1,7 @@
 export const BASE_URL='https://chaloghoomneapi.kickrtechnology.in/api/v1/'
 
-export const NEXT_URL = 'http://localhost:3000';
+export const NEXT_URL = 'https://chaloghoomnenew.kickrtech.in';
+// export const NEXT_URL = 'http://localhost:3000';
 
 
 // export const BASE_URL = "https://api.chaloghoomne.com/api/v1/";
