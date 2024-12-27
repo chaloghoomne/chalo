@@ -83,7 +83,6 @@ const Login = () => {
           
           //redirecting to the home page of nextJs
           window.location.href = `${NEXT_URL}/?id=${response.userId}`;
-          console.log("Response after login : ",response.userId)
         }
       }
     } catch (err) {

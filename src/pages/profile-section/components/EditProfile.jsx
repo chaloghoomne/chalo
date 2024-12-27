@@ -60,8 +60,6 @@ const EditProfile = ({ isOpen, onClose }) => {
           if (data.image) {
             setImagePreview(data.image);
           }
-        } else {
-          console.log("");
         }
       } catch (err) {
         console.log(err);

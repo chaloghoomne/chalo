@@ -23,8 +23,6 @@ function Profile() {
         );
         if (response) {
           setUserData(response?.data);
-        } else {
-          console.log("");
         }
       } catch (err) {
         console.log(err);

@@ -59,7 +59,7 @@ const CareerForm = () => {
       <Helmet>
         <meta charSet="utf-8" />
         <title>Chalo Ghoomne</title>
-        <link rel="canonical" href="https://chaloghoomne.com/" />   
+        <link rel="canonical" href="https://chaloghoomne.com/" />
       </Helmet>
       <h1 className="text-4xl font-bold text-[#F26337] mb-6">Career Form</h1>
       <form onSubmit={handleSubmit} className="space-y-6 w-full">
@@ -73,7 +73,7 @@ const CareerForm = () => {
             { label: 'Skills', name: 'skills', icon: <FaTools /> }
           ].map(({ label, name, icon, type = 'text' }) => (
             <div key={name} className="flex items-center">
-              
+
               <div className="flex-1">
                 <label className=" text-black flex gap-1 mb-2"> <span className="text-xl text-[#F26337] mr-2">{icon}</span>{label}</label>
                 <input
@@ -90,9 +90,9 @@ const CareerForm = () => {
           ))}
 
           <div className="flex items-center">
-        
+
             <div className="flex-1">
-            <label className=" text-black flex gap-1 mb-2">     <span className="text-xl text-[#F26337] mr-2"><BsCardText /></span>Description</label>
+              <label className=" text-black flex gap-1 mb-2">     <span className="text-xl text-[#F26337] mr-2"><BsCardText /></span>Description</label>
 
               <textarea
                 name="description"
@@ -106,7 +106,7 @@ const CareerForm = () => {
           </div>
 
           <div className="flex items-center">
-           
+
             <div className="flex-1">
               <label className=" text-black  flex gap-1 mb-2"> <span className="text-xl text-[#F26337] mr-2"><FaFileAlt /></span>Resume</label>
               <input
@@ -119,10 +119,11 @@ const CareerForm = () => {
             </div>
           </div>
         </div>
-
-        <button type="submit" className="bg-[#F26438] text-white py-2 px-8 mt-4 text-lg font-semibold rounded-full transition-all hover:bg-[#e65327]">
-          Submit
-        </button>
+        <div className='w-full flex justify-center'>
+          <button type="submit" className="bg-[#F26438] text-white py-2 px-8 mt-4 text-lg font-semibold rounded-full transition-all hover:bg-[#e65327]">
+            Submit
+          </button>
+        </div>
       </form>
     </div>
   );
