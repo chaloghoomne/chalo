@@ -10,7 +10,6 @@ import { Helmet } from "react-helmet";
 const Packages = ({ plans }) => {
   const navigate = useNavigate();
   const [selected, setSelected] = useState("");
-
   const [data, setData] = useState();
 
   useEffect(() => {

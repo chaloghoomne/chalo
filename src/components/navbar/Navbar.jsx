@@ -147,7 +147,7 @@ const Navbar = () => {
                 <div  onClick={handleVisaClick}  className="block poppins-five pop px-3 py-2 cursor-pointer rounded-md text-[16px] font-normal">
                   Visa
                 </div>
-                <div className="block poppins-five pop px-3 py-2 cursor-pointer rounded-md text-[16px] font-normal">
+                <div  className="block poppins-five pop px-3 py-2 cursor-pointer rounded-md text-[16px] font-normal">
                   Visa Appointments
                 </div>
                 <div
@@ -276,7 +276,7 @@ const Navbar = () => {
                   <FaPhoneAlt size={15} />
                   9555535252
                 </a>
-              </div>
+              </div> 
             </div>
 
             <div className="p-4 border-t">
