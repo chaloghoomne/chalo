@@ -1,7 +1,7 @@
 // export const NEXT_URL = import.meta.env.NEXT_PUBLIC_URL;
 // export const BASE_URL = import.meta.env.NEXT_PUBLIC_BASE_URL;
 
-export const NEXT_URL = "http://localhost:5173/";
+export const NEXT_URL = "https://chaloghoomne2.vercel.app/";
 export const BASE_URL = "https://dashboard-backend-r1xk.onrender.com/api/v1/";
 
 export const NetworkConfig = {
