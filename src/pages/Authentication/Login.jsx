@@ -61,7 +61,7 @@ const Login = () => {
 				if (state?.countryId) {
 					navigate(`/visa-types/${state.countryId}`);
 				} else {
-					window.location.href = `/home?id=${response.data.userId}`;
+					window.location.href = `/`;
 				}
 			}
 		} catch (err) {
