@@ -63,6 +63,7 @@ const VisaTypes = () => {
         if (response) {
           setData(response.data);
         }
+        console.log("vivsa types",response.data)
       } catch (error) {
         console.log(error);
       }
@@ -79,6 +80,7 @@ const VisaTypes = () => {
         `${BASE_URL}visa-category-by-package`,
         { package: id, tourType: visaTypeId }
       );
+      console.log(response);
       if (response) {
         setPlans(response.data);
       }

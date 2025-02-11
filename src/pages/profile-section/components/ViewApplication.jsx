@@ -170,7 +170,7 @@ const ViewApplication = () => {
      <Helmet>
         <meta charSet="utf-8" />
         <title>Chalo Ghoomne</title>
-        <link rel="canonical" href="https://chaloghoomne.com/" />   
+        <link rel="canonical" href="https://chaloghoomne2.vercel.app/" />   
       </Helmet>
       <div className="flex flex-col justify-between items-center mb-5">
         <button className="bg-orange-500 text-xl font-bold text-white py-3 mt-5 px-10 rounded-[25px]">
