@@ -15,7 +15,7 @@ import { calenderDate } from "../../../redux/actions/calender-date-action";
 
 const Calendar = () => {
   const travelDate = useSelector((state) => state.CalenderReducer.visaDate);
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedDate, setSelectedDate] = useState("");
   const [currentDate, setCurrentDate] = useState(new Date());
   const dispatch = useDispatch();
 

@@ -36,10 +36,10 @@ const HomeFourth = () => {
         </h1>
         <p className="text-gray-600 poppins-three mb-6">{data?.description}</p>
         <div className="grid min-[1213px]:grid-cols-4 grid-cols-2 gap-4">
-          {data?.subItems?.map((box) => {
+          {data?.subItems?.map((box,index) => {
             return (
-              <>
-                <div className="p-4 bg-white min-h-24 border border-gray-100  rounded-lg shadow-md text-center">
+              
+                <div key = {box?.id || index} className="p-4 bg-white min-h-24 border border-gray-100  rounded-lg shadow-md text-center">
                   <h2 className="text-2xl poppins-six  font-bold text-[#F2A137] mb-2">
                     {box?.heading === "4.5" ? box?.heading : box?.heading}
                   </h2>
@@ -47,7 +47,6 @@ const HomeFourth = () => {
                     {box?.description}
                   </p>
                 </div>
-              </>
             );
           })}
         </div>

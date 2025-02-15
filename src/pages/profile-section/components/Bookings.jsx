@@ -26,6 +26,7 @@ const Bookings = () => {
         if (response) {
           setBookings(response.data);
         }
+
       } catch (error) {
         console.log(error);
       }
@@ -86,7 +87,8 @@ const Bookings = () => {
             >
               <div className="w-full flex items-center gap-1">
                 <img
-                  src={booking?.visaCategory?.image}
+                  // src={booking?.visaCategory?.image}
+                  src = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTcZsL6PVn0SNiabAKz7js0QknS2ilJam19QQ&s"
                   alt="Visa"
                   className="w-24 h-24 rounded object-cover mr-4"
                 />

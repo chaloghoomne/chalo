@@ -24,8 +24,8 @@ const Blog = () => {
       <h1 className="text-4xl font-bold mb-6">Blog</h1>
       <h2 className="text-2xl mb-4">Recently Published</h2>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {blogs.map(blog => (
-          <BlogCard key={blog.id} blog={blog} />
+        {blogs.map((blog,index) => (
+          <BlogCard key={blog?.id || index} blog={blog} />
         ))}
       </div>
     </div>

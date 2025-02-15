@@ -27,6 +27,7 @@ import ReturnCalender from "./components/ReturnCalendar";
 import FAQs from "./components/Faqs";
 import VisaProcessSteps from "./components/Steps";
 import { Helmet } from "react-helmet";
+import axios from "axios";
 
 const VisaDetails = () => {
   const { id } = useParams();
@@ -54,6 +55,8 @@ const VisaDetails = () => {
   const [important, setImportantPoints] = useState();
   const [partners, setPartners] = useState([]);
   const [data, setData] = useState({});
+
+  const [data1,setData1] = useState([]);
 
   const applyNowRef = useRef(null);
   const faqRef = useRef(null);
@@ -211,6 +214,7 @@ const VisaDetails = () => {
           "GET",
           `${BASE_URL}visa-category/${id}`
         );
+        console.log("response", response);
         if (response) {
           setData(response.data);
           dispatch(setChildShowId(id))
@@ -227,10 +231,34 @@ const VisaDetails = () => {
     dispatch(numberofCoTravelers(numberOfTravelers));
   }, [numberOfTravelers]);
 
+
+
   const handleStartApplication = async () => {
     // setApplicationModalOpen(true);
     setCalendarModalOpen(true);
   };
+
+
+// made because the images weren't loading on the order visa page
+  useEffect(() => {
+		// const id = data?._id;
+    if (!selectedCountry) return;
+		const fetchCountryImage = async () => {
+			try {
+				const response =await axios.post(
+					`${BASE_URL}country-image`,{country:selectedCountry}
+				);
+				console.log(response);
+        setData1(response?.data);
+			} catch (error) {
+				console.log(error);
+			}
+		};
+
+    if (selectedCountry) {
+      fetchCountryImage();
+  }
+  }, [selectedCountry]);
 
   const handleApplicationChoice = (choice) => {
     setApplicationModalOpen(false);
@@ -359,18 +387,19 @@ const VisaDetails = () => {
     }
   };
 
+
   return (
     <div ref={contentRef} className="w-full h-full mx-auto container py-10">
       <Helmet>
         <meta charSet="utf-8" />
         <title>Chalo Ghoomne</title>
-        <link rel="canonical" href="https://chaloghoomne.com/" />   
+        <link rel="canonical" href="https://chaloghoomne2.vercel.app/" />   
       </Helmet>
       {/* Main Image */}
       <div ref={mainImageRef} className="w-full relative mt-12 rounded-xl bg-cover flex h-[500px] justify-center items-center mb-10">
         <div className="px-16 w-full relative ">
           <img
-            src={data?.image}
+            src={data1?.image}
             alt={selectedCountry}
             className="w-full bg-cover   h-[450px] rounded-2xl"
           />
@@ -628,10 +657,10 @@ const VisaDetails = () => {
         <h2 className="text-3xl font-bold  mb-6">Partners we work with</h2>
         <div className="overflow-x-auto">
           <div className="flex space-x-4 py-5">
-            {partners?.map((partner) => {
+            {partners?.map((partner,index) => {
               return (
-                <>
-                  <Link
+
+                  <Link key ={index}
                     to={`${partner?.link}`}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -656,7 +685,7 @@ const VisaDetails = () => {
                     
                     </div>
                   </Link>
-                </>
+
               );
             })}
           </div>
