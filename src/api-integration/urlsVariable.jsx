@@ -1,8 +1,8 @@
-export const NEXT_URL = "http://localhost:5173/";
-export const BASE_URL = "http://localhost:3001/api/v1/";
+// export const NEXT_URL = "http://localhost:5173/";
+// export const BASE_URL = "http://localhost:3001/api/v1/";
 
-// export const NEXT_URL = "https://chaloghoomne2.vercel.app/";
-// export const BASE_URL = "https://dashboard-backend-r1xk.onrender.com/api/v1/";
+export const NEXT_URL = "https://chaloghoomne2.vercel.app/";
+export const BASE_URL = "https://dashboard-backend-r1xk.onrender.com/api/v1/";
 
 
 export const NetworkConfig = {
