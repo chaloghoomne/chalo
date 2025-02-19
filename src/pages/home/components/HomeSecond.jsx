@@ -43,16 +43,23 @@ const HomeSecond = forwardRef((props, ref) => {
   useEffect(() => {
     const fetchProfileImage = async () => {
       try {
+        const cachedData = localStorage.getItem("Package");
+        if(cachedData){
+         setPackages(JSON.parse(cachedData))
+        }
+        else{
         const response = await fetchDataFromAPI(
           "GET",
           `${BASE_URL}places?country=${inputValue}`
         );
         if (response) {
           setPackages(response.data);
+          localStorage.setItem("Package",JSON.stringify(response.data))
         }
-      } catch (error) {
+      }} catch (error) {
         console.log(error);
       }
+    
     };
     fetchProfileImage();
   }, [inputValue]);

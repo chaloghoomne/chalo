@@ -40,11 +40,12 @@ const Navbar = () => {
 
   const handleLogout = () => {
     setModalOpen(!modalOpen);
-    localStorage.removeItem("token");
+    localStorage.clear()
     dispatch(login(false));
     dispatch(getCountryId(null));
     setModalOpen(false);
     navigate("/login");
+    window.location.reload();
   };
 
   useEffect(() => {
