@@ -130,6 +130,7 @@ const VisaDetails = () => {
         cardRef.current.style.position = 'fixed';
         cardRef.current.style.top = '60px';
         cardRef.current.style.right = '47px';
+        cardRef.current.style.left = '${card.getBoundingClientRect().left}px';
         cardRef.current.style.width = '26rem';
         cardRef.current.style.opacity = '1';
         cardRef.current.style.visibility = 'visible';
@@ -466,10 +467,10 @@ const VisaDetails = () => {
               backgroundImage: `url(${card})`,
               // transition: 'all 0.3s ease-in-out'
             }}
-            className="w-full bg-cover z-30 pb-16 mx-auto mt-7 bg-transparent md:p-10 p-6"
+            className="w-full bg-cover z-30 pb-16 mx-20 mt-7 bg-transparent md:p-10 p-6"
           >
             <div className="flex justify-between px-5 items-center  mb-4">
-              <h2 className="text-2xl flex flex-row poppins-six relative top-5 font-semibold ">
+              <h2 className="text-2xl  flex flex-row poppins-six relative top-5 font-semibold ">
               Travellers
                 <RiContactsLine size={30} style={{ fontWeight: "bold" }} />
               
