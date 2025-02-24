@@ -20,6 +20,7 @@ import {
 } from "./reducers/package-id-reducer";
 import { PersonalDetailsReducer } from "./reducers/personal-details-reducer";
 import { NumberOfTravelerReducer } from "./reducers/numberofTraveler-reducer";
+import { CartReducer } from "./reducers/cart-reducer";
 
 const persistConfig = {
   key: "root",
@@ -33,6 +34,7 @@ const persistConfig = {
     "NumberOfTravelerReducer",
     "CountryIdReducer",
     "VisaIdReducer",
+    "CartReducer",
   ], // only ImageCollectReducer will be persisted
 };
 
@@ -50,7 +52,8 @@ const rootReducer = combineReducers({
   ReturnCalenderReducer,
   VisaIdReducer,
   ShowButtonReducer,
-  ChildSHowIdReducer
+  ChildSHowIdReducer,
+  CartReducer
 });
 
 export const persistedReducer = persistReducer(persistConfig, rootReducer);

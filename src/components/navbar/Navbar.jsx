@@ -11,15 +11,21 @@ import { getCountryId } from "../../redux/actions/package-id-actions";
 import { FaPhoneAlt } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
 import { MdWifiCalling3 } from "react-icons/md";
+import { IoMdCart } from "react-icons/io";
+import { IoIosNotifications } from "react-icons/io";
+import axios from "axios";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isNotiOpen, setIsNotiOpen] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
   const [whichLogo, setWhichLogo] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [bgColor, setBgColor] = useState(
     "bg-gradient-to-r from-[#3180CA] to-[#7AC7F9]"
   );
+  const [count, setCount] = useState(0);
+  const [noti,setNoti] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
@@ -47,6 +53,34 @@ const Navbar = () => {
     navigate("/login");
     window.location.reload();
   };
+
+  
+  const handleNotification = async()=>{
+    try{
+      const response = await axios.get(`${BASE_URL}notification`,{
+        headers:{
+          Authorization: "Bearer " + localStorage.getItem("token")
+        }
+      })
+      const data = await response.data;
+    console.log("API Response:", data); // Debugging API response
+
+    if (!data || !data.data) {
+      console.error("Invalid API response format:", data);
+      return;
+    }
+
+    setNoti(data.data); 
+    console.log(noti)
+    setCount(noti.filter(item =>item.isRead === false).length)
+      
+    }catch(err){
+      console.log("Error aa rahi ahi notification fetch karne me",err.message)
+    }
+  }
+  useEffect(()=>{
+    handleNotification()
+  },[isNotiOpen])
 
   useEffect(() => {
     if (localStorage.getItem("token")) {
@@ -167,10 +201,28 @@ const Navbar = () => {
               >
                 <MdWifiCalling3 size={20} color={whichLogo ? "white" : "black"} /> 9555535252
               </a>
+              <div className=" mx-4 p-5">
+                <div className="text-red-600 font-bold text-xs"><h4>{count}</h4></div>
+              <IoIosNotifications  size={20} onClick={()=>{setIsNotiOpen(!isNotiOpen)}} />
+                <div className={`absolute  scroll-smooth w-80 h-60 bg-white ${isNotiOpen? "flex flex-wrap justify-center" :"hidden"} overflow-y-scroll right-10 border-2 rounded-lg`}>
+                  {noti  && noti.length>0 ?(noti.map((item,index)=>(
+                    <div className="
+                    p-3 flex justify-left border-2 border-black rounded-lg m-2 w-full overflow-x-hidden" key={index}>
+                      
+                      <img className="w-8 h-8" src={item.image} alt="" />
+                      <span className=" p-2 text-wrap text-black">{item.title}</span>
+                      {/* <h4>{item.title}</h4> */}
+                    </div>
+                  ))):( <p className="text-gray-500">No new notifications</p>)}
+                </div>
+              </div> 
+              <div className="flex flex-col ">
+                <Link to="/cart"><IoMdCart className="h-6 w-8"/></Link>
+              </div>
               {!localStorage.getItem("token") ? (
                 <Link
                   to="/login"
-                  className={`ml-3 bg-[#F26337] poppins-three ${whichLogo ? "text-white" : "text-black"} px-8 py-2 rounded-full text-[14px] font-medium`}
+                  className={`ml-3 bg-[#2c2ea5] poppins-three ${whichLogo ? "text-white" : "text-black"} px-8 py-2 rounded-full text-[14px] font-medium`}
                 >
                   Login
                 </Link>

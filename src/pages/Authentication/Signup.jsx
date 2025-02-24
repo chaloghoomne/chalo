@@ -41,7 +41,7 @@ const SignUp = () => {
 	const registerUser = async (userData) => {
 		console.log("inside register user");
 		try {
-			console.log("userData: ", userData);
+			// console.log("userData: ", userData);
 			const response = await fetchDataFromAPI(
 				"POST",
 				`${BASE_URL}user-signup`,
@@ -52,7 +52,7 @@ const SignUp = () => {
 				toast.success(`Register SuccessFully`);
 				localStorage.setItem("userId", response?.data?._id);
 
-				navigate("/user-login");
+				navigate("/login");
 			} else {
 				throw new Error("Failed to register user.");
 			}
