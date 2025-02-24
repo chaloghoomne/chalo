@@ -1,6 +1,4 @@
-import React, { useRef, useState } from "react";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   format,
@@ -14,24 +12,18 @@ import {
   parseISO,
   isWithinInterval,
   isBefore,
+  isValid,
 } from "date-fns";
-import "./style.css"
-import {
-  calenderDate,
-  returnCalenderDate,
-} from "../../../redux/actions/calender-date-action";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { returnCalenderDate } from "../../../redux/actions/calender-date-action";
 
 const ReturnCalender = () => {
-  const [selectedDate, setSelectedDate] = useState(null);
+  const dispatch = useDispatch();
   const travelDate = useSelector((state) => state.CalenderReducer.visaDate);
   const returnDate = useSelector((state) => state.ReturnCalenderReducer.returnDate);
 
- 
-
-  const dispatch = useDispatch();
-  
-
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(returnDate || "");
 
   const handlePrevMonth = () => {
     setCurrentDate(subMonths(currentDate, 1));
@@ -42,17 +34,30 @@ const ReturnCalender = () => {
   };
 
   const handleDateClick = (day) => {
-    const clickedDate = format(day, "yyyy-MM-dd");
-      setSelectedDate(clickedDate);
-    dispatch(returnCalenderDate(clickedDate));
+    if (!travelDate) return;
+    if (isBefore(day, parseISO(travelDate))) return; // Prevents selecting a date before travelDate
+
+    const formattedDate = format(day, "yyyy-MM-dd");
+    setSelectedDate(formattedDate);
+    dispatch(returnCalenderDate(formattedDate));
+  };
+
+  const handleInputChange = (e) => {
+    const inputDate = e.target.value;
+    setSelectedDate(inputDate);
+
+    const parsedDate = parseISO(inputDate);
+    if (!isValid(parsedDate) || (travelDate && isBefore(parsedDate, parseISO(travelDate)))) return;
+
+    setCurrentDate(parsedDate);
+    dispatch(returnCalenderDate(format(parsedDate, "yyyy-MM-dd")));
   };
 
   const isDateInRange = (date) => {
     if (!travelDate || !returnDate) return false;
-    
     return isWithinInterval(date, {
       start: parseISO(travelDate),
-      end: parseISO(returnDate)
+      end: parseISO(returnDate),
     });
   };
 
@@ -66,73 +71,71 @@ const ReturnCalender = () => {
   const daysInMonth = eachDayOfInterval({ start: monthStart, end: monthEnd });
 
   return (
-    <div className="w-full bg-white min-h-56 rounded-lg shadow-lg px-4">
-     <div className="relative flex w-[90%] flex-col gap-2 p-2 border rounded">
-       
-       <input type="text"
-       value={selectedDate || returnDate}
-       className="w-[90%] border border-black rounded-lg text-black p-2" />
-       <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-     <div className="calendar">
-       <div>
-         <div
-           className="header"
-           style={{
-             textAlign: "start",
-           }}
-         >
-           Calendar
-         </div>
-         <div className="divider"></div>
-       </div>
-       <div className="nav-buttons">
-         <div className="month">{format(currentDate, "MMMM yyyy")}</div>
-         <div
-           style={{
-             display: "flex",
-             gap: "10px",
-           }}
-         >
-           <div className="nav-button" onClick={handlePrevMonth}>
-             &lt; Prev
-           </div>
-           <div className="nav-button" onClick={handleNextMonth}>
-             Next &gt;
-           </div>
-         </div>
-       </div>
+    <div className="w-full bg-white rounded-lg shadow-lg p-6 max-w-md mx-auto">
+      <div className="flex flex-col items-center">
+        {/* Input Field for Manual Date Entry */}
+        <input
+          type="date"
+          value={selectedDate || ""}
+          onChange={handleInputChange}
+          className="w-full border border-gray-300 rounded-lg px-4 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
+          min={travelDate || format(new Date(), "yyyy-MM-dd")}
+        />
 
-       <div className="days">
-       {/* {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
-                <div key={day} className="text-center font-medium p-2">
-                  {day}
-                </div>
-              ))} */}
-         {daysInMonth.map((day) => {
-           const formattedDate = format(day, "yyyy-MM-dd");
-           const disabled = isDateDisabled(day);
-           const inRange = isDateInRange(day);
-           return (
-             <div
-               title=""
-               key={day.toISOString()}
-               className={`day  ${disabled ? 'cursor-not-allowed opacity-50' : 'hover:bg-gray-100'}
-                      ${inRange ? 'bg-blue-100' : ''}
-                      ${returnDate === formattedDate ? 'selected' : ''}
-                      ${travelDate === formattedDate ? 'bg-blue-500 text-white' : ''} ${
-                 isSameMonth(day, currentDate) ? "current-month" : ""
-               }`}
-               onClick={() => handleDateClick(day)}
-             >
-               {format(day, "d")}
-               
-             </div>
-           );
-         })}
-       </div>
-     </div>
-   </div>
-     </div>
+        {/* Month Navigation */}
+        <div className="flex justify-between items-center w-full">
+          <button
+            className="p-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition"
+            onClick={handlePrevMonth}
+            disabled={isBefore(startOfMonth(subMonths(currentDate, 1)), startOfMonth(new Date()))}
+          >
+            <ChevronLeft className="w-5 h-5 text-gray-600" />
+          </button>
+          <div className="text-lg font-semibold text-gray-800">
+            {format(currentDate, "MMMM yyyy")}
+          </div>
+          <button
+            className="p-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition"
+            onClick={handleNextMonth}
+          >
+            <ChevronRight className="w-5 h-5 text-gray-600" />
+          </button>
+        </div>
+
+        {/* Calendar Grid */}
+        <div className="grid grid-cols-7 gap-2 mt-4 w-full">
+          {/* Day Headers */}
+          {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
+            <div key={day} className="text-center font-semibold text-gray-500">
+              {day}
+            </div>
+          ))}
+
+          {/* Calendar Days */}
+          {daysInMonth.map((day) => {
+            const formattedDate = format(day, "yyyy-MM-dd");
+            const disabled = isDateDisabled(day);
+            const inRange = isDateInRange(day);
+
+            return (
+              <div
+                key={formattedDate}
+                className={`
+                  flex justify-center items-center w-10 h-10 text-sm rounded-full cursor-pointer transition
+                  ${disabled ? "text-gray-300 cursor-not-allowed" : "hover:bg-blue-100"}
+                  ${inRange ? "bg-blue-200" : ""}
+                  ${selectedDate === formattedDate ? "bg-blue-500 text-black font-bold" : ""}
+                  ${travelDate === formattedDate ? "border border-blue-500" : ""}
+                  ${!isSameMonth(day, currentDate) ? "text-gray-400" : ""}
+                `}
+                onClick={() => !disabled && handleDateClick(day)}
+              >
+                {format(day, "d")}
+              </div>
+            );
+          })}
+        </div>
+      </div>
     </div>
   );
 };
