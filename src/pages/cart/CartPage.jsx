@@ -15,7 +15,10 @@ const CartPage = () => {
       <h2 className="text-3xl font-bold text-gray-800 mb-6">🛒 Your Cart ({cartItems.length} items)</h2>
 
       {cartItems.length === 0 ? (
-        <p className="text-gray-500 text-center text-lg">Your cart is empty.</p>
+        <p className="text-gray-500 m-10 text-center text-lg">
+        Your cart is currently empty. Start adding items to fill it up! 🛒
+      </p>
+      
       ) : (
         <div className="bg-white shadow-lg rounded-lg p-6">
           <div className="space-y-4">
@@ -45,7 +48,7 @@ const CartPage = () => {
             <h3 className="text-xl font-bold text-gray-800">Total: ₹{totalPrice}</h3>
             <button 
               onClick={() => dispatch(clearCart())} 
-              className="bg-red-500 hover:bg-red-600 text-white py-2 px-6 rounded-lg transition"
+              className="bg-red-500 hover:bg-red-600 text-white  py-2 px-6 rounded-lg transition"
             >
               Clear Cart
             </button>

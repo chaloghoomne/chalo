@@ -5,10 +5,12 @@ import { MdKeyboardArrowRight } from "react-icons/md";
 import { fetchDataFromAPI } from "../../../api-integration/fetchApi";
 import { BASE_URL, NetworkConfig } from "../../../api-integration/urlsVariable";
 import { useSelector } from "react-redux";
+import debounce from "lodash/debounce";
 
 const HomeSecond = forwardRef((props, ref) => {
   const [packages, setPackages] = useState([]);
   const [data, setData] = useState();
+  const [allPackages,setAllPackages] = useState([])
   const [finalValue, setFinalVlaue] = useState(12);
   const inputValue = useSelector(
     (state) => state.SearchPackageReducer.inputValue
@@ -45,6 +47,7 @@ const HomeSecond = forwardRef((props, ref) => {
       try {
         const cachedData = localStorage.getItem("Package");
         if(cachedData){
+          setAllPackages(JSON.parse(cachedData))
          setPackages(JSON.parse(cachedData))
         }
         else{
@@ -63,6 +66,44 @@ const HomeSecond = forwardRef((props, ref) => {
     };
     fetchProfileImage();
   }, [inputValue]);
+
+  useEffect(() => {
+    const filterAndSortPackages = debounce(() => {
+      if (!allPackages.length) return; // Prevent filtering on empty data
+  
+      if (!inputValue.trim()) {
+        setPackages(allPackages); // Reset if search is empty
+      } else {
+        const filtered = allPackages
+          .filter(
+            (visa) =>
+              visa?.country?.toLowerCase().includes(inputValue.toLowerCase()) ||
+              visa?.city?.toLowerCase().includes(inputValue.toLowerCase())
+          )
+          .sort((a, b) => {
+            const countryA = a?.country?.toLowerCase() || "";
+            const countryB = b?.country?.toLowerCase() || "";
+            const query = inputValue.toLowerCase();
+  
+            // Prioritize countries that start with the search term
+            const startsWithA = countryA.startsWith(query) ? -1 : 1;
+            const startsWithB = countryB.startsWith(query) ? -1 : 1;
+  
+            if (countryA.startsWith(query) !== countryB.startsWith(query)) {
+              return startsWithA - startsWithB; // Countries that start with query come first
+            }
+  
+            return countryA.localeCompare(countryB); // Sort alphabetically
+          });
+  
+        setPackages(filtered);
+      }
+    }, 300); // Adjust debounce time if needed
+  
+    filterAndSortPackages();
+  
+    return () => filterAndSortPackages.cancel(); // Cleanup function
+  }, [inputValue, allPackages]);
 
   return (
     <div ref={ref} className="py-[40px] px-5">

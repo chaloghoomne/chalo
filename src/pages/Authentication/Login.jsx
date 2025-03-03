@@ -51,10 +51,10 @@ const Login = () => {
 					password,
 				}
 			);
-			console.log("response: ", response);
+			// console.log("response: ", response);
 			if (response.data.success) {
 				toast.success("Login Successfully");
-				console.log("response.data.token: ", response.data.token);
+				// console.log("response.data.token: ", response.data.token);
 				dispatch(login(true));
 				localStorage.setItem("token", response.data.token);
 
