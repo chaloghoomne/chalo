@@ -39,21 +39,7 @@ const RefundPolicyPage = () => {
       <div className="text-white px-10 py-8">
         <h1 className="text-4xl text-center  poppins-seven font-bold text-orange-400 mb-6">{privacyData.title || 'Privacy Policy'}</h1>
         
-        <p className="text-lg poppins-four  text-black mb-4">{privacyData.description || 'Description about privacy policy goes here...'}</p>
-
-        {/* Sections */}
-        <div className="space-y-8">
-          {privacyData?.sections?.map((section, index) => (
-            <div key={index}>
-              <h2 className="text-2xl poppins-five font-semibold text-orange-400">{section.heading}</h2>
-              <ul className="list-disc poppins-three list-inside mt-2 text-black">
-                {section.point.map((point, idx) => (
-                  <li key={idx}>{point}</li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
+        <div dangerouslySetInnerHTML={{__html:privacyData.description}} className='prose prose-lg max-w-none'></div>
       </div>
     </div>
   );
