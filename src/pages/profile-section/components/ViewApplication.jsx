@@ -59,7 +59,7 @@ const ViewApplication = () => {
           "GET",
           `${BASE_URL}user-visa-order/${packageId}`
         );
-        console.log(response.data, "response daya");
+        // console.log(response.data, "response daya");
         if (response) {
           setApplicationType(response?.data?.visaOrder?.applicationType);
           // setDiscount(response?.data?.visaOrder?.discount);

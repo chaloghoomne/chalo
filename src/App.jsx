@@ -76,10 +76,10 @@ const AppContent = () => {
           <Route path="/visa-types/:id" element={<VisaTypes />} />
           <Route path="/packages" element={<Packages />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/visa-details/:id" element={<PrivateRoute><VisaDetails /></PrivateRoute>} />
-          <Route path="/upload-image" element={<PrivateRoute><ImageUpload /></PrivateRoute>} />
-          <Route path="/persons-details" element={<PrivateRoute><PersonDetails /></PrivateRoute>} />
-          <Route path="/offer-packages" element={<PrivateRoute><OfferPackages /></PrivateRoute>} />
+          <Route path="/visa-details/:id" element={<VisaDetails />} />
+          <Route path="/upload-image" element={<ImageUpload />} />
+          <Route path="/persons-details" element={<PersonDetails />} />
+          <Route path="/offer-packages" element={<OfferPackages />} />
           <Route path="/edit-visa-request" element={<PrivateRoute><EditVisaDetails /></PrivateRoute>} />
           <Route path="/view-application" element={<PrivateRoute><ViewApplication /></PrivateRoute>} />
           <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />

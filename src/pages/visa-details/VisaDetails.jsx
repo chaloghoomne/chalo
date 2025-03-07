@@ -211,7 +211,7 @@ const VisaDetails = () => {
 				);
 				if (response) {
 					setPartners(response.data);
-				}
+				} 
 			} catch (error) {
 				console.log(error);
 			}
@@ -253,7 +253,7 @@ const VisaDetails = () => {
 					"GET",
 					`${BASE_URL}visa-category/${id}`
 				);
-				console.log("response", response);
+				// console.log("response", response);
 				if (response) {
 					setData(response.data);
 					dispatch(setChildShowId(id));
@@ -344,6 +344,7 @@ const VisaDetails = () => {
 
 	const proceedApplication = async () => {
 		setCalendarModalOpen(false);
+		localStorage.setItem("date",)
 		try {
 			const response = await fetchDataFromAPI(
 				"POST",
@@ -734,7 +735,7 @@ const VisaDetails = () => {
 				{data?.longDescription}
 			</div>
 			{/* Partners Section */}
-			<div className="w-full md:w-[60%] p-6 ml-[8px]">
+			{/* <div className="w-full md:w-[60%] p-6 ml-[8px]">
 				<h2 className="text-3xl font-bold  mb-6">
 					Partners we work with
 				</h2>
@@ -771,7 +772,7 @@ const VisaDetails = () => {
 						})}
 					</div>
 				</div>
-			</div>
+			</div> */}
 			<div ref={footerRef}>{/* Your footer content */}</div>
 			{isApplicationModalOpen && (
 				<div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
