@@ -344,7 +344,8 @@ const VisaDetails = () => {
 
 	const proceedApplication = async () => {
 		setCalendarModalOpen(false);
-		localStorage.setItem("date",)
+		localStorage.setItem("fromDate", fromDate);
+		localStorage.setItem("toDate", toDate);
 		try {
 			const response = await fetchDataFromAPI(
 				"POST",
