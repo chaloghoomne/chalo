@@ -1,15 +1,18 @@
-
-
-export const LoginReducer = (state={isLogin:false},actions)=>{
-const {type,payload} = actions
-switch (type) {
-    case "LOGIN":
+const initialState = {
+    isLogin: false, // ✅ Default value to prevent "undefined" errors
+  };
+  
+  const loginReducer = (state = initialState, action) => {
+    switch (action.type) {
+      case "LOGIN":
         return {
-         isLogin:payload
-        }
-       
-
-    default:return state
-     
-}
-}      
+          ...state,
+          isLogin: action.payload, // ✅ Correctly updating login state
+        };
+      default:
+        return state;
+    }
+  };
+  
+  export default loginReducer;
+  

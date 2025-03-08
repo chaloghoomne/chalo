@@ -2,7 +2,7 @@ import { combineReducers } from "redux";
 import { persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage"; // defaults to localStorage for web
 
-import { LoginReducer } from "./reducers/login-reducer";
+import loginReducer from "../redux/reducers/login-reducer";
 import {
   CalenderReducer,
   ReturnCalenderReducer,
@@ -39,7 +39,7 @@ const persistConfig = {
 };
 
 const rootReducer = combineReducers({
-  LoginReducer,
+  loginReducer,
   CalenderReducer,
   PackageIdReducer,
   CotravelerIdReducer,
