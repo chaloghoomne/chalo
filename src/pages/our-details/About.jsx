@@ -30,7 +30,7 @@ const AboutUs = () => {
       <div className="mt-8 flex justify-center">
         <img src={aboutUsData.image || "https://t4.ftcdn.net/jpg/05/06/80/79/360_F_506807900_w3mbiKhspSodoRQZEC53lWD3mqfoFeum.jpg"} alt="Team" className="rounded-lg shadow-lg" />
       </div>
-      <div className="mt-8 text-center" >
+      <div className="mt-8" >
       <div
 				dangerouslySetInnerHTML={{
 					__html: aboutUsData.description,
