@@ -14,6 +14,7 @@ import { Helmet } from "react-helmet";
 import { Button } from "@mui/material";
 import { login } from "../../redux/actions/login-actions";
 import { RiVerifiedBadgeFill } from "react-icons/ri";
+import axios from "axios";
 
 const PersonDetails = () => {
 	const navigate = useNavigate();
@@ -39,6 +40,7 @@ const PersonDetails = () => {
 	});
 	const [phone, setPhone] = useState("");
 	const [phoneOtp, setPhoneOtp] = useState("");
+	const [email, setEmail] = useState("");
 	const [otpSentToPhone, setOtpSentToPhone] = useState(false);
 	const [phoneVerified, setPhoneVerified] = useState(false);
 
@@ -169,68 +171,86 @@ const PersonDetails = () => {
 	};
 
 	const sendPhoneOtp = async () => {
-		console.log(
-			"Sending OTP to:",
-			phone,
-			"Name:",
-			formData.firstName + " " + formData.lastName
-		);
+		// console.log(
+		// 	"Sending OTP to:",
+		// 	phone,
+		// 	"firstName:", formData.firstName,
+		// 	"lastName:", formData.lastName
+		// );
+
 		if (!validatePhoneNumber(phone)) {
 			return toast.error("Please enter a valid phone number.");
 		}
-		try {
-			const response = await fetchDataFromAPI(
-				"POST",
-				`${BASE_URL}send-mobile-otp`,
-				{
-					phoneNumber: phone,
-					// Send full name
-				}
-			);
 
-			if (response.success) {
+		try {
+			const response = await axios.post(`${BASE_URL}send-mobile-otp`, {
+				phoneNumber: phone,
+				firstName: formData.firstName,
+				lastName: formData.lastName,
+			});
+
+			if (response.data.success) {
+				// Correct way to access response
 				setOtpSentToPhone(true);
 				toast.success("OTP sent to phone.");
 			} else {
-				toast.error(response.message || "Failed to send OTP.");
+				toast.error(response.data.message || "Failed to send OTP.");
 			}
 		} catch (err) {
-			toast.error(err.message || "Error sending OTP");
+			toast.error(
+				err.response?.data?.message ||
+					err.message ||
+					"Error sending OTP"
+			);
 		}
 	};
 
 	const verifyPhoneOtp = async (otp) => {
 		try {
-			const response = await fetchDataFromAPI(
-				"POST",
-				`${BASE_URL}user-verify-number`,
-				{
-					firstName: formData.firstName,
-					lastName: formData.lastName,
-					phoneNumber: phone,
-					otp,
-				}
-			);
+			const response = await axios.post(`${BASE_URL}user-verify-number`, {
+				firstName: formData.firstName,
+				lastName: formData.lastName,
+				phoneNumber: phone,
+				otp,
+			});
 
-			if (!response.success) {
-				throw new Error(response.message || "Invalid OTP");
+			// console.log("API Response:", response);
+
+			// ✅ Correct response handling
+			if (!response.data.success) {
+				throw new Error(response.data.message || "Invalid OTP");
 			}
 
+			const { token } = response.data;
+
+			// console.log("Token:", token);
+
+			// ✅ Store token in localStorage
+			localStorage.setItem("token", token);
+
+			// ✅ Set default headers for future API requests
+			axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
+			// ✅ Update state and notify user
 			setPhoneVerified(true);
-			dispatch(login(true));
-			toast.success("Phone number verified.");
+			dispatch(login(true)); // Login state update
+			toast.success("Phone number verified. You are now logged in!");
 		} catch (err) {
-			toast.error(err.message || "Error verifying OTP");
+			toast.error(
+				err.response?.data?.message ||
+					err.message ||
+					"Error verifying OTP"
+			);
 		}
 	};
 
 	const isLoggedIn = useSelector((state) => state.login?.isLogin ?? false);
+
 	// console.log("isLoggedIn: ", isLoggedIn);
 
-	useEffect(() => {
-		dispatch(login(true));
-		console.log("Login Status:", isLoggedIn);
-	}, [isLoggedIn]);
+	// useEffect(() => {
+	// 	console.log("Redux State:", isLoggedIn);
+	// }, [isLoggedIn]);
 
 	const handlePhoneOtp = (e) => {
 		const otp = e.target.value;
@@ -289,11 +309,22 @@ const PersonDetails = () => {
 		// if (kuchaayega) {
 		if (packageData?.orderDetails === travlersCount) {
 			try {
-				const response = await fetchDataFromAPI(
-					"PUT",
+				// const response = await fetchDataFromAPI(
+				// 	"PUT",
+				// 	`${BASE_URL}edit-order-details/${cotravlerId}`,
+				// 	{ ...formData, detailsFulfilled: true }
+				// );
+				const token = localStorage.getItem("token");
+				const response = await axios.put(
 					`${BASE_URL}edit-order-details/${cotravlerId}`,
-					{ ...formData, detailsFulfilled: true }
+					{ ...formData, detailsFulfilled: true },
+					{
+						headers: {
+							Authorization: `Bearer ${token}`,
+						},
+					}
 				);
+				console.log(response);
 				if (response) {
 					navigate("/edit-visa-request");
 				}
@@ -537,14 +568,32 @@ const PersonDetails = () => {
 									readOnly
 								/>
 							</div>
-							<input
-								type="text"
-								value={phone}
-								onChange={(e) => setPhone(e.target.value)}
-								placeholder="Phone No"
-								className="w-full p-2 text-black border border-gray-300 rounded-md"
-								required
-							/>
+							<div>
+								<label className="block text-sm font-semibold">
+									Phone Number
+								</label>
+								<input
+									type="text"
+									value={phone}
+									onChange={(e) => setPhone(e.target.value)}
+									placeholder="Phone No"
+									className="w-full p-2 text-black border border-gray-300 rounded-md"
+								/>
+							</div>
+							<div>
+								<label className="block text-sm font-semibold">
+									Email
+								</label>
+								<input
+									type="text"
+									name="email"
+									required
+									placeholder="Email"
+									value={formData.email}
+									onChange={handleFields}
+									className="w-full p-2 border rounded-lg"
+								/>
+							</div>
 							{!phoneVerified && validatePhoneNumber(phone) && (
 								<div className="flex items-center gap-2 mt-2">
 									<button

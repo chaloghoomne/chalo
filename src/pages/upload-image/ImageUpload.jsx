@@ -231,11 +231,11 @@ const ImageUpload = () => {
                   {important?.docDescription}
                 </p>
                 <ul className="text-left space-y-2">
-                  {important?.docPoints?.map((item) => {
+                  {important?.docPoints?.map((item,index) => {
                     return (
-                      <>
+                      <div kay = {index}>
                         <li>✔️ {item}</li>
-                      </>
+                      </div>
                     );
                   })}
                 </ul>
@@ -301,9 +301,9 @@ const ImageUpload = () => {
           <>
             <div className="flex-1 p-4 rounded-lg mb-4 md:mb-0">
               <div className="bg-white h-auto p-4 rounded-xl">
-                {data?.map((item) => {
+                {data?.map((item,index) => {
                   return (
-                    <>
+                    <div key = {index}>
                       <h2 className="text-xl font-semibold mb-4">
                         {item?.name}
                       </h2>
@@ -314,7 +314,7 @@ const ImageUpload = () => {
                         {" "}
                         {item?.description}
                       </p>
-                    </>
+                    </div>
                   );
                 })}
                 {/* <ul className="text-left space-y-2">

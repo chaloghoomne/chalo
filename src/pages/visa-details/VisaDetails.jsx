@@ -344,8 +344,9 @@ const VisaDetails = () => {
 
 	const proceedApplication = async () => {
 		setCalendarModalOpen(false);
-		localStorage.setItem("fromDate", fromDate);
-		localStorage.setItem("toDate", toDate);
+		// localStorage.setItem("fromDate", fromDate);
+		// localStorage.setItem("toDate", toDate);
+		// console.log("Visa ki ID",id)
 		try {
 			const response = await fetchDataFromAPI(
 				"POST",
@@ -356,8 +357,14 @@ const VisaDetails = () => {
 					from: fromDate,
 					to: toDate,
 					applicationType: "normal",
+				}, {
+					headers: {
+						Authorization: `Bearer ${localStorage.getItem("token")}`,
+						"Content-Type": "application/json",
+					},
 				}
 			);
+			// console.log("Dikkat kya hai",response)
 			if (response) {
 				dispatch(PackageId(response?.data?.visaOrder?._id));
 				dispatch(numberofCoTravelers(numberOfTravelers));

@@ -44,13 +44,18 @@ const useScrollToSection = () => {
     }
   }, [location]);
 };
-
 const PrivateRoute = ({ children }) => {
-  const token = useSelector((state) => state.LoginReducer.token) || localStorage.getItem("token");
-  const countryId = useSelector((state) => state.CountryIdReducer.countryId);
+  // Retrieve token from Redux or localStorage
+  const token = useSelector((state) => state.LoginReducer?.token) || localStorage.getItem("token") || null;
+  const countryId = useSelector((state) => state.CountryIdReducer?.countryId);
   const location = useLocation();
 
-  return token ? children : <Navigate to="/login" state={{ from: location, countryId }} replace />;
+  // If token is missing, redirect to login
+  if (!token) {
+    return <Navigate to="/login" state={{ from: location, countryId }} replace />;
+  }
+
+  return children;
 };
 
 const AppContent = () => {
