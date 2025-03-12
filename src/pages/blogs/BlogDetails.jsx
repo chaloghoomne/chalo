@@ -5,13 +5,15 @@ import { BASE_URL } from "../../api-integration/urlsVariable";
 import { Helmet } from "react-helmet";
 import "react-quill/dist/quill.snow.css";
 import "tailwindcss/tailwind.css";
+import { fetchDataFromAPI } from "../../api-integration/fetchApi";
 
 const BlogDetails = () => {
 	const { id } = useParams();
 	const [blog, setBlog] = useState(null);
 	const [metaData, setMetaData] = useState({
 		metaTitle: "Chalo Ghoomne - Travel Blogs",
-		metaDescription: "Explore exciting travel blogs and discover amazing destinations.",
+		metaDescription:
+			"Explore exciting travel blogs and discover amazing destinations.",
 		metaKeywords: "travel, adventure, tourism, destinations",
 	});
 
@@ -19,11 +21,16 @@ const BlogDetails = () => {
 	useEffect(() => {
 		const fetchBlog = async () => {
 			try {
-				const res = await axios.get(`${BASE_URL}blog/${id}`);
-				// console.log("API Response:", res.data);
+				const res = await fetchDataFromAPI(
+					"GET",
+					`${BASE_URL}blog/${id}`
+				);
+				// const res = await axios.get(`${BASE_URL}blog/${id}`);
+				console.log("API Response:", res.data);
 
-				if (res.data && res.data.data) {
-					setBlog(res.data.data);
+				// Check if the response is structured as expected
+				if (res.data) {
+					setBlog(res.data); // Directly set the blog object 
 				} else {
 					console.warn("Unexpected API response format:", res.data);
 				}
@@ -40,8 +47,12 @@ const BlogDetails = () => {
 		if (blog) {
 			setMetaData({
 				metaTitle: blog.metaTitle || "Chalo Ghoomne - Travel Blogs",
-				metaDescription: blog.metaDescription || "Explore exciting travel blogs and discover amazing destinations.",
-				metaKeywords: blog.metaKeywords?.join(", ") || "travel, adventure, tourism, destinations",
+				metaDescription:
+					blog.metaDescription ||
+					"Explore exciting travel blogs and discover amazing destinations.",
+				metaKeywords:
+					blog.metaKeywords?.join(", ") ||
+					"travel, adventure, tourism, destinations",
 			});
 			console.log("Updated Meta Data:", metaData);
 		}
