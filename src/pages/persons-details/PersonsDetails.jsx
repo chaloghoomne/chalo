@@ -573,6 +573,20 @@ const PersonDetails = () => {
 							</div>
 							<div>
 								<label className="block text-sm font-semibold">
+									Email
+								</label>
+								<input
+									type="email"
+									name="email"
+									required
+									placeholder="Email"
+									value={formData.email}
+									onChange={handleFields}
+									className="w-full p-2 border rounded-lg"
+								/>
+							</div>
+							<div>
+								<label className="block text-sm font-semibold">
 									Phone Number
 								</label>
 								<input
@@ -625,20 +639,7 @@ const PersonDetails = () => {
 									/>
 								</p>
 							)}
-							<div>
-								<label className="block text-sm font-semibold">
-									Email
-								</label>
-								<input
-									type="email"
-									name="email"
-									required
-									placeholder="Email"
-									value={formData.email}
-									onChange={handleFields}
-									className="w-full p-2 border rounded-lg"
-								/>
-							</div>
+							
 						</div>
 
 						<ImageUpload />
