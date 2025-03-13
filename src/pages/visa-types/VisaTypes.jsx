@@ -23,6 +23,7 @@ const VisaTypes = () => {
   const navigate = useNavigate();
   const [plans, setPlans] = useState();
   const [data, setData] = useState();
+  const [data1,setData1] = useState();
   const [visatypes, setVisaTypes] = useState();
   const { id } = useParams();
 
@@ -36,6 +37,10 @@ const VisaTypes = () => {
         if (response) {
           setVisaTypes(response?.data?.tourTypes);
           setSelectedVisa(response?.data?.tourTypes[0]?._id);
+          // console.log(response.data)
+          setData1(response.data);
+          // console.log(data1)
+          // console.log(data1.metaDescription,data1.metaKeywords,data1.metaTitle)
           handleplans(
             response?.data?.tourTypes[0]?._id,
             response?.data?.tourTypes[0]?.name
@@ -47,6 +52,7 @@ const VisaTypes = () => {
     };
     fetchData();
   }, [id]);
+  
 
   useEffect(() => {
     dispatch(returnCalenderDate(null));
@@ -62,6 +68,7 @@ const VisaTypes = () => {
         );
         if (response) {
           setData(response.data);
+          console.log(response)
         }
         // console.log("vivsa types",response.data)
       } catch (error) {
@@ -90,16 +97,20 @@ const VisaTypes = () => {
   };
 
   return (
+
     <div className="flex flex-col  items-center justify-center py-20 px-4 bg-white">
       <Helmet>
-        <meta charSet="utf-8" />
-        <title>Chalo Ghoomne</title>
-        <link rel="canonical" href="https://chaloghoomne.com/" />   
-      </Helmet>
+              <meta charSet="utf-8" />
+              <title>{data1?.metaTitle || "Chalo Ghoomne"}</title>
+              
+              <meta name="description" content={data1?.metaDescription} />
+              <meta name="keywords" content={data1?.metaKeywords} />
+              <link rel="canonical" href="https://chaloghoomne.com/" />
+            </Helmet>
       <h2 className="text-3xl poppins-six text-center  font-bold my-4">
         {selectedCountry} Visa Application 
       </h2>
-      <p className="text-orange-500 poppins-four  text-xl mb-6">{data?.description }</p>
+      <p className="text-orange-500 poppins-four  text-xl mb-6">{data1?.description }</p>
       <div className="flex flex-wrap md:justify-evenly justify-center gap-8 mb-6">
         {visatypes?.map((visa) => (
           <div

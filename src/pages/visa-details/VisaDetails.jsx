@@ -71,25 +71,29 @@ const VisaDetails = () => {
 	const mainImageRef = useRef(null);
 	const cardRef = useRef(null);
 	const contentRef = useRef(null);
+	const [metaData, setMetaData] = useState({
+		metaTitle: "Chalo Ghoomne - Travel Blogs",
+		metaDescription:
+			"Explore exciting travel blogs and discover amazing destinations.",
+		metaKeywords: "travel, adventure, tourism, destinations",
+	});
 
+	const cartItems = useSelector((state) => state.CartReducer.cartItems);
 
-  const cartItems = useSelector((state) => state.CartReducer.cartItems);
+	const handleAddToCart = () => {
+		const cartItem = {
+			id: data?._id || Math.random().toString(), // Ensure ID is unique
+			name: selectedCountry || "Unknown",
+			price: data?.price || 0,
+			quantity: 1,
+			image: data1?.image || "",
+		};
 
-  const handleAddToCart = () => {
-    const cartItem = {
-      id: data?._id || Math.random().toString(), // Ensure ID is unique
-      name: selectedCountry || "Unknown",
-      price: data?.price || 0,
-      quantity: 1,
-      image: data1?.image || "",
-    };
+		// console.log("Adding to cart:", cartItem);
+		dispatch(addToCart(cartItem)); // Dispatch action
 
-    // console.log("Adding to cart:", cartItem);
-    dispatch(addToCart(cartItem)); // Dispatch action
-  
-
-    toast.success("Visa added to cart!");
-  };
+		toast.success("Visa added to cart!");
+	};
 
 	useEffect(() => {
 		const checkScreenSize = () => {
@@ -112,6 +116,7 @@ const VisaDetails = () => {
 
 				if (response) {
 					setfaqData(response?.data);
+					// console.log(response)
 				}
 			} catch (error) {
 				console.log(error);
@@ -211,7 +216,7 @@ const VisaDetails = () => {
 				);
 				if (response) {
 					setPartners(response.data);
-				} 
+				}
 			} catch (error) {
 				console.log(error);
 			}
@@ -253,7 +258,7 @@ const VisaDetails = () => {
 					"GET",
 					`${BASE_URL}visa-category/${id}`
 				);
-				// console.log("response", response);
+				console.log("response", response);
 				if (response) {
 					setData(response.data);
 					dispatch(setChildShowId(id));
@@ -295,6 +300,23 @@ const VisaDetails = () => {
 			fetchCountryImage();
 		}
 	}, [selectedCountry]);
+
+	useEffect(() => {
+		if (faqData) {
+			setMetaData({
+				metaTitle: faqData.metaTitle || "Chalo Ghoomne - Travel Blogs",
+				metaDescription:
+					faqData.metaDescription ||
+					"Explore exciting travel blogs and discover amazing destinations.",
+				metaKeywords:
+					faqData.metaKeywords?.join(", ") ||
+					"travel, adventure, tourism, destinations",
+			});
+			console.log("Updated Meta Data:", metaData);
+		}
+	}, [faqData]); // ✅ Runs when `blog` updates
+
+	if (!faqData) return <div>Loading...</div>;
 
 	const handleApplicationChoice = (choice) => {
 		setApplicationModalOpen(false);
@@ -357,9 +379,12 @@ const VisaDetails = () => {
 					from: fromDate,
 					to: toDate,
 					applicationType: "normal",
-				}, {
+				},
+				{
 					headers: {
-						Authorization: `Bearer ${localStorage.getItem("token")}`,
+						Authorization: `Bearer ${localStorage.getItem(
+							"token"
+						)}`,
 						"Content-Type": "application/json",
 					},
 				}
@@ -435,11 +460,11 @@ const VisaDetails = () => {
 		<div ref={contentRef} className="w-full h-full mx-auto container py-10">
 			<Helmet>
 				<meta charSet="utf-8" />
-				<title>Chalo Ghoomne</title>
-				<link
-					rel="canonical"
-					href="https://chaloghoomne2.vercel.app/"
-				/>
+				<title>{metaData.metaTitle}</title>
+				
+				<meta name="description" content={metaData.metaDescription} />
+				<meta name="keywords" content={metaData.metaKeywords} />
+				<link rel="canonical" href="https://chaloghoomne.com/" />
 			</Helmet>
 			{/* Main Image */}
 			<div
@@ -514,13 +539,16 @@ const VisaDetails = () => {
 					</div>
 				</div>
 				<div className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow-md transition duration-300 h-[20%]">
-					<Link onClick={handleAddToCart} className="flex items-center gap-4">
+					<Link
+						onClick={handleAddToCart}
+						className="flex items-center gap-4"
+					>
 						<IoMdCart className="text-6xl" />
 						<h3 className="text-lg font-semibold">Add to Cart</h3>
 					</Link>
 				</div>
 				<div className=" md:w-[50%] md:px-10 relative w-full ">
-					<div 
+					<div
 						ref={cardRef}
 						style={{
 							backgroundImage: `url(${card})`,

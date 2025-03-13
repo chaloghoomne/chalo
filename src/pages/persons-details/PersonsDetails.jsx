@@ -33,6 +33,7 @@ const PersonDetails = () => {
 		motherName: "",
 		gender: "",
 		ageGroup: "",
+		email: "",
 		passportNumber: "",
 		dob: "",
 		passportIssueDate: "",
@@ -40,7 +41,7 @@ const PersonDetails = () => {
 	});
 	const [phone, setPhone] = useState("");
 	const [phoneOtp, setPhoneOtp] = useState("");
-	const [email, setEmail] = useState("");
+
 	const [otpSentToPhone, setOtpSentToPhone] = useState(false);
 	const [phoneVerified, setPhoneVerified] = useState(false);
 
@@ -210,6 +211,8 @@ const PersonDetails = () => {
 			const response = await axios.post(`${BASE_URL}user-verify-number`, {
 				firstName: formData.firstName,
 				lastName: formData.lastName,
+				gender: formData.gender,
+				dob:formData.dob,
 				phoneNumber: phone,
 				otp,
 			});
@@ -580,20 +583,7 @@ const PersonDetails = () => {
 									className="w-full p-2 text-black border border-gray-300 rounded-md"
 								/>
 							</div>
-							<div>
-								<label className="block text-sm font-semibold">
-									Email
-								</label>
-								<input
-									type="text"
-									name="email"
-									required
-									placeholder="Email"
-									value={formData.email}
-									onChange={handleFields}
-									className="w-full p-2 border rounded-lg"
-								/>
-							</div>
+							
 							{!phoneVerified && validatePhoneNumber(phone) && (
 								<div className="flex items-center gap-2 mt-2">
 									<button
@@ -635,6 +625,20 @@ const PersonDetails = () => {
 									/>
 								</p>
 							)}
+							<div>
+								<label className="block text-sm font-semibold">
+									Email
+								</label>
+								<input
+									type="email"
+									name="email"
+									required
+									placeholder="Email"
+									value={formData.email}
+									onChange={handleFields}
+									className="w-full p-2 border rounded-lg"
+								/>
+							</div>
 						</div>
 
 						<ImageUpload />

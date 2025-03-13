@@ -74,7 +74,7 @@ const BlogDetails = () => {
 			{/* ✅ Blog Content */}
 			<img
 				src={blog.imageUrl}
-				alt={blog.title}
+				alt={blog.imageAlt || blog.title}
 				className="w-full h-64 object-cover mb-6 rounded"
 			/>
 			<div className="flex items-center mb-4">
