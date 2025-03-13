@@ -342,6 +342,7 @@ const VisaDetails = () => {
 				"POST",
 				`${BASE_URL}create-visa-order`,
 				{
+					user: localStorage.getItem("userId"),
 					visaCategory: id,
 					travellersCount: numberOfTravelers,
 					// from: new Date(data[`${selectedType}Date`]).toISOString(),

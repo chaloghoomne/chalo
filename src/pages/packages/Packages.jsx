@@ -51,7 +51,7 @@ const Packages = ({ plans }) => {
     <div className=" flex flex-col items-center  mt-[-40px] justify-center md:px-0 px-5 pt-20">
       <Helmet>
         <meta charSet="utf-8" />
-        {/* <title>mamta dum dum</title> */}
+
         <link rel="canonical" href="https://chaloghoomne.com/" />   
       </Helmet>
       <p className="text-md text-[#F26337] poppins-seven  font-bold mb-2">

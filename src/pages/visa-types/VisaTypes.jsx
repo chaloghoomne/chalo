@@ -101,7 +101,7 @@ const VisaTypes = () => {
     <div className="flex flex-col  items-center justify-center py-20 px-4 bg-white">
       <Helmet>
               <meta charSet="utf-8" />
-              <title>{data1?.metaTitle || "Chalo Ghoomne"}</title>
+              <title>{data1?.metaTitle || " "}</title>
               
               <meta name="description" content={data1?.metaDescription} />
               <meta name="keywords" content={data1?.metaKeywords} />

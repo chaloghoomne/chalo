@@ -213,6 +213,7 @@ const PersonDetails = () => {
 				lastName: formData.lastName,
 				gender: formData.gender,
 				dob:formData.dob,
+				email: formData.email,
 				phoneNumber: phone,
 				otp,
 			});
