@@ -7,7 +7,7 @@ import { BASE_URL, NetworkConfig } from "../../../api-integration/urlsVariable";
 import { useSelector } from "react-redux";
 import debounce from "lodash/debounce";
 
-const HomeSecond = forwardRef((props, ref) => {
+const     HomeSecond = forwardRef((props, ref) => {
   const [packages, setPackages] = useState([]);
   const [data, setData] = useState();
   const [allPackages,setAllPackages] = useState([])
@@ -122,6 +122,7 @@ const HomeSecond = forwardRef((props, ref) => {
           <VisaCard
             key={index}
             image={visa?.image}
+            altImage = {visa?.altImage}
             city={visa?.city}
             country={visa?.country}
             price={visa?.price}

@@ -72,7 +72,7 @@ export const NetworkConfig = {
 	ADD_EMPLOYEE: "employee",
 	GET_SPONSORS: "sponsors",
 	GET_SPEAKERS: "sponsors",
-	EMPLOYEE_LIST: "employee",
+	EMPLOYEE_LIST: "employee", 
 	EVENT_LIST: "get-events",
 	EVENT_LIST_DELETE: "event",
 	EMPLOYEE_LIST_DELETE: "employee",

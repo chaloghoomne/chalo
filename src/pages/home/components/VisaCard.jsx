@@ -8,7 +8,7 @@ import {
 } from "../../../redux/actions/package-id-actions";
 import ImagePlaceholder from "./ImagePlaceholder";
 
-const VisaCard = ({ image, city, country, price, rating, description, id }) => {
+const VisaCard = ({ image, city, country, price, rating, description, id, altImage }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [finalValue, setFinalValue] = useState(30);
@@ -38,7 +38,7 @@ const VisaCard = ({ image, city, country, price, rating, description, id }) => {
             <img
               className="w-full rounded-t-brand rounded-2xl object-cover md:h-[200px] md:transition-all md:ease-in-out 2xl:h-[200px] max-h-[200px]"
               src={image}
-              alt={country}
+              alt={altImage ||country}
             />
           ) : (
             <ImagePlaceholder />

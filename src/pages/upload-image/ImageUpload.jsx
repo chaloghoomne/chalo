@@ -172,13 +172,22 @@ const ImageUpload = () => {
   //   fetchProfileImage();
   // }, []);
 
+  const token = localStorage.getItem("token");
   const uploadImage = async (data) => {
     try {
+
+      console.log(data)
       const response = await fetchDataFromAPI(
         "PUT",
         `${BASE_URL}edit-order-details/${cotravlerId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
         data
       );
+      console.log(data)
       if (response) {
         return response;
       }
@@ -190,27 +199,37 @@ const ImageUpload = () => {
   };
 
   const handleSubmit = async () => {
-    const imageArray = data.map((item) => ({
-      name: item.name,
-      image: images[item.name],
-    }));
-
-    // Now you can send imageArray to your backend
+    console.log("Images before appending to FormData:", images);
+  
     const formData = new FormData();
-    imageArray.forEach((item, index) => {
-      formData.append(`documents[${index}][name]`, item.name);
-    });
-    imageArray.forEach((item) => {
-      if (typeof item.image === "string") {
-        console.log("");
+    data.forEach((item, index) => {
+      const imageFile = images[item.name];
+  
+      if (imageFile) {
+        formData.append(`documents[${index}][image]`, imageFile);
+        console.log(`Added: documents[${index}][image] ->`, imageFile.name);
       } else {
-        formData.append("documents", item.image);
+        console.warn(`Skipping ${item.name}: No image found`);
       }
     });
-    dispatch(showButton(true))
-    const getData = uploadImage(formData);
-    return getData;
+  
+    // console.log("Final FormData contents:");
+    for (let pair of formData.entries()) {
+      console.log(pair[0], pair[1]);
+    }
+  
+    dispatch(showButton(true));
+  
+    try {
+      console.log("Formdata", formData)
+      const response = await uploadImage(formData);
+      console.log("Server Response:", response);
+    } catch (error) {
+      console.error("Error submitting images:", error);
+    }
   };
+  
+  
 
   return (
     <>

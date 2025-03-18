@@ -475,7 +475,7 @@ const VisaDetails = () => {
 				<div className="px-16 w-full relative ">
 					<img
 						src={data1?.image}
-						alt={selectedCountry}
+						alt={data.altImage || selectedCountry}
 						className="w-full bg-cover   h-[450px] rounded-2xl"
 					/>
 					<div className="absolute lg:block hidden inset-0 left-28 -z-10 w-[85%] rounded-2xl bg-gradient-to-r from-blue-600 to-purple-600 blur-md opacity-65"></div>
