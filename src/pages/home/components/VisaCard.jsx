@@ -14,10 +14,13 @@ const VisaCard = ({ image, city, country, price, rating, description, id, altIma
   const [finalValue, setFinalValue] = useState(30);
   const [imageLoaded, setImageLoaded] = useState(false);
 
+  const generateSlug = (title) => 
+    title.toLowerCase().replace(/ /g, "-").replace(/[^\w-]+/g, "");
+
   const handleRedirect = (id, name) => {
     dispatch(getselectedCountry(name));
     dispatch(getCountryId(id));
-    navigate(`/visa-types/${id}`);
+    navigate(`/visa-types/${generateSlug(country)}-${id}`);
   };
 
   const handleseeMore = (value) => {
@@ -29,6 +32,8 @@ const VisaCard = ({ image, city, country, price, rating, description, id, altIma
     img.src = image;
     img.onload = () => setImageLoaded(true);
   }, [image]);
+
+  
 
   return (
     <div className="w-full md:max-w-xl items-start self-start cursor-pointer bg-white rounded-e-2xl overflow-hidden transform hover:scale-105 transition-transform duration-300">

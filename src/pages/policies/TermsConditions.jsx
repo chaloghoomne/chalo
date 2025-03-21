@@ -27,7 +27,7 @@ const TermsConditions = () => {
     <div className="bg-white min-h-screen">
       <Helmet>
         <meta charSet="utf-8" />
-        <title>Chalo Ghoomne</title>
+        <title>{privacyData.title || 'Terms & Conditions'}</title>
         <link rel="canonical" href="https://chaloghoomne.com/" />   
       </Helmet>
       {/* Header Image */}

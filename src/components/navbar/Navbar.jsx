@@ -97,12 +97,16 @@ const Navbar = () => {
 					},
 				}
 			);
+			// if (response.status === 503) {
+			// 	navigate("/503"); // Redirect to Service Unavailable page
+			// }
 
 			if (response?.data) {
 				setFormData(response.data);
 				localStorage.setItem("userId", response.data._id || "");
 			}
 		} catch (error) {
+			navigate("/503")
 			console.error("Error fetching user profile:", error);
 		}
 	};

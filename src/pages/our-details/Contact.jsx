@@ -21,11 +21,13 @@ const ContactUs = () => {
         fetchData()
   }, []);
 
+  
+
   return (
     <div className="bg-white text-black mt-20 p-8 min-h-screen container mx-auto ">
       <Helmet>
         <meta charSet="utf-8" />
-        <title>Chalo Ghoomne</title>
+        <title>Contact Us</title>
         <link rel="canonical" href="https://chaloghoomne.com/" />   
       </Helmet>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

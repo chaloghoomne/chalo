@@ -11,6 +11,7 @@ const Packages = ({ plans }) => {
   const navigate = useNavigate();
   const [selected, setSelected] = useState("");
   const [data, setData] = useState();
+  const [heading,setHeading] = useState()
 
   useEffect(() => {
     if (plans?.length > 0) {
@@ -28,6 +29,7 @@ const Packages = ({ plans }) => {
         if (response) {
           setData(response.data);
         }
+        console.log(response);
       } catch (error) {
         console.log(error);
       }
@@ -35,16 +37,26 @@ const Packages = ({ plans }) => {
     fetchProfileImage();
   }, []);
 
-  const handleselect = (id) => {
+  // console.log(data);
+  const handleselect = (id,heading) => {
     setSelected(id);
+    setHeading(heading)
   };
+  // console.log(selected,heading)
+
+  const generateSlug = (title)=>{
+    return title.toLowerCase().replace(/ /g, "-").replace(/[^\w-]+/g, "");
+  }
+  // console.log(heading)
 
   const handleRedirect = () => {
-    if (selected) {
-      navigate(`/visa-details/${selected}`);
-    } else {
-      toast.error("First select the Package");
+    if (!selected || !heading) {
+        toast.error("First select the Package");
+        return;
     }
+
+    const slug = generateSlug(heading); // Generate slug safely
+    navigate(`/visa-details/${slug}-${selected}`);
   };
 
   return (
@@ -63,7 +75,7 @@ const Packages = ({ plans }) => {
       <div className="space-y-4 w-full flex flex-col gap-5 justify-center ">
         {plans?.map((option, index) => (
           <div
-            onClick={() => handleselect(option?._id)}
+            onClick={() => handleselect(option?._id,option?.visaTypeHeading)}
             key={index}
             className="border md:min-w-[900px] relative gap-3 rounded-[25px] border-blue-500 shadow-sm shadow-blue-200 p-8 py-10 flex  cursor-pointer flex-col justify-between items-center"
           >

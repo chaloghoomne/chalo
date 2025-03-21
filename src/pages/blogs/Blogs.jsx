@@ -8,17 +8,25 @@ import { Helmet } from 'react-helmet';
 const Blog = () => {
   const [blogs, setBlogs] = useState([]);
 
+  
+
   useEffect(() => {
     axios.get(`${BASE_URL}/blogs`)  // Replace with your API URL
       .then(response => setBlogs(response.data.data))
       .catch(error => console.error('Error fetching blogs', error));
   }, []);
 
+  if (blogs.length === 0) {
+    return <div>Loading...</div>;
+  }
+
+  
+
   return (
     <div className="container mt-28 mx-auto px-4">
       <Helmet>
         <meta charSet="utf-8" />
-        <title>Chalo Ghoomne</title>
+        <title>Blogs</title>
         <link rel="canonical" href="https://chaloghoomne.com/" />   
       </Helmet>
       <h1 className="text-4xl font-bold mb-6">Blog</h1>

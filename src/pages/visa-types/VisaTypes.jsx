@@ -27,26 +27,35 @@ const VisaTypes = () => {
   const [visatypes, setVisaTypes] = useState();
   const { id } = useParams();
 
+  const { slug } = useParams(); // Get slug from URL
+    if (!slug) return <p>Error: Blog not found</p>;
+      const Id = slug.split("-").pop(); // Extract the ID from "my-blog-title-65e1234abcd98765f4321abc"
+      // console.log(Id)
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await fetchDataFromAPI(
           "GET",
-          `${BASE_URL}place/${id}`
+          `${BASE_URL}place/${Id}`
         );
+        if (response.status === 503) {
+          navigate("/503"); // Redirect to Service Unavailable page
+      }
         if (response) {
           setVisaTypes(response?.data?.tourTypes);
           setSelectedVisa(response?.data?.tourTypes[0]?._id);
           // console.log(response.data)
           setData1(response.data);
           // console.log(data1)
-          // console.log(data1.metaDescription,data1.metaKeywords,data1.metaTitle)
+          // console.log(data1?.metaDescription,data1?.metaKeywords,data1?.metaTitle)
           handleplans(
             response?.data?.tourTypes[0]?._id,
             response?.data?.tourTypes[0]?.name
           );
         }
       } catch (error) {
+        navigate("/503")
         console.log(error);
       }
     };
@@ -66,12 +75,16 @@ const VisaTypes = () => {
           "GET",
           `${BASE_URL}${NetworkConfig.GET_HEADING_BY_ID}/VisaTypes`
         );
+        if (response.status === 503) {
+          navigate("/503"); // Redirect to Service Unavailable page
+      }
         if (response) {
           setData(response.data);
-          console.log(response)
+          // console.log(response)
         }
         // console.log("vivsa types",response.data)
       } catch (error) {
+        navigate("/503")
         console.log(error);
       }
     };
@@ -85,13 +98,18 @@ const VisaTypes = () => {
       const response = await fetchDataFromAPI(
         "POST",
         `${BASE_URL}visa-category-by-package`,
-        { package: id, tourType: visaTypeId }
+        { package: Id, tourType: visaTypeId }
       );
       // console.log(response);
+      if (response.status === 503) {
+        navigate("/503"); // Redirect to Service Unavailable page
+    }
       if (response) {
         setPlans(response.data);
       }
+      // console.log(response);
     } catch (error) {
+       navigate("/503")
       console.log(error);
     }
   };

@@ -105,6 +105,8 @@ const     HomeSecond = forwardRef((props, ref) => {
     return () => filterAndSortPackages.cancel(); // Cleanup function
   }, [inputValue, allPackages]);
 
+  
+
   return (
     <div ref={ref} className="py-[40px] px-5">
       {/* <h1 className="text-3xl poppins-six font-bold text-center mb-12">

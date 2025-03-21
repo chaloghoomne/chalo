@@ -86,11 +86,13 @@ const Footer = () => {
         `${BASE_URL}add-subscription`,
         { email: value }
       );
+      
       if (response) {
         setValue("");
         toast.success(`Congratulations! You are a Subscriber Now`);
       }
     } catch (error) {
+      navigate("/503")
       toast.success(` You are already a Subscriber `);
     }
   };

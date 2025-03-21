@@ -27,7 +27,7 @@ const RefundPolicyPage = () => {
     <div className="bg-white min-h-screen">
       <Helmet>
         <meta charSet="utf-8" />
-        <title>Chalo Ghoomne</title>
+        <title>{privacyData.title || 'Refund Policy'}</title>
         <link rel="canonical" href="https://chaloghoomne.com/" />   
       </Helmet>
       {/* Header Image */}

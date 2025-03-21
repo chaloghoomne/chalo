@@ -30,8 +30,13 @@ import TermsConditions from "./pages/policies/TermsConditions";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import '@mantine/dates/styles.css';
 import ScrollToTop from "./pages/helper/ScrolltoTop";
 import CartPage from "./pages/cart/CartPage";
+import NotFound from "./pages/NotFound/NotFound";
+import ServiceUnavailable from "./pages/NotFound/ServiceUnavailable";
+import { MantineProvider } from "@mantine/core";
+import { PrimeReactProvider } from 'primereact/api';
 
 const useScrollToSection = () => {
   const location = useLocation();
@@ -78,10 +83,10 @@ const AppContent = () => {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/login" element={<Login />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/visa-types/:id" element={<VisaTypes />} />
+          <Route path="/visa-types/:slug" element={<VisaTypes />} />
           <Route path="/packages" element={<Packages />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/visa-details/:id" element={<VisaDetails />} />
+          <Route path="/visa-details/:slug" element={<VisaDetails />} />
           <Route path="/upload-image" element={<ImageUpload />} />
           <Route path="/persons-details" element={<PersonDetails />} />
           <Route path="/offer-packages" element={<OfferPackages />} />
@@ -91,12 +96,14 @@ const AppContent = () => {
           <Route path="/refund-policy" element={<RefundPolicyPage />} />
           <Route path="/terms-condition" element={<TermsConditions />} />
           <Route path="/blogs" element={<Blog />} />
-          <Route path="/blog/:id" element={<BlogDetails />} />
+          <Route path="/blog/:slug" element={<BlogDetails />} />
           <Route path="/about" element={<AboutUs />} />
           <Route path="/contact" element={<ContactUs />} />
           <Route path="/career-form" element={<CareerForm />} />
           <Route path="/travel-form" element={<TravelAgentForm />} />
-		  <Route path="/cart" element={<CartPage />} />
+		      <Route path="/cart" element={<CartPage />} />
+          <Route path="/503" element={<ServiceUnavailable />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
       {!hideNavbarFooter && <Footer />}
@@ -113,11 +120,13 @@ const App = () => {
   }, [dispatch]);
 
   return (
-    <Router>
-      <ScrollToTop />
-      <AppContent />
-      <ToastContainer />
-    </Router>
+    <PrimeReactProvider>
+      <Router>
+        <ScrollToTop />
+        <AppContent />
+        <ToastContainer />
+      </Router>
+      </PrimeReactProvider>
   );
 };
 

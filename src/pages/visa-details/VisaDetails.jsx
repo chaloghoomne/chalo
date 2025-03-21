@@ -3,7 +3,7 @@ import card from "../../assets/card.png";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import Calendar from "./components/Calender";
 import { RxCross1 } from "react-icons/rx";
 import MonthCalender from "./components/MonthCalender";
@@ -113,12 +113,16 @@ const VisaDetails = () => {
 					"GET",
 					`${BASE_URL}place/${countryId}`
 				);
+				if (response.status === 503) {
+					navigate("/503"); // Redirect to Service Unavailable page
+				}
 
 				if (response) {
 					setfaqData(response?.data);
 					// console.log(response)
 				}
 			} catch (error) {
+				navigate("/503");
 				console.log(error);
 			}
 		};
@@ -141,69 +145,74 @@ const VisaDetails = () => {
 
 	const footerRef = useRef(null);
 
+	
+
+	const handleScroll = useCallback(() => {
+		if (!isLargeScreen || !mainImageRef.current || !cardRef.current || !footerRef.current) {
+			return;
+		}
+
+		const imageBottom = mainImageRef.current.getBoundingClientRect().bottom;
+		const footerTop = footerRef.current.getBoundingClientRect().top;
+		const cardHeight = cardRef.current.offsetHeight;
+		const windowHeight = window.innerHeight;
+		const cardBottom = cardHeight + 80; // 80px offset
+
+		// Check if card would overlap footer
+		const wouldOverlapFooter = windowHeight - footerTop + cardBottom > windowHeight;
+
+		if (imageBottom <= 0 && !wouldOverlapFooter) {
+			// Fix card position when scrolling past the main image
+			const cardLeft = cardRef.current.getBoundingClientRect().left; // Fix left shift
+
+			Object.assign(cardRef.current.style, {
+				position: "fixed",
+				top: "60px",
+				left: `${cardLeft}px`, // Fixed left position
+				width: "26rem",
+				opacity: "1",
+				visibility: "visible",
+				transform: "translateX(0)", // Ensure no unexpected shift
+			});
+		} else if (wouldOverlapFooter) {
+			// Hide card when overlapping footer
+			Object.assign(cardRef.current.style, {
+				opacity: "0",
+				visibility: "hidden",
+			});
+		} else {
+			// Reset to original position
+			Object.assign(cardRef.current.style, {
+				position: "relative",
+				top: "20px",
+				left: "0",
+				width: "26rem",
+				opacity: "1",
+				visibility: "visible",
+				transform: "translateX(0)", // Ensure no shift
+			});
+		}
+	}, [isLargeScreen]);
+
 	useEffect(() => {
-		const handleScroll = () => {
-			if (
-				!isLargeScreen ||
-				!mainImageRef.current ||
-				!cardRef.current ||
-				!footerRef.current
-			)
-				return;
-
-			const imageBottom =
-				mainImageRef.current.getBoundingClientRect().bottom;
-			const footerTop = footerRef.current.getBoundingClientRect().top;
-			const cardHeight = cardRef.current.offsetHeight;
-			const windowHeight = window.innerHeight;
-			const cardBottom = cardHeight + 80; // 80px is the top offset we're using
-
-			// Calculate when card would overlap footer
-			const wouldOverlapFooter =
-				windowHeight - footerTop + cardBottom > windowHeight;
-
-			// If we've scrolled past the main image but not into footer territory
-			if (imageBottom <= 0 && !wouldOverlapFooter) {
-				cardRef.current.style.position = "fixed";
-				cardRef.current.style.top = "60px";
-				cardRef.current.style.right = "47px";
-				cardRef.current.style.left =
-					"${card.getBoundingClientRect().left}px";
-				cardRef.current.style.width = "26rem";
-				cardRef.current.style.opacity = "1";
-				cardRef.current.style.visibility = "visible";
-			} else if (wouldOverlapFooter) {
-				// Hide card when it would overlap footer
-				cardRef.current.style.opacity = "0";
-				cardRef.current.style.visibility = "hidden";
-			} else {
-				// Reset to original position when above the image
-				cardRef.current.style.position = "relative";
-				cardRef.current.style.top = "20px";
-				cardRef.current.style.right = "-80px";
-				cardRef.current.style.width = "26rem";
-				cardRef.current.style.opacity = "1";
-				cardRef.current.style.visibility = "visible";
-			}
-		};
-
 		if (isLargeScreen) {
 			window.addEventListener("scroll", handleScroll);
 			handleScroll(); // Initial position check
-		} else {
+		} else if (cardRef.current) {
 			// Reset styles for mobile view
-			if (cardRef.current) {
-				cardRef.current.style.position = "relative";
-				cardRef.current.style.top = "auto";
-				cardRef.current.style.right = "auto";
-				cardRef.current.style.width = "100%";
-				cardRef.current.style.opacity = "1";
-				cardRef.current.style.visibility = "visible";
-			}
+			Object.assign(cardRef.current.style, {
+				position: "relative",
+				top: "auto",
+				left: "auto",
+				width: "100%",
+				opacity: "1",
+				visibility: "visible",
+			});
 		}
 
 		return () => window.removeEventListener("scroll", handleScroll);
-	}, [isLargeScreen]);
+	}, [isLargeScreen, handleScroll]);
+
 
 	const navigate = useNavigate();
 
@@ -214,10 +223,13 @@ const VisaDetails = () => {
 					"GET",
 					`${BASE_URL}partners`
 				);
-				if (response) {
+				if (response.status === 503) {
+					navigate("/503"); // Redirect to Service Unavailable page
+				} else if (response) {
 					setPartners(response.data);
 				}
 			} catch (error) {
+				navigate("/503");
 				console.log(error);
 			}
 		};
@@ -237,6 +249,9 @@ const VisaDetails = () => {
 					"GET",
 					`${BASE_URL}notes`
 				);
+				if (response.status === 503) {
+					navigate("/503"); // Redirect to Service Unavailable page
+				}
 				if (response) {
 					const filtered = response?.data?.find(
 						(item) => item.type === "Instructions"
@@ -245,31 +260,40 @@ const VisaDetails = () => {
 					setImportantPoints(filtered);
 				}
 			} catch (error) {
+				navigate("/503");
 				console.log(error);
 			}
 		};
 		fetchProfileImage();
 	}, []);
 
+	const {slug} = useParams(); // Get slug from URL
+	// console.log(slug);
+	const Id = slug.split("-").pop(); // Extract the ID from "my-blog-title-65e1234abcd98765f4321abc"
+	// console.log(Id)
+
 	useEffect(() => {
 		const fetchProfileImage = async () => {
 			try {
 				const response = await fetchDataFromAPI(
 					"GET",
-					`${BASE_URL}visa-category/${id}`
+					`${BASE_URL}visa-category/${Id}`
 				);
-				console.log("response", response);
-				if (response) {
+				// console.log("response", response);
+				if (response.status === 503) {
+					navigate("/503"); // Redirect to Service Unavailable page
+				} else if (response) {
 					setData(response.data);
-					dispatch(setChildShowId(id));
+					dispatch(setChildShowId(Id));
 				}
 			} catch (error) {
+				navigate("/503");
 				console.log(error);
 			}
-			dispatch(setVisaId(id));
+			dispatch(setVisaId(Id));
 		};
 		fetchProfileImage();
-	}, [id]);
+	}, [Id]);
 
 	useEffect(() => {
 		dispatch(numberofCoTravelers(numberOfTravelers));
@@ -312,7 +336,7 @@ const VisaDetails = () => {
 					faqData.metaKeywords?.join(", ") ||
 					"travel, adventure, tourism, destinations",
 			});
-			console.log("Updated Meta Data:", metaData);
+			// console.log("Updated Meta Data:", metaData);
 		}
 	}, [faqData]); // ✅ Runs when `blog` updates
 
@@ -353,6 +377,10 @@ const VisaDetails = () => {
 				}
 			);
 
+			if (response.status === 503) {
+				navigate("/503"); // Redirect to Service Unavailable page
+			}
+
 			if (response) {
 				dispatch(PackageId(response?.data?.visaOrder?._id));
 				dispatch(numberofCoTravelers(numberOfTravelers));
@@ -361,6 +389,7 @@ const VisaDetails = () => {
 			setIsModalOpen(false);
 			navigate("/persons-details");
 		} catch (error) {
+			navigate("/503");
 			console.log(error);
 		}
 	};
@@ -390,6 +419,9 @@ const VisaDetails = () => {
 					},
 				}
 			);
+			if (response.status === 503) {
+				navigate("/503"); // Redirect to Service Unavailable page
+			}
 			// console.log("Dikkat kya hai",response)
 			if (response) {
 				dispatch(PackageId(response?.data?.visaOrder?._id));
@@ -397,6 +429,7 @@ const VisaDetails = () => {
 				dispatch(coTraveler(response?.data?.orderDetails?._id));
 			}
 		} catch (error) {
+			navigate("/503");
 			console.log(error);
 		}
 		navigate("/persons-details");
@@ -462,7 +495,7 @@ const VisaDetails = () => {
 			<Helmet>
 				<meta charSet="utf-8" />
 				<title>{metaData.metaTitle}</title>
-				
+
 				<meta name="description" content={metaData.metaDescription} />
 				<meta name="keywords" content={metaData.metaKeywords} />
 				<link rel="canonical" href="https://chaloghoomne.com/" />
@@ -495,6 +528,10 @@ const VisaDetails = () => {
 					<span className="text-blue-500 font-bold text-3xl">
 						{new Date().toDateString()?.slice(4, 100)}
 					</span>
+
+					<div className="text-md w-full md:w-[60%] poppins-four  py-5 text-black px-10">
+						{data?.longDescription}
+					</div>
 
 					<div className="mb-6 w-full">
 						<div className="md:w-[85%] w-80 bg-white rounded-lg  py-4">
@@ -539,23 +576,15 @@ const VisaDetails = () => {
 						</div>
 					</div>
 				</div>
-				<div className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow-md transition duration-300 h-[20%]">
-					<Link
-						onClick={handleAddToCart}
-						className="flex items-center gap-4"
-					>
-						<IoMdCart className="text-6xl" />
-						<h3 className="text-lg font-semibold">Add to Cart</h3>
-					</Link>
-				</div>
-				<div className=" md:w-[50%] md:px-10 relative w-full ">
+
+				<div className=" xl:w-[50%] lg:px-10 relative w-full lg:ml-48">
 					<div
 						ref={cardRef}
-						style={{
-							backgroundImage: `url(${card})`,
-							// transition: 'all 0.3s ease-in-out'
-						}}
-						className="w-full bg-cover z-30 pb-16 mx-20 mt-7 bg-transparent md:p-10 p-6"
+						// style={{
+						// 	backgroundImage: `url(${card})`,
+						// 	// transition: 'all 0.3s ease-in-out'
+						// }}
+						className="w-full bg-cover z-30 pb-16  mt-7 bg-white shadow-xl rounded-xl lg:p-10 p-6"
 					>
 						<div className="flex justify-between px-5 items-center  mb-4">
 							<h2 className="text-2xl  flex flex-row poppins-six relative top-5 font-semibold ">
@@ -661,10 +690,17 @@ const VisaDetails = () => {
 						<div className="flex justify-center items-center">
 							<button
 								onClick={handleStartApplication}
-								className="bg-gradient-to-r mt-[10px] relative cursor-pointer top-2 from-[#3180CA] to-[#7AC7F9] text-white py-3 px-4 rounded-full text-2xl poppins-six w-[80%]"
+								className="bg-gradient-to-r mt-[10px] relative cursor-pointer top-2 from-[#3180CA] to-[#7AC7F9] text-white py-2 px-4 rounded-full text-2xl poppins-six w-[80%]"
 							>
 								Start Application
 							</button>
+
+							<Link
+								onClick={handleAddToCart}
+								className=" mt-[10px] relative cursor-pointer top-2 py-3 px-4 rounded-full"
+							>
+								<IoMdCart className="text-4xl" />
+							</Link>
 						</div>
 					</div>
 				</div>
@@ -768,9 +804,6 @@ const VisaDetails = () => {
 				<FAQs ref={faqRef} data={faqData?.faq} />
 			</div>
 
-			<div className="text-md w-full md:w-[60%] poppins-four py-5 text-black px-10">
-				{data?.longDescription}
-			</div>
 			{/* Partners Section */}
 			{/* <div className="w-full md:w-[60%] p-6 ml-[8px]">
 				<h2 className="text-3xl font-bold  mb-6">
@@ -840,17 +873,21 @@ const VisaDetails = () => {
 
 			{/* Calendar Modal */}
 			{isCalendarModalOpen && (
-				<div className="fixed inset-0 flex z-50 items-center justify-center bg-black bg-opacity-50">
-					<div className="bg-white relative m-4 mt-5 max-h-[600px] overflow-auto rounded-lg shadow-lg w-full max-w-md">
-						<h2 className="text-xl poppins-four font-bold text-center my-2">
+				<div className="fixed inset-0 flex z-50  justify-center bg-black bg-opacity-50">
+					<div className="bg-white relative m-4 mt-5 max-h-[600px] overflow-auto rounded-lg shadow-lg w-full max-w-xl">
+						<h2 className="text-xl p-4 poppins-four font-bold text-center">
 							Select Departure Date
 						</h2>
 
-						<MonthCalender
-							onClose={
-								!selectedType ? proceedApplication : proceedFunc
-							}
-						/>
+						<div className="  flex justify-center">
+							<MonthCalender
+								onClose={
+									!selectedType
+										? proceedApplication
+										: proceedFunc
+								}
+							/>
+						</div>
 						<button
 							onClick={() => setCalendarModalOpen(false)}
 							className="absolute right-2 top-3 text-2xl font-bold"

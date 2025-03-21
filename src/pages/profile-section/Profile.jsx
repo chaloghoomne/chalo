@@ -35,7 +35,7 @@ function Profile() {
     <div className="flex flex-col mt-16 h-[100%] min-h-screen bg-gray-100">
       <Helmet>
         <meta charSet="utf-8" />
-        <title>Chalo Ghoomne</title>
+        <title>User Profile</title>
         <link rel="canonical" href="https://chaloghoomne.com/" />   
       </Helmet>
       <div className="w-full h-96 bg-cover object-cover">

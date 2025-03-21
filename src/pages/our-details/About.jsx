@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { BASE_URL } from "../../api-integration/urlsVariable";
 import { Helmet } from "react-helmet";
 import { fetchDataFromAPI } from "../../api-integration/fetchApi";
+import { useLocation } from "react-router-dom";
 
 const AboutUs = () => {
 	const [aboutUsData, setAboutUsData] = useState({
@@ -51,6 +52,8 @@ const AboutUs = () => {
     }, [aboutUsData]); // ✅ Runs when `blog` updates
   
     if (!aboutUsData) return <div>Loading...</div>;
+
+
 
 	return (
 		<div className="bg-white mx-auto container text-black mt-20 p-8">

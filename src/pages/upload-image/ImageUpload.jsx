@@ -96,6 +96,9 @@ const ImageUpload = () => {
           "GET",
           `${BASE_URL}visa-category/${visaId}`
         );
+        if (response.status === 503) {
+          navigate("/503"); // Redirect to Service Unavailable page
+      }
         if (response) {
           const filterDoc = response?.data?.documents.filter(
             (doc) => doc.show === "true" || doc.show === true
@@ -104,6 +107,7 @@ const ImageUpload = () => {
           setData(filterDoc);
         }
       } catch (error) {
+        navigate("/503")
         console.log(error);
       }
     };
@@ -118,10 +122,14 @@ const ImageUpload = () => {
           "GET",
           `${BASE_URL}user-visa-order/${packageId}`
         );
+        if (response.status === 503) {
+          navigate("/503"); // Redirect to Service Unavailable page
+      }
         if (response) {
           setPackageData(response?.data);
         }
       } catch (error) {
+        navigate("/503")
         console.log(error);
       }
     };
@@ -140,9 +148,13 @@ const ImageUpload = () => {
           "GET",
           `${BASE_URL}order-detail/${cotravlerId}`
         );
+        if (response.status === 503) {
+          navigate("/503"); // Redirect to Service Unavailable page
+      }
         if (response) {
         }
       } catch (error) {
+        navigate("/503")
         console.log(error);
       }
     };
@@ -187,11 +199,15 @@ const ImageUpload = () => {
         },
         data
       );
-      console.log(data)
+      // console.log(data)
+      if (response.status === 503) {
+        navigate("/503"); // Redirect to Service Unavailable page
+    }
       if (response) {
         return response;
       }
     } catch (error) {
+      navigate("/503")
       console.log(error);
     } finally {
       setUploading(false);

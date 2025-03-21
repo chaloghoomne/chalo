@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { BASE_URL } from "../../api-integration/urlsVariable";
 import { Helmet } from "react-helmet";
@@ -9,6 +9,7 @@ import { fetchDataFromAPI } from "../../api-integration/fetchApi";
 
 const BlogDetails = () => {
 	const { id } = useParams();
+	const navigate = useNavigate()
 	const [blog, setBlog] = useState(null);
 	const [metaData, setMetaData] = useState({
 		metaTitle: "Chalo Ghoomne - Travel Blogs",
@@ -17,16 +18,25 @@ const BlogDetails = () => {
 		metaKeywords: "travel, adventure, tourism, destinations",
 	});
 
+	const { slug } = useParams(); // Get slug from URL
+	if (!slug) return <p>Error: Blog not found</p>;
+    const blogId = slug.split("-").pop(); // Extract the ID from "my-blog-title-65e1234abcd98765f4321abc"
+    console.log(blogId)
+    
+
 	// ✅ Fetch Blog Data
 	useEffect(() => {
 		const fetchBlog = async () => {
 			try {
 				const res = await fetchDataFromAPI(
 					"GET",
-					`${BASE_URL}blog/${id}`
+					`${BASE_URL}blog/${blogId}`
 				);
 				// const res = await axios.get(`${BASE_URL}blog/${id}`);
-				console.log("API Response:", res.data);
+				// console.log("API Response:", res.data);
+				// if (res.status === 503) {
+				// 	navigate("/503"); // Redirect to Service Unavailable page
+				// }
 
 				// Check if the response is structured as expected
 				if (res.data) {
@@ -35,6 +45,7 @@ const BlogDetails = () => {
 					console.warn("Unexpected API response format:", res.data);
 				}
 			} catch (error) {
+				navigate("/503")
 				console.error("Error fetching blog details:", error);
 			}
 		};
@@ -42,10 +53,16 @@ const BlogDetails = () => {
 		fetchBlog();
 	}, [id]);
 
+
+	// const location = useLocation();
+	// console.log(location.pathname);
+			
 	// ✅ Set Meta Data after `blog` is updated
 	useEffect(() => {
 		if (blog) {
+			
 			setMetaData({
+				
 				metaTitle: blog.metaTitle || "Chalo Ghoomne - Travel Blogs",
 				metaDescription:
 					blog.metaDescription ||
@@ -54,7 +71,7 @@ const BlogDetails = () => {
 					blog.metaKeywords?.join(", ") ||
 					"travel, adventure, tourism, destinations",
 			});
-			console.log("Updated Meta Data:", metaData);
+			// console.log("Updated Meta Data:", metaData);
 		}
 	}, [blog]); // ✅ Runs when `blog` updates
 

@@ -23,11 +23,13 @@ const PrivacyPolicyPage = () => {
     return <div className="text-white text-center">Loading...</div>;
   }
 
+  
+
   return (
     <div className="bg-white min-h-screen">
       <Helmet>
         <meta charSet="utf-8" />
-        <title>Chalo Ghoomne</title>
+        <title>{privacyData.title || 'Privacy Policy'}</title>
         <link rel="canonical" href="https://chaloghoomne.com/" />   
       </Helmet>
       {/* Header Image */}
