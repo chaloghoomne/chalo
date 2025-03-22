@@ -141,25 +141,25 @@ const Footer = () => {
           experience and a team of experts, we provide personalized services
           to ensure a smooth and hassle-free visa application experience.
         </p>
-        <div className="mt-4 flex flex-wrap gap-4">
+        <div className="mt-4 flex flex-wrap justify-center items-center gap-4">
           <a href="https://www.facebook.com/chaloghoomneofficial/" target="_blank" rel="noopener noreferrer">
-            <FaFacebookF className="w-6 h-6 hover:scale-110" />
+            <FaFacebookF className="w-8 h-8 hover:-scale-x-100 transition-all hover:bg-yellow-500 border border-white p-1 rounded-lg" />
           </a>
           <a href="https://www.instagram.com/chaloghoomneofficial/" target="_blank" rel="noopener noreferrer">
-            <FaInstagram className="w-6 h-6 hover:scale-110" />
+            <FaInstagram className="w-8 h-8 hover:-scale-x-100 transition-all hover:bg-yellow-500 border border-white p-1 rounded-lg" />
           </a>
-          <a href="https://linkedin.com/company/chaloghoomneofficial" target="_blank" rel="noopener noreferrer">
-            <FaLinkedinIn className="w-6 h-6 hover:scale-110" />
-          </a>
+          {/* <a href="https://linkedin.com/company/chaloghoomneofficial" target="_blank" rel="noopener noreferrer">
+            <FaLinkedinIn className="w-8 h-8 hover:-scale-x-100 transition-all hover:bg-yellow-500 border border-white p-1 rounded-lg" />
+          </a> */}
           <a href="https://x.com/chaloghoomne1" target="_blank" rel="noopener noreferrer">
-            <FaTwitter className="w-6 h-6 hover:scale-110" />
+            <FaTwitter className="w-8 h-8 hover:-scale-x-100 transition-all hover:bg-yellow-500 border border-white p-1 rounded-lg" />
           </a>
           <a href="https://wa.me/919555535252" target="_blank" rel="noopener noreferrer">
-            <FaWhatsapp className="w-6 h-6 hover:scale-110" />
+            <FaWhatsapp className="w-8 h-8 hover:-scale-x-100 transition-all hover:bg-yellow-500 border border-white p-1 rounded-lg" />
           </a>
-          <a href="https://in.pinterest.com/chaloghoomneofficial" target="_blank" rel="noopener noreferrer">
-            <FaPinterest className="w-6 h-6 hover:scale-110" />
-          </a>
+          {/* <a href="https://in.pinterest.com/chaloghoomneofficial" target="_blank" rel="noopener noreferrer">
+            <FaPinterest className="w-8 h-8 hover:-scale-x-100 transition-all hover:bg-yellow-500 border border-white p-1 rounded-lg" />
+          </a> */}
         </div>
       </div>
 
@@ -226,38 +226,31 @@ const Footer = () => {
       <div>
         <h3 className="text-lg font-bold text-white">Contact Us</h3>
         <ul className="mt-4 space-y-2 text-white">
-          <p className="flex items-center gap-2" style={{ lineHeight: "2rem" }}>
+          <p className="flex items-center gap-2 w-[100px] md:w-[400px]" style={{ lineHeight: "2rem" }}>
             <FaMapMarkerAlt className="w-4 h-4" />
-            { formData?.addressLine1 ||"Siri Fort, New Delhi - 110049"}
+            { formData?.addressLine1 + " " + formData?.addressLine2  ||"Siri Fort, New Delhi - 110049"}
           </p>
-          <p className="flex items-center gap-2" style={{ lineHeight: "2rem" }}>
+          {/* <p className="flex items-center gap-2" style={{ lineHeight: "2rem" }}>
             <FaMapMarkerAlt className="w-4 h-4" />
             { formData?.addressLine2 ||"Siri Fort, New Delhi - 110049"}
-          </p>
+          </p> */}
           <p className="flex items-center gap-2" style={{ lineHeight: "2rem" }}>
             <FaGlobe className="inline-block w-4 h-4 mr-2" />
           { formData?.supportEmail ||"  www.chaloghoomne.com"}
           </p>
           <p className="flex items-center gap-2" style={{ lineHeight: "2rem" }}>
             <FaPhone className="inline-block w-4 h-4 mr-2" />
-            { formData?.phoneNumber || 9555535252}
+            { "+"+91+" "  + formData?.phoneNumber || 9555535252}
           </p>
         </ul>
 
-        <div className="mt-4">
-          <h4 className="text-md font-semibold text-white mb-2">Payment Methods</h4>
-          <div className="flex flex-wrap gap-2">
-            <SiVisa className="w-8 h-8" />
-            <FaCcMastercard className="w-8 h-8" />
-            <BsPaypal className="w-8 h-8" color="blue" />
-            <SiAmazonpay className="w-8 h-8" color="yellow" />
-          </div>
-        </div>
+        
+       
       </div>
     </div>
-      <div className="py-2 bg-[#1E231F] flex justify-between px-14 items-center ">
-        <p className="text-white text-md poppins-four">Copyright c 2023</p>
-        <p className="text-white text-md poppins-four">
+      <div className="py-2 bg-[#1E231F] flex px-14 justify-center">
+        {/* <p className="text-white text-md poppins-four">Copyright c 2025</p> */}
+        <p className="text-white "> Copyright c 2025.
           All Rights Reserved
         </p>
       </div>
