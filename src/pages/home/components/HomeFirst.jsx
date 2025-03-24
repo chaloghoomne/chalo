@@ -69,7 +69,7 @@ const HomeFirst = ({ homeSecondRef }) => {
   }
 
   return (
-    <div className="relative flex flex-col shadow-lg mt-10 md:flex-row items-center gap-6 md:justify-between h-auto px-6 py-8 md:py-12 rounded-xl overflow-hidden" style={{ backgroundImage: `url(${flight})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+    <div className="relative h-screen flex flex-col shadow-lg mt-10 md:flex-row items-center gap-6 md:justify-between px-6 py-8 md:py-12 rounded-xl w-screen overflow-hidden" style={{ backgroundImage: `url(${flight})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
       {/* Desktop Content */}
       <div className="md:flex hidden text-white flex-col items-start w-full md:w-[50%] text-left p-2 md:pt-12 md:pb-8 z-10">
         <AnimatePresence>

@@ -44,7 +44,7 @@ const HomeSecond = forwardRef((props, ref) => {
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: containerRef.current,
-        start: "top 50%",
+        start: "top 10%",
         end: "bottom 20%",
         toggleActions: "play none none reverse",
       },
@@ -87,7 +87,7 @@ const HomeSecond = forwardRef((props, ref) => {
       "-=0.7",
     )
 
-    // Animate paragraph with a fade-in effect
+    // Animate paragraph with a fade-in effect  
     tl.fromTo(
       paragraphRef.current,
       {
