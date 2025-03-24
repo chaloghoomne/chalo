@@ -8,7 +8,10 @@ import { fetchDataFromAPI } from "../../../api-integration/fetchApi"
 import { BASE_URL, NetworkConfig } from "../../../api-integration/urlsVariable"
 import { searchPackageByValue } from "../../../redux/actions/package-id-actions"
 import homefirst from "../../../assets/homefirst.png";
-import myname from "../../../assets/myname.mp4"
+import india from "../../../assets/india.png"
+import uae from "../../../assets/UAE.png"
+import italy from "../../../assets/Italy.png"
+import flight from "../../../assets/flight3.jpg"
 
 const HomeFirst = ({ homeSecondRef }) => {
   const [data, setData] = useState(null)
@@ -66,7 +69,7 @@ const HomeFirst = ({ homeSecondRef }) => {
   }
 
   return (
-    <div className="relative flex flex-col shadow-lg mt-10 md:flex-row items-center gap-6 md:justify-between h-auto px-6 py-8 md:py-12 bg-gradient-to-r from-[#3180CA] to-[#7AC7F9] rounded-xl overflow-hidden">
+    <div className="relative flex flex-col shadow-lg mt-10 md:flex-row items-center gap-6 md:justify-between h-auto px-6 py-8 md:py-12 rounded-xl overflow-hidden" style={{ backgroundImage: `url(${flight})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
       {/* Desktop Content */}
       <div className="md:flex hidden text-white flex-col items-start w-full md:w-[55%] text-left p-2 md:pt-12 md:pb-8 z-10">
         <AnimatePresence>
@@ -148,13 +151,55 @@ const HomeFirst = ({ homeSecondRef }) => {
             <motion.img
               src={homefirst}
               alt="Travel Destination"
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover absolute top-14 mb-10 lg:top-10 lg:right-24"
               initial={{ scale: 1 }}
               animate={{
                 scale: isHovering ? 1.22 : 1.2,
               }}
               transition={{
                 scale: { duration: 0.4 },
+              }}
+            />
+            <motion.img
+              src={italy}
+              alt="Travel Destination"
+              className="h-24 w-16 absolute top-44 right-3 md:top-52 md:-right-2 lg:right-24"
+              initial={{ scale: 0.5 }}
+              animate={{
+                scale: isHovering ? 1.22 : 1.2,
+                x: [-4, 4, -4],
+              }}
+              transition={{
+                scale: { duration: 0.4 },
+                x: { duration: 2, repeat: Infinity, ease: "easeInOut" },
+              }}
+            />
+            <motion.img
+              src={india}
+              alt="Travel Destination"
+              className="h-28 w-24 absolute -bottom-9 left-4 md:bottom-2 md:left-8 lg:-bottom-14 lg:-left-5"
+              initial={{ scale: 0.8 }}
+              animate={{
+                scale: isHovering ? 1.22 : 1.2,
+                x: [-4, 4, -4],
+              }}
+              transition={{
+                scale: { duration: 0.4 },
+                x: { duration: 2, repeat: Infinity, ease: "easeInOut" },
+              }}
+            />
+            <motion.img
+              src={uae}
+              alt="Travel Destination"
+              className="h-28 w-24 absolute top-16 left-8 md:top-16 md:left-4 lg:top-20 lg:-left-10"
+              initial={{ scale: 0.8 }}
+              animate={{
+                scale: isHovering ? 1.22 : 1.2,
+                x: [-4, 4, -4],
+              }}
+              transition={{
+                scale: { duration: 0.4 },
+                x: { duration: 2, repeat: Infinity, ease: "easeInOut" },
               }}
             />
             {/* <video
@@ -182,7 +227,7 @@ const HomeFirst = ({ homeSecondRef }) => {
               transition={{ duration: 0.5 }}
               className="w-full"
             >
-              <h1 className="text-2xl font-bold mb-4">
+              <h1 className="text-2xl font-bold my-5 ">
                 {data?.title || "Get the VISA simple, fast & Reliable"}
                 <p className="text-xl mt-2">{data?.subHeading || "Get your visa with Chalo Ghoomne"}</p>
               </h1>

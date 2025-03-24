@@ -26,6 +26,7 @@ const Navbar = () => {
 	);
 	const [count, setCount] = useState(0);
 	const [noti, setNoti] = useState("");
+	const [cartCount, setCartCount] = useState(0);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const location = useLocation();
@@ -82,7 +83,7 @@ const Navbar = () => {
 	};
 	useEffect(() => {
 		handleNotification();
-	}, [isNotiOpen]);
+	}, []);
 
 	const fetchData = async (token) => {
 		if (!token) return;
@@ -106,14 +107,14 @@ const Navbar = () => {
 				localStorage.setItem("userId", response.data._id || "");
 			}
 		} catch (error) {
-			navigate("/503")
+			navigate("/503");
 			console.error("Error fetching user profile:", error);
 		}
 	};
 
 	useEffect(() => {
 		fetchData(token);
-	}, [token]);
+	}, []);
 
 	// Listen for localStorage changes (detects when OTP sets the token)
 	useEffect(() => {
@@ -125,6 +126,15 @@ const Navbar = () => {
 
 		window.addEventListener("storage", handleStorageChange);
 		return () => window.removeEventListener("storage", handleStorageChange);
+	}, []);
+
+	useEffect(() => {
+		const name = JSON.parse(
+			localStorage.getItem("persist:root")
+		).CartReducer;
+		const cartCount = name.cartItems ? cartData.cartItems.length : 0;
+		console.log("Total Cart Items:", cartCount);
+		setCartCount(cartCount);
 	}, []);
 
 	useEffect(() => {
@@ -209,88 +219,119 @@ const Navbar = () => {
 								}`}
 							>
 								<div
+									onClick={() => {
+										navigate("/");
+									}}
+									className="block poppins-five pop px-3 py-2 cursor-pointer rounded-md text-[16px] font-normal"
+								>
+									Home
+								</div>
+								<div
 									onClick={handleVisaClick}
 									className="block poppins-five pop px-3 py-2 cursor-pointer rounded-md text-[16px] font-normal"
 								>
 									Visa
 								</div>
-								<div className="block poppins-five pop px-3 py-2 cursor-pointer rounded-md text-[16px] font-normal">
-									Visa Appointments
+								<div
+									onClick={() => {
+										navigate("/about");
+									}}
+									className="block poppins-five pop px-3 py-2 cursor-pointer rounded-md text-[16px] font-normal"
+								>
+									About Us
 								</div>
 								<div
 									onClick={() => navigate("/travel-form")}
 									className="block poppins-five pop px-3 py-2 cursor-pointer rounded-md text-[16px] font-normal"
-								>
-									Agent
-								</div>
+								></div>
 							</div>
 						</div>
 
 						<div
 							className={`${
 								whichLogo ? "text-white" : "text-black"
-							} absolute hidden inset-y-0 right-0 sm:flex items-center pr-2 sm:static sm:inset-auto sm:ml-20 sm:pr-0`}
+							} absolute hidden inset-y-0 right-0 sm:flex gap-4 items-center pr-2 sm:static sm:inset-auto sm:ml-20 sm:pr-0`}
 						>
-							<a
-								href="tel:+919555535252"
-								className={`block poppins-five relative ${
-									!localStorage.getItem("token")
-										? "left-0"
-										: "left-8"
-								} flex items-center justify-center gap-2 pop px-3 py-2 ml-6 rounded-md text-[18px] font-normal`}
-							>
-								<MdWifiCalling3
-									size={20}
-									color={whichLogo ? "white" : "black"}
-								/>{" "}
-								9555535252
-							</a>
-							<div className=" mx-4 p-5">
-								<div className="text-red-600 font-bold text-xs">
-									<h4>{count}</h4>
-								</div>
-								<IoIosNotifications
-									size={20}
-									onClick={() => {
-										setIsNotiOpen(!isNotiOpen);
-									}}
-								/>
-								<div
-									className={`absolute  scroll-smooth w-80 h-60 bg-white ${
-										isNotiOpen
-											? "flex flex-wrap justify-center"
-											: "hidden"
-									} overflow-y-scroll right-10 border-2 rounded-lg`}
-								>
-									{noti && noti.length > 0 ? (
-										noti.map((item, index) => (
-											<div
-												className="
-                    p-3 flex justify-left border-2 border-black rounded-lg m-2 w-full overflow-x-hidden"
-												key={index}
-											>
-												<img
-													className="w-8 h-8"
-													src={item.image}
-													alt=""
-												/>
-												<span className=" p-2 text-wrap text-black">
-													{item.title}
-												</span>
-												{/* <h4>{item.title}</h4> */}
-											</div>
-										))
-									) : (
-										<p className="text-gray-500">
-											No new notifications
-										</p>
+							
+
+							<div className={`relative ${count.length ===0 ? 'hidden':''} `}>
+								{/* Notification Icon & Count */}
+								<div className="relative flex items-center gap-2 cursor-pointer">
+									{/* Notification Count */}
+									{count > 0 && (
+										<span className="absolute -top-1 -right-2 bg-red-600 text-white text-xs font-bold px-2 py-0.5 rounded-full">
+											{count}
+										</span>
 									)}
+
+									{/* Notification Icon */}
+									<IoIosNotifications
+										size={24}
+										className="text-gray-700 hover:text-gray-900 transition duration-200"
+										onClick={() =>
+											setIsNotiOpen(!isNotiOpen)
+										}
+									/>
+								</div>
+
+								{/* Notification Dropdown */}
+								<div
+									className={`absolute right-0 top-12 w-80 bg-white shadow-lg border border-gray-200 rounded-lg overflow-hidden transition-all duration-300 ${
+										isNotiOpen
+											? "opacity-100 scale-100 visible"
+											: "opacity-0 scale-95 invisible"
+									}`}
+								>
+									<div className="p-4 max-h-60 overflow-y-auto">
+										{noti && noti.length > 0 ? (
+											noti.map((item, index) => (
+												<div
+													key={index}
+													className="flex items-center gap-3 border-b border-gray-200 p-3 hover:bg-gray-100 transition"
+												>
+													{/* Notification Image */}
+													<img
+														src={item.image}
+														alt="Notification"
+														className="w-10 h-10 rounded-full object-cover"
+													/>
+
+													{/* Notification Text */}
+													<span className="text-sm text-gray-700">
+														{item.title}
+													</span>
+												</div>
+											))
+										) : (
+											<p className="text-gray-500 text-center py-4">
+												No new notifications
+											</p>
+										)}
+									</div>
 								</div>
 							</div>
-							<div className="flex flex-col ">
-								<Link to="/cart">
-									<IoMdCart className="h-6 w-8" />
+							<div className="relative flex items-center">
+								<Link to="/cart" className="relative group">
+									{/* Cart Icon */}
+									<IoMdCart className="h-7 w-8 text-gray-700 hover:text-gray-900 transition duration-300" />
+
+									{/* Cart Badge (Visible only if cartCount > 0) */}
+									{cartCount > 0 && (
+										<span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold px-2 py-0.5 rounded-full">
+											{cartCount}
+										</span>
+									)}
 								</Link>
+							</div>
+							<div onClick = {()=>{
+										navigate("/travel-form")
+									}}
+									className="text-white hover:underline cursor-pointer  p-2 rounded-full bg-blue-600">
+
+									
+								
+									Join as Agent
+
 							</div>
 							{!localStorage.getItem("token") ? (
 								<Link
