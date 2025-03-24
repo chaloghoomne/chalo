@@ -71,7 +71,7 @@ const HomeFirst = ({ homeSecondRef }) => {
   return (
     <div className="relative flex flex-col shadow-lg mt-10 md:flex-row items-center gap-6 md:justify-between h-auto px-6 py-8 md:py-12 rounded-xl overflow-hidden" style={{ backgroundImage: `url(${flight})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
       {/* Desktop Content */}
-      <div className="md:flex hidden text-white flex-col items-start w-full md:w-[55%] text-left p-2 md:pt-12 md:pb-8 z-10">
+      <div className="md:flex hidden text-white flex-col items-start w-full md:w-[50%] text-left p-2 md:pt-12 md:pb-8 z-10">
         <AnimatePresence>
           {!loading && (
             <motion.div
@@ -93,7 +93,7 @@ const HomeFirst = ({ homeSecondRef }) => {
                   "We make your travel dreams come true with hassle-free visa services and exclusive travel packages."}
               </p>
 
-              <div className="flex items-center xl:w-[75%] px-6 flex-wrap gap-5 p-4 bg-white/80 backdrop-blur-sm rounded-xl shadow-md">
+              <div className="flex items-center md:w-[80%] px-6 flex-wrap gap-5 p-4 bg-white/80 backdrop-blur-sm rounded-xl shadow-md">
                 <div className="flex justify-start px-5 bg-white border border-gray-200 rounded-lg items-center shadow-sm">
                   <CiSearch size={24} className="text-gray-500" />
                   <input
@@ -101,13 +101,13 @@ const HomeFirst = ({ homeSecondRef }) => {
                     placeholder="Where to..."
                     value={inputValue}
                     onChange={handleInputValue}
-                    className="flex-grow focus:outline-none w-40 md:w-56 lg:w-64 text-black p-3 rounded-lg"
+                    className="flex-grow focus:outline-none w-[100%] xl:w-64 text-black p-3 rounded-lg"
                   />
                 </div>
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.98 }}
-                  className="bg-[#F26337] min-w-28 text-white font-medium py-3 px-6 rounded-full shadow-md"
+                  className="bg-[#F26337] min-w-28 sm:w-full xl:w-36 text-white font-medium py-3 px-6 rounded-full shadow-md"
                 >
                   Get Started
                 </motion.button>

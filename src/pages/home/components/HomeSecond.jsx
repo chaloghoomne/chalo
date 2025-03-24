@@ -1,12 +1,19 @@
 "use client"
 
-import { forwardRef, useEffect, useState } from "react"
+import { forwardRef, useEffect, useRef, useState } from "react"
 import VisaCard from "./VisaCard"
 import { fetchDataFromAPI } from "../../../api-integration/fetchApi"
 import { BASE_URL, NetworkConfig } from "../../../api-integration/urlsVariable"
 import { useSelector } from "react-redux"
 import debounce from "lodash/debounce"
 import { MdKeyboardArrowRight } from "react-icons/md"
+import { gsap } from "gsap"
+import { ScrollTrigger } from "gsap/ScrollTrigger"
+
+// Only register plugins on the client side
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger)
+}
 
 const HomeSecond = forwardRef((props, ref) => {
   const [packages, setPackages] = useState([])
@@ -15,6 +22,91 @@ const HomeSecond = forwardRef((props, ref) => {
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState(null)
   const [showAll, setShowAll] = useState(false)
+
+  const containerRef = useRef(null)
+  const elementRef = useRef(null)
+  const headingRef = useRef(null)
+  const paragraphRef = useRef(null)
+
+  useEffect(() => {
+    // Ensure we're in the browser and refs are available
+    if (
+      typeof window === "undefined" ||
+      !containerRef.current ||
+      !elementRef.current ||
+      !headingRef.current ||
+      !paragraphRef.current
+    )
+      return
+
+    // Create a main timeline
+    let ctx = gsap.context(() => {
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: containerRef.current,
+        start: "top 50%",
+        end: "bottom 20%",
+        toggleActions: "play none none reverse",
+      },
+    })
+
+    // Element animation with improved motion
+    tl.fromTo(
+      elementRef.current,
+      {
+        x: 100,
+        y: 30,
+        opacity: 0,
+        scale: 0.9,
+        rotationZ: 2,
+      },
+      {
+        x: 0,
+        y: 0,
+        opacity: 1,
+        scale: 1,
+        rotationZ: 0,
+        duration: 1.2,
+        ease: "power3.out",
+      },
+    )
+
+    // Animate heading with a modern reveal effect
+    tl.fromTo(
+      headingRef.current,
+      {
+        y: 50,
+        opacity: 0,
+      },
+      {
+        y: 0,
+        opacity: 1,
+        duration: 0.8,
+        ease: "back.out(1.7)",
+      },
+      "-=0.7",
+    )
+
+    // Animate paragraph with a fade-in effect
+    tl.fromTo(
+      paragraphRef.current,
+      {
+        y: 20,
+        opacity: 0,
+      },
+      {
+        y: 0,
+        opacity: 1,
+        duration: 0.7,
+        ease: "power2.out",
+      },
+      "-=0.5",
+    )
+
+    // Cleanup function
+    return () => ctx.revert(); 
+  })
+  }, [])
 
   const ITEMS_PER_PAGE = 12
 
@@ -124,7 +216,15 @@ const HomeSecond = forwardRef((props, ref) => {
   }
 
   return (
-    <div ref={ref} className="py-8 md:py-12 px-4 md:px-6 lg:px-8 max-w-[1400px] mx-auto">
+    <div
+      ref={(el) => {
+        // Handle both the forwarded ref and our containerRef
+        if (typeof ref === "function") ref(el)
+        else if (ref) ref.current = el
+        containerRef.current = el
+      }}
+      className="py-8 md:py-12 px-4 md:px-6 lg:px-8 max-w-[1400px] mx-auto"
+    >
       {isLoading ? (
         <div className="flex flex-col items-center justify-center min-h-[300px]">
           <div className="w-12 h-12 border-4 border-t-yellow-500 border-r-transparent border-b-transparent border-l-transparent rounded-full animate-spin"></div>
@@ -132,12 +232,19 @@ const HomeSecond = forwardRef((props, ref) => {
         </div>
       ) : (
         <>
-          <h1 className="text-3xl md:text-4xl lg:text-5xl poppins-six text-center font-bold mb-6 md:mb-10 relative inline-block w-full">
+          <h1
+            ref={headingRef}
+            className="text-3xl md:text-4xl lg:text-5xl poppins-six text-center font-bold mb-6 md:mb-10 relative inline-block w-full"
+          >
             <span className="relative z-10 bg-clip-text text-transparent bg-gradient-to-r from-yellow-600 to-orange-500 hover:from-orange-500 hover:to-yellow-600 transition-all duration-700">
               {headingData?.heading || "World Best Visas Requested Countries"}
             </span>
             <span className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-yellow-500 rounded-full transition-all duration-300 hover:w-48"></span>
           </h1>
+          <p ref={paragraphRef} className="text-center text-gray-600 max-w-3xl mx-auto mb-8">
+            {headingData?.subHeading ||
+              "Explore our selection of visa packages for the most requested destinations around the world."}
+          </p>
 
           {packages.length === 0 ? (
             <div className="text-center py-10">
@@ -145,7 +252,10 @@ const HomeSecond = forwardRef((props, ref) => {
             </div>
           ) : (
             <>
-              <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+              <div
+                ref={elementRef}
+                className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5"
+              >
                 {displayedPackages.map((visa, index) => (
                   <VisaCard
                     key={index}

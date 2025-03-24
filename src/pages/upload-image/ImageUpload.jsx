@@ -268,7 +268,7 @@ const ImageUpload = () => {
                 <ul className="text-left space-y-2">
                   {important?.docPoints?.map((item,index) => {
                     return (
-                      <div kay = {index}>
+                      <div key = {index}>
                         <li>✔️ {item}</li>
                       </div>
                     );
@@ -278,11 +278,11 @@ const ImageUpload = () => {
             </div>
           </>
         </div>
-        <div className="flex flex-col self-center w-[73%]">
+        <div className="flex flex-col self-center w-[80%]">
           {/* <h1 className="text-xl poppins-four text-center self-center text-orange-500 ">
             {`Traveler Information: Applicant #${packageData?.orderDetails} of ${travlersCount}`}
           </h1> */}
-          <div className="bg-white sm:p-8 p-2 rounded-lg flex flex-col justify-center items-center  w-full sm:max-w-6xl">
+          <div className="bg-white  rounded-lg flex flex-col justify-center items-center  w-full md:max-w-6xl">
             <HorizontalLinearAlternativeLabelStepper
               documents={data}
               value={step}
@@ -291,26 +291,27 @@ const ImageUpload = () => {
             {/* Step Indicator */}
 
             {/* Document Upload Sections */}
-            <div className="flex flex-wrap flex-col md:flex-row   my-8">
+            <div className="flex flex-wrap  md:flex-row   ">
               {/* Selfie */}
               {data.map((item, index) => (
                 <div
                   key={index}
-                  className="flex flex-col min-w-52 items-center mb-4 md:mb-0"
+                  className="flex flex-col min-w-46 items-center mb-4 md:mb-0"
                 >
-                  <label className=" flex gap-4 justify-center items-center text-gray-700">
-                    <img src={item?.icon} className="w-8 h-4" />
+                  <label className=" flex justify-center items-center text-gray-700">
+                    {/* <img src={item?.icon} className="w-8 h-4" /> */}
                     {item?.name}
                   </label>
-                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 mb-4">
+                  <div className="border-2 border-dashed border-gray-300 rounded-lg  mx-4 mb-4">
                     {/* Show the preview if it exists */}
                     {previews[item?.name] ? (
                       <img
                         src={previews[item?.name]}
                         alt={`Preview of ${item?.name}`}
-                        className="w-24 h-24 object-contain rounded-lg mt-2"
+                        className="w-16 h-24 object-contain rounded-lg mt-2"
                       />
                     ) : (
+                      <div className="flex flex-col items-center ">
                       <input
                         type="file"
                         accept="image/*"
@@ -318,8 +319,11 @@ const ImageUpload = () => {
                         onChange={(e) =>
                           handleImageChange(e, item?.name, index)
                         }
-                        className="w-24 h-24 object-cover rounded-lg"
+                        className="object-cover"
+                        
                       />
+                      <img src={item?.icon} className="w-24 h-24 object-cover rounded-lg" />
+                      </div>
                     )}
                   </div>
                   {/* <ul className="text-start mb-4 space-y-2">

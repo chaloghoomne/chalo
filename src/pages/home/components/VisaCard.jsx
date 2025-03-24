@@ -83,7 +83,7 @@ const VisaCard = ({ image, city, country, price, rating, description, id, altIma
           }`}
         >
           <div className="flex flex-col gap-1">
-            <span className="text-sm text-[#0C111F99]">{country}</span>
+            <span className="text-sm text-[#0C111F99]">{rating}</span>
             <span className={`text-md poppins-seven font-semibold transition-all duration-300 ${
               isHovered ? 'text-blue-600 translate-x-1' : ''
             }`}>

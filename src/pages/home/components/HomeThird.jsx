@@ -7,6 +7,10 @@ import { motion, AnimatePresence } from "framer-motion"
 import { FaQuoteLeft, FaStar, FaStarHalf } from "react-icons/fa"
 import { HiChevronLeft, HiChevronRight } from "react-icons/hi"
 import homethird from "../../../assets/homeThird.png"
+import {gsap} from "gsap"
+import {ScrollTrigger} from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 // Sample reviews data (will be replaced with API data in production)
 const reviews = [
@@ -44,6 +48,46 @@ const HomeThird = () => {
   const [data, setData] = useState()
   const [isAnimating, setIsAnimating] = useState(false)
   const testimonialsRef = useRef(null)
+
+  const containerRef = useRef(null)
+  const elementRef = useRef(null)
+  const headingRef = useRef(null)
+  const paragraphRef = useRef(null)
+
+  useEffect(() => {
+  let ctx = gsap.context(() => {
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: containerRef.current,
+        start: "top 60%",
+        end: "bottom 20%",
+        toggleActions: "play none none reverse",
+      },
+    });
+
+    tl.fromTo(
+      elementRef.current,
+      { x: 100, y: 30, opacity: 0, scale: 0.9, rotationZ: 2 },
+      { x: 0, y: 0, opacity: 1, scale: 1, rotationZ: 0, duration: 1.2, ease: "power3.out" }
+    )
+      .fromTo(
+        headingRef.current,
+        { x: -100, opacity: 0 },
+        { x: 0, opacity: 1, duration: 1, ease: "power2.out" },
+        "-=0.7"
+      )
+      .fromTo(
+        paragraphRef.current,
+        { y: 20, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.7, ease: "power2.out" },
+        "-=0.5"
+      );
+  });
+
+  return () => ctx.revert(); // ✅ Proper cleanup to remove only this component's animations
+}, []);
+  
+  
 
   useEffect(() => {
     const fetchHeadingData = async () => {
@@ -115,7 +159,7 @@ const HomeThird = () => {
           <div className="w-full lg:w-5/12 relative">
             <div className="relative">
               <div className="absolute inset-0 bg-gradient-to-br from-orange-400/20 to-yellow-400/20 rounded-2xl transform rotate-3"></div>
-              <div className="relative bg-white p-4 md:p-6 rounded-2xl shadow-xl transform -rotate-3 transition-transform duration-500 hover:rotate-0">
+              <div ref={headingRef} className="relative bg-white p-4 md:p-6 rounded-2xl shadow-xl transform -rotate-3 transition-transform duration-500 hover:rotate-0">
                 <img
                   src={homethird}
                   alt="World Map with Customer Testimonials"

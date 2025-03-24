@@ -1,27 +1,16 @@
-import React, { useEffect, useState } from "react";
-import logo from "../../assets/loginlogo.png";
-import facebook from "../../assets/facebook.png";
-import instagram from "../../assets/instagram.png";
-import linkedin from "../../assets/linkedin.jpg";
-import pinterest from "../../assets/pinterest.png";
-import twitter from "../../assets/twitter.png";
-import whatsapp from "../../assets/whatsapp.png";
-import whitelogo from "../../assets/whitelogo.png";
-import subscribe from "../../assets/subscribe.png";
-import { TbLocationShare } from "react-icons/tb";
+"use client"
 
-import { fetchDataFromAPI } from "../../api-integration/fetchApi";
-import { BASE_URL } from "../../api-integration/urlsVariable";
-import { toast } from "react-toastify";
-import { Link, useLocation } from "react-router-dom";
-import { 
-  FaFacebookF, 
-  FaInstagram, 
-  FaLinkedinIn, 
-  FaTwitter, 
-  FaWhatsapp, 
-  FaPinterest,
-  FaCcMastercard,
+import { useEffect, useState } from "react"
+import { Link, useLocation } from "react-router-dom"
+import axios from "axios"
+import { toast } from "react-toastify"
+import { BASE_URL } from "../../api-integration/urlsVariable"
+import { fetchDataFromAPI } from "../../api-integration/fetchApi"
+import {
+  FaFacebookF,
+  FaInstagram,
+  FaTwitter,
+  FaWhatsapp,
   FaBriefcase,
   FaUserTie,
   FaInfoCircle,
@@ -31,231 +20,266 @@ import {
   FaGlobe,
   FaShieldAlt,
   FaFileContract,
-  FaMoneyBillWave
-} from 'react-icons/fa';
-import { SiVisa, SiAmazonpay } from 'react-icons/si';
-import { BsPaypal } from "react-icons/bs";
-import axios from "axios";
-
+  FaMoneyBillWave,
+  FaPaperPlane,
+} from "react-icons/fa"
 
 const Footer = () => {
-  const [value, setValue] = useState("");
-  const location = useLocation();
-
-  const [show,setShow] = useState(true)
+  const [email, setEmail] = useState("")
+  const location = useLocation()
+  const [showNewsletter, setShowNewsletter] = useState(true)
   const [formData, setFormData] = useState({
-    offices: [{ city: '', addressLine1: '', addressLine2: '', phone: '' }],
-    supportEmail: ''
-  });
+    offices: [{ city: "", addressLine1: "", addressLine2: "", phone: "" }],
+    supportEmail: "",
+    phoneNumber: "9555535252",
+  })
 
   useEffect(() => {
-    // Fetch existing contact info (if available)
+    // Fetch existing contact info
     const fetchData = async () => {
       try {
-        const resp = await axios.get(`${BASE_URL}/contact`);
-        setFormData(resp.data.data);
+        const resp = await axios.get(`${BASE_URL}/contact`)
+        setFormData(resp.data.data)
       } catch (error) {
-        console.error('Error fetching contact data:', error);
+        console.error("Error fetching contact data:", error)
       }
-    };
-    fetchData();
-  }, []);
-
+    }
+    fetchData()
+  }, [])
 
   useEffect(() => {
-    const pathName = location.pathname;
-    if (pathName === "/edit-visa-request" || pathName === "/upload-image" || pathName === "/view-application" || pathName === "/visa-details/:id" ) {
-      setShow(false);
-    } else {
-      setShow(true);
-    }
-  }, [location.pathname]);
+    const pathName = location.pathname
+    const hiddenPaths = ["/edit-visa-request", "/upload-image", "/view-application", "/visa-details/:id"]
+    setShowNewsletter(!hiddenPaths.some((path) => pathName === path || pathName.startsWith(path)))
+  }, [location.pathname])
 
-  const handleChnage = (e) => {
-    setValue(e.target.value);
-  };
-
-  const className = ` container  md:mx-5 w-full bg-cover bg-center rounded-2xl min-h-72 flex flex-col min-[1000px]   justify-center items-center text-white text-center py-8 bg-gradient-to-r from-[#F2A137] to-[#F2A137] mt-4 ${
-    subscribe ? 'lg:bg-[url("' + subscribe + '")]' : " "
-  }`;
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value)
+  }
 
   const becomeSubscriber = async () => {
+    if (!email || !/\S+@\S+\.\S+/.test(email)) {
+      toast.error("Please enter a valid email address")
+      return
+    }
+
     try {
-      const response = await fetchDataFromAPI(
-        "POST",
-        `${BASE_URL}add-subscription`,
-        { email: value }
-      );
-      
+      const response = await fetchDataFromAPI("POST", `${BASE_URL}add-subscription`, { email })
+
       if (response) {
-        setValue("");
-        toast.success(`Congratulations! You are a Subscriber Now`);
+        setEmail("")
+        toast.success("Congratulations! You are a subscriber now")
       }
     } catch (error) {
-      navigate("/503")
-      toast.success(` You are already a Subscriber `);
+      toast.info("You are already a subscriber")
     }
-  };
+  }
 
   return (
-    <footer className="bg-white w-full">
-      <div className="flex justify-center items-center py-3 px-5  pb-5 w-full bg-white">
-        {show && <div className={className}>
-          <div className="w-full justify-center flex flex-col items-center text-center">
-          <h2 className="text-4xl  text-black poppins-six font-semibold">
-            Sign up to our newsletter
-          </h2>
-          <p
-            style={{ overflowWrap: "anywhere" }}
-            className="mt-4 text-black poppins-four w-[40%] se text-sm"
-          >
-            We value the connections we make with our clients and partners. Your
-            feedback and insights are crucial to our growth and improvement.
-          </p>
+    <footer className="w-full bg-white">
+      {showNewsletter && (
+        <div className="px-4 sm:px-6 lg:px-8 py-6">
+          <div className="max-w-6xl mx-auto overflow-hidden rounded-lg bg-gradient-to-r from-amber-400 to-amber-500 shadow-md">
+            <div className="relative px-6 py-4 md:py-5">
+              <div className="absolute inset-0 bg-[url('../../assets/subscribe.png')] bg-cover bg-center opacity-10"></div>
+              <div className="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <h2 className="text-xl text-center font-bold text-white whitespace-nowrap">Join our newsletter</h2>
+                <div className="flex flex-1 max-w-lg">
+                  <input
+                    type="email"
+                    placeholder="Enter your email address"
+                    value={email}
+                    onChange={handleEmailChange}
+                    className="flex-grow px-4 py-2 rounded-l-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-amber-600 border-0"
+                  />
+                  <button
+                    onClick={becomeSubscriber}
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-r-lg transition-colors flex items-center justify-center gap-2 whitespace-nowrap"
+                  >
+                    
+                    <FaPaperPlane className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
-          <div className="mt-6 p-2 md:min-w-96 flex justify-between rounded-xl items-center bg-white">
-            <input
-              type="email"
-              placeholder="Enter Your email Address"
-              value={value}
-              onChange={(e) => handleChnage(e)}
-              className="px-4 py-2 rounded-l-md sm:w-72 w-56 min-h-10 text-black focus:outline-none"
-            />
-            <button
-              onClick={() => becomeSubscriber()}
-              className="px-2 py-2    bg-blue-600 text-white rounded-md"
-            >
-              <TbLocationShare size={22} color="white" />
-            </button>
+        </div>
+      )}
+
+      <div className="bg-gray-900 text-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+            {/* Company Info */}
+            <div>
+              <div className="mb-6">
+                <img src="/assets/whitelogo.png" alt="Chalo Ghoomne" className="h-12" />
+              </div>
+              <p className="text-gray-300 text-sm mb-6">
+                Our visa booking company is dedicated to simplifying the complex and often daunting process of obtaining
+                travel visas. With extensive experience and a team of experts, we provide personalized services to
+                ensure a smooth and hassle-free visa application experience.
+              </p>
+              <div className="flex space-x-4">
+                <a
+                  href="https://www.facebook.com/chaloghoomneofficial/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-300 hover:text-amber-400 transition-colors"
+                >
+                  <FaFacebookF className="w-5 h-5" />
+                </a>
+                <a
+                  href="https://www.instagram.com/chaloghoomneofficial/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-300 hover:text-amber-400 transition-colors"
+                >
+                  <FaInstagram className="w-5 h-5" />
+                </a>
+                <a
+                  href="https://x.com/chaloghoomne1"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-300 hover:text-amber-400 transition-colors"
+                >
+                  <FaTwitter className="w-5 h-5" />
+                </a>
+                <a
+                  href="https://wa.me/919555535252"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-300 hover:text-amber-400 transition-colors"
+                >
+                  <FaWhatsapp className="w-5 h-5" />
+                </a>
+              </div>
+            </div>
+
+            {/* Company Links */}
+            <div>
+              <h3 className="text-lg font-bold mb-6 text-white relative pb-2 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-12 after:h-0.5 after:bg-amber-400">
+                Company
+              </h3>
+              <ul className="space-y-3">
+                <li>
+                  <Link
+                    to="/career-form"
+                    className="text-gray-300 hover:text-amber-400 transition-colors flex items-center gap-2"
+                  >
+                    <FaBriefcase className="w-4 h-4" />
+                    <span>Careers</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/travel-form"
+                    className="text-gray-300 hover:text-amber-400 transition-colors flex items-center gap-2"
+                  >
+                    <FaUserTie className="w-4 h-4" />
+                    <span>For Travel Agents</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/about"
+                    className="text-gray-300 hover:text-amber-400 transition-colors flex items-center gap-2"
+                  >
+                    <FaInfoCircle className="w-4 h-4" />
+                    <span>About us</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/blogs"
+                    className="text-gray-300 hover:text-amber-400 transition-colors flex items-center gap-2"
+                  >
+                    <FaBlog className="w-4 h-4" />
+                    <span>Blog</span>
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            {/* Important Links */}
+            <div>
+              <h3 className="text-lg font-bold mb-6 text-white relative pb-2 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-12 after:h-0.5 after:bg-amber-400">
+                Important Links
+              </h3>
+              <ul className="space-y-3">
+                <li>
+                  <Link
+                    to="/privacy-policy"
+                    className="text-gray-300 hover:text-amber-400 transition-colors flex items-center gap-2"
+                  >
+                    <FaShieldAlt className="w-4 h-4" />
+                    <span>Privacy Policy</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/terms-condition"
+                    className="text-gray-300 hover:text-amber-400 transition-colors flex items-center gap-2"
+                  >
+                    <FaFileContract className="w-4 h-4" />
+                    <span>Terms and Conditions</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/refund-policy"
+                    className="text-gray-300 hover:text-amber-400 transition-colors flex items-center gap-2"
+                  >
+                    <FaMoneyBillWave className="w-4 h-4" />
+                    <span>Refund Policy</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/contact"
+                    className="text-gray-300 hover:text-amber-400 transition-colors flex items-center gap-2"
+                  >
+                    <FaPhone className="w-4 h-4" />
+                    <span>Contact Us</span>
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            {/* Contact Info */}
+            <div>
+              <h3 className="text-lg font-bold mb-6 text-white relative pb-2 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-12 after:h-0.5 after:bg-amber-400">
+                Contact Us
+              </h3>
+              <ul className="space-y-3">
+                <li className="text-gray-300 flex items-start gap-2">
+                  <FaMapMarkerAlt className="w-4 h-4 mt-1 flex-shrink-0" />
+                  <span>
+                    {formData?.addressLine1 + " " + formData?.addressLine2 || "Siri Fort, New Delhi - 110049"}
+                  </span>
+                </li>
+                <li className="text-gray-300 flex items-center gap-2">
+                  <FaGlobe className="w-4 h-4 flex-shrink-0" />
+                  <span>{formData?.supportEmail || "www.chaloghoomne.com"}</span>
+                </li>
+                <li className="text-gray-300 flex items-center gap-2">
+                  <FaPhone className="w-4 h-4 flex-shrink-0" />
+                  <span>{"+91 " + (formData?.phoneNumber || "9555535252")}</span>
+                </li>
+              </ul>
+            </div>
           </div>
-        </div>}
-      </div>
-      <div className="bg-[#1E231F] text-white mx-auto border-t border-gray-200 border-b px-6 sm:px-10 lg:px-14 py-14 flex flex-wrap lg:flex-nowrap lg:justify-between mt-4 gap-8">
-      <div className="lg:min-w-72 flex flex-col justify-start items-start lg:max-w-72">
-        <div className="w-full self-start">
-          <img src={whitelogo} alt="Chalo Ghoomne" className="self-start items-start w-[150px] mt-[-5px]" />
         </div>
-        <p className="text-white text-[13px] mt-[25px]">
-          Our visa booking company is dedicated to simplifying the complex and
-          often daunting process of obtaining travel visas. With extensive
-          experience and a team of experts, we provide personalized services
-          to ensure a smooth and hassle-free visa application experience.
-        </p>
-        <div className="mt-4 flex flex-wrap justify-center items-center gap-4">
-          <a href="https://www.facebook.com/chaloghoomneofficial/" target="_blank" rel="noopener noreferrer">
-            <FaFacebookF className="w-8 h-8 hover:-scale-x-100 transition-all hover:bg-yellow-500 border border-white p-1 rounded-lg" />
-          </a>
-          <a href="https://www.instagram.com/chaloghoomneofficial/" target="_blank" rel="noopener noreferrer">
-            <FaInstagram className="w-8 h-8 hover:-scale-x-100 transition-all hover:bg-yellow-500 border border-white p-1 rounded-lg" />
-          </a>
-          {/* <a href="https://linkedin.com/company/chaloghoomneofficial" target="_blank" rel="noopener noreferrer">
-            <FaLinkedinIn className="w-8 h-8 hover:-scale-x-100 transition-all hover:bg-yellow-500 border border-white p-1 rounded-lg" />
-          </a> */}
-          <a href="https://x.com/chaloghoomne1" target="_blank" rel="noopener noreferrer">
-            <FaTwitter className="w-8 h-8 hover:-scale-x-100 transition-all hover:bg-yellow-500 border border-white p-1 rounded-lg" />
-          </a>
-          <a href="https://wa.me/919555535252" target="_blank" rel="noopener noreferrer">
-            <FaWhatsapp className="w-8 h-8 hover:-scale-x-100 transition-all hover:bg-yellow-500 border border-white p-1 rounded-lg" />
-          </a>
-          {/* <a href="https://in.pinterest.com/chaloghoomneofficial" target="_blank" rel="noopener noreferrer">
-            <FaPinterest className="w-8 h-8 hover:-scale-x-100 transition-all hover:bg-yellow-500 border border-white p-1 rounded-lg" />
-          </a> */}
+
+        {/* Copyright */}
+        <div className="border-t border-gray-800">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 text-center text-gray-400 text-sm">
+            <p>Copyright © {new Date().getFullYear()} Chalo Ghoomne. All Rights Reserved</p>
+          </div>
         </div>
-      </div>
-
-      <div>
-        <h3 className="text-lg font-bold text-white">Company</h3>
-        <ul className="mt-4 space-y-2 text-white">
-          <Link to="/career-form" className="">
-            <li className="flex items-center gap-2" style={{ lineHeight: "2rem" }}>
-              <FaBriefcase className="w-4 h-4" />
-              Careers
-            </li>
-          </Link>
-          <Link to="/travel-form" className="">
-            <li className="flex items-center gap-2" style={{ lineHeight: "2rem" }}>
-              <FaUserTie className="w-4 h-4" />
-              For Travel Agents
-            </li>
-          </Link>
-          <Link to="/about" className="">
-            <li className="flex items-center gap-2" style={{ lineHeight: "2rem" }}>
-              <FaInfoCircle className="w-4 h-4" />
-              About us
-            </li>
-          </Link>
-          <Link to="/blogs" className="">
-            <li className="flex items-center gap-2" style={{ lineHeight: "2rem" }}>
-              <FaBlog className="w-4 h-4" />
-              Blog
-            </li>
-          </Link>
-        </ul>
-      </div>
-
-      <div>
-        <h3 className="text-lg font-bold text-white">Important Links</h3>
-        <ul className="mt-4 space-y-2 text-white">
-          <Link to="/privacy-policy">
-            <li className="flex items-center gap-2" style={{ lineHeight: "2rem" }}>
-              <FaShieldAlt className="w-4 h-4" />
-              Privacy Policy
-            </li>
-          </Link>
-          <Link to="/terms-condition">
-          <li className="flex items-center gap-2" style={{ lineHeight: "2rem" }}>
-            <FaFileContract className="w-4 h-4" />
-            Terms and Conditions
-          </li>
-          </Link>
-          <Link to="/refund-policy">
-            <li className="flex items-center gap-2" style={{ lineHeight: "2rem" }}>
-              <FaMoneyBillWave className="w-4 h-4" />
-              Refund Policy
-            </li>
-          </Link>
-          <Link to="/contact">
-            <li className="flex items-center gap-2" style={{ lineHeight: "2rem" }}>
-              <FaPhone className="w-4 h-4" />
-            Contact Us
-            </li>
-          </Link>
-        </ul>
-      </div>
-
-      <div>
-        <h3 className="text-lg font-bold text-white">Contact Us</h3>
-        <ul className="mt-4 space-y-2 text-white">
-          <p className="flex items-center gap-2 w-[100px] md:w-[400px]" style={{ lineHeight: "2rem" }}>
-            <FaMapMarkerAlt className="w-4 h-4" />
-            { formData?.addressLine1 + " " + formData?.addressLine2  ||"Siri Fort, New Delhi - 110049"}
-          </p>
-          {/* <p className="flex items-center gap-2" style={{ lineHeight: "2rem" }}>
-            <FaMapMarkerAlt className="w-4 h-4" />
-            { formData?.addressLine2 ||"Siri Fort, New Delhi - 110049"}
-          </p> */}
-          <p className="flex items-center gap-2" style={{ lineHeight: "2rem" }}>
-            <FaGlobe className="inline-block w-4 h-4 mr-2" />
-          { formData?.supportEmail ||"  www.chaloghoomne.com"}
-          </p>
-          <p className="flex items-center gap-2" style={{ lineHeight: "2rem" }}>
-            <FaPhone className="inline-block w-4 h-4 mr-2" />
-            { "+"+91+" "  + formData?.phoneNumber || 9555535252}
-          </p>
-        </ul>
-
-        
-       
-      </div>
-    </div>
-      <div className="py-2 bg-[#1E231F] flex px-14 justify-center">
-        {/* <p className="text-white text-md poppins-four">Copyright c 2025</p> */}
-        <p className="text-white "> Copyright c 2025.
-          All Rights Reserved
-        </p>
       </div>
     </footer>
-  );
-};
+  )
+}
 
-export default Footer;
+export default Footer
+

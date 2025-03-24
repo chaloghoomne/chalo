@@ -72,14 +72,14 @@ const HomeFourth = () => {
               variants={staggerContainer}
               initial="hidden"
               animate="visible"
-              className="grid grid-cols-1 sm:grid-cols-3 gap-4"
+              className="grid grid-cols-1 sm:grid-cols-2 gap-4"
             >
               {data?.subItems?.map((item, index) => (
                 <motion.div
                   key={item?.id || index}
                   variants={fadeIn}
                   whileHover={{ y: -5, transition: { duration: 0.2 } }}
-                  className="bg-white shadow-lg rounded-xl p-6 text-center hover:shadow-xl transition-all duration-300 border border-gray-200"
+                  className="bg-white shadow-lg rounded-xl p-6 text-center hover:shadow-xl h-40 transition-all duration-300 border border-gray-200"
                 >
                   <h3 className="mt-4 text-2xl font-bold text-primary">
                     {item?.heading}
