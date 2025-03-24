@@ -145,7 +145,7 @@ const HomeThird = () => {
         {/* Section heading with animated underline */}
         <div className="text-center mb-16">
           <h2 className="inline-block text-orange-500 text-lg md:text-xl font-medium mb-3 relative">
-            {data?.heading || "TESTIMONIALS"}
+            {data?.heading}
             <span className="absolute bottom-0 left-0 w-full h-0.5 bg-orange-500 transform scale-x-0 transition-transform duration-500 group-hover:scale-x-100"></span>
           </h2>
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 relative inline-block">

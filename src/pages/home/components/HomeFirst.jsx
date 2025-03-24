@@ -46,8 +46,8 @@ const HomeFirst = ({ homeSecondRef }) => {
     const { left, top, width, height } = currentTarget.getBoundingClientRect()
 
     // Calculate mouse position relative to the center of the element
-    const x = (clientX - left - width / 2) / 20 // Reduced divisor for more subtle movement
-    const y = -(clientY - top - height / 2) / 20 // Negative for correct direction
+    const x = (clientX - left - width / 2) / 25 // Reduced divisor for more subtle movement
+    const y = -(clientY - top - height / 2) / 25 // Negative for correct direction
 
     setMousePosition({ x, y })
   }
@@ -124,7 +124,7 @@ const HomeFirst = ({ homeSecondRef }) => {
       {/* Image Section */}
       <div className="flex items-center md:justify-end justify-center w-full md:w-[45%] p-2 md:px-4 z-10">
         <motion.div
-          className="relative w-72 h-72 md:w-96 md:h-96 cursor-pointer"
+          className="relative w-80 h-80 md:w-96 md:h-96 cursor-pointer"
           style={{ perspective: 1500 }}
           onMouseMove={handleMouseMove}
           onMouseEnter={() => setIsHovering(true)}
