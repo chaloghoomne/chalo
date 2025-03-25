@@ -31,7 +31,7 @@ const MonthCalender = ({ onClose }) => {
 
 	// Handle date selection
 	const handleDateSelection = (e) => {
-		console.log("Selected Date Range:", e.value);
+		console.log("Selected Date Range:", e.value)
 		setDateRange(e.value);
 	};
 
@@ -41,7 +41,7 @@ const MonthCalender = ({ onClose }) => {
 			toast.error("Please select both Travel and Return Dates");
 			return;
 		}
-
+		console.log(dateRange)
 		const formattedVisaDate = dateRange[0].toISOString().split("T")[0]; // First date
 		const formattedReturnDate = dateRange[1].toISOString().split("T")[0]; // Second date
 
@@ -75,8 +75,6 @@ const MonthCalender = ({ onClose }) => {
 					onChange={handleDateSelection}
 					selectionMode="range"
 					inline
-					showWeek
-					readOnlyInput
 					className=" "  
 					// style={{ maxWidth: "450px", fontSize: "10px", padding: "8px" }}
 				/>

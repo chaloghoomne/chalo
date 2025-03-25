@@ -81,7 +81,8 @@ const VisaDetails = () => {
 
 	const cartItems = useSelector((state) => state.CartReducer.cartItems);
 
-	console.log(id)
+	// console.log(id)
+	console.log(fromDate,toDate)
 
 	const handleAddToCart = () => {
 		const cartItem = {
@@ -363,6 +364,7 @@ const VisaDetails = () => {
 		//   return;
 		// }
 		setCalendarModalOpen(false);
+		console.log(fromDate,toDate)
 		const newDate = new Date(returnDate).toISOString();
 		try {
 			const response = await fetchDataFromAPI(
@@ -398,11 +400,19 @@ const VisaDetails = () => {
 	};
 
 	const proceedApplication = async () => {
-		setCalendarModalOpen(false);
+		if (!fromDate || !toDate) {
+			console.warn("Waiting for fromDate and toDate to be set...");
+			return;
+		  }
+		
+		  setCalendarModalOpen(false);
+		  
+		  console.log("Sending POST request with:", { fromDate, toDate });
 		// localStorage.setItem("fromDate", fromDate);
 		// localStorage.setItem("toDate", toDate);
 		// console.log("Visa ki ID",id)
 		try {
+			console.log(fromDate,toDate)
 			const response = await fetchDataFromAPI(
 				"POST",
 				`${BASE_URL}create-visa-order`,
@@ -437,6 +447,17 @@ const VisaDetails = () => {
 		}
 		navigate("/persons-details");
 	};
+	useEffect(() => {
+		if (fromDate && toDate) {
+		  console.log("Updated fromDate and toDate:", fromDate, toDate);
+		}
+	  }, [fromDate, toDate]);
+	  
+
+	// console.log("fromDate:", fromDate);
+// console.log("toDate:", toDate);
+
+
 
 	const handleCalendarChoice = (choice) => {
 		setCalendarModalOpen(false);
