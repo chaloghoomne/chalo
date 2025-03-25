@@ -123,11 +123,49 @@ const Navbar = () => {
   }, [])
 
   useEffect(() => {
-    const name = JSON.parse(localStorage.getItem("persist:root")).CartReducer
-    const cartCount = name.cartItems ? cartData.cartItems.length : 0
-    console.log("Total Cart Items:", cartCount)
-    setCartCount(cartCount)
-  }, [])
+    const getCartCount = () => {
+      try {
+        const storedData = localStorage.getItem("persist:root");
+        if (storedData) {
+          const parsedData = JSON.parse(storedData);
+          if (parsedData?.CartReducer) {
+            const cartReducer = JSON.parse(parsedData.CartReducer); // Second parse
+            const itemCount = cartReducer.cartItems ? cartReducer.cartItems.length : 0;
+            console.log("Total Cart Items:", itemCount);
+            setCartCount(itemCount);
+          }
+        }
+      } catch (error) {
+        console.error("Error parsing cart data:", error);
+      }
+    };
+  
+    // Initial load
+    getCartCount();
+  
+    // Listen for storage changes in other tabs
+    const handleStorageChange = (event) => {
+      if (event.key === "persist:root") {
+        getCartCount();
+      }
+    };
+  
+    window.addEventListener("storage", handleStorageChange);
+  
+    // Optional: Listen for local updates within the same tab
+    const originalSetItem = localStorage.setItem;
+    localStorage.setItem = function (key, value) {
+      originalSetItem.apply(this, arguments);
+      if (key === "persist:root") {
+        getCartCount();
+      }
+    };
+  
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+      localStorage.setItem = originalSetItem; // Restore original method
+    };
+  }, []); // No dependency to avoid infinite loop
 
   useEffect(() => {
     const pathName = location.pathname
@@ -228,7 +266,7 @@ const Navbar = () => {
                 whichLogo ? "text-white" : "text-black"
               } absolute hidden inset-y-0 right-0 lg:flex gap-4 items-center pr-2 sm:static sm:inset-auto sm:ml-20 sm:pr-0`}
             >
-              <div className={`relative ${count.length === 0 ? "hidden" : ""} `}>
+              <div className={`relative ${count.length === 0 ? "" : "hidden"} `}>
                 {/* Notification Icon & Count */}
                 <div className="relative flex items-center gap-2 cursor-pointer">
                   {/* Notification Count */}
@@ -286,7 +324,7 @@ const Navbar = () => {
                 </div>
               </div>
               <div className="relative flex items-center">
-                <Link to="/cart" className="relative group">
+                <Link to="/cart" className={`relative group ${cartCount ? "" : "hidden"}`}>
                   {/* Cart Icon */}
                   <IoMdCart
                     className={`h-7 w-8 ${whichLogo ? "text-white" : "text-gray-700"} group-hover:text-amber-400 transition duration-300 transform group-hover:scale-110`}
