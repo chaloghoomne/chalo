@@ -8,20 +8,7 @@ import {
 } from "../../../redux/actions/calender-date-action";
 import { FloatLabel } from "primereact/floatlabel";
 import "primereact/resources/themes/lara-light-cyan/theme.css";
-import {
-	format,
-	startOfMonth,
-	endOfMonth,
-	eachDayOfInterval,
-	isSameMonth,
-	isSameDay,
-	addMonths,
-	subMonths,
-	parseISO,
-	isWithinInterval,
-	isBefore,
-	isValid,
-} from "date-fns";
+import { format } from "date-fns";
 
 const MonthCalender = ({ onClose }) => {
 	const dispatch = useDispatch();
@@ -29,9 +16,13 @@ const MonthCalender = ({ onClose }) => {
 	// Local state to temporarily store selected dates
 	const [dateRange, setDateRange] = useState([]);
 
+	// Get today's date to prevent past date selection
+	const today = new Date();
+	today.setHours(0, 0, 0, 0); // Reset time to avoid timezone issues
+
 	// Handle date selection
 	const handleDateSelection = (e) => {
-		console.log("Selected Date Range:", e.value)
+		console.log("Selected Date Range:", e.value);
 		setDateRange(e.value);
 	};
 
@@ -41,7 +32,7 @@ const MonthCalender = ({ onClose }) => {
 			toast.error("Please select both Travel and Return Dates");
 			return;
 		}
-		console.log(dateRange)
+
 		const formattedVisaDate = dateRange[0].toISOString().split("T")[0]; // First date
 		const formattedReturnDate = dateRange[1].toISOString().split("T")[0]; // Second date
 
@@ -49,37 +40,28 @@ const MonthCalender = ({ onClose }) => {
 		console.log("Dispatching Return Date:", formattedReturnDate);
 
 		// Dispatch dates to Redux
-		dispatch(calenderDate(format(formattedVisaDate, "yyyy-MM-dd")));
-		dispatch(returnCalenderDate(format(formattedReturnDate, "yyyy-MM-dd")));
+		dispatch(calenderDate(format(dateRange[0], "yyyy-MM-dd")));
+		dispatch(returnCalenderDate(format(dateRange[1], "yyyy-MM-dd")));
 
 		// Close the calendar
 		onClose();
 	};
 
 	return (
-		<div className="   rounded-lg object-fill overflow-auto shadow-lg">
+		<div className="rounded-lg object-fill overflow-auto shadow-lg">
 			{/* Date Picker */}
-			<div className=" bottom-2 rounded-lg">
-				{/* <FloatLabel>
-          <Calendar
-            value={dateRange}
-            onChange={handleDateSelection}
-            selectionMode="range"
-            variant="filled"
-            className="w-full h-10"
-          />
-          <label htmlFor="travel_date">Select Travel & Return Dates</label>
-        </FloatLabel> */}
+			<div className="bottom-2 rounded-lg">
 				<Calendar
 					value={dateRange}
 					onChange={handleDateSelection}
 					selectionMode="range"
 					inline
-					className=" "  
-					// style={{ maxWidth: "450px", fontSize: "10px", padding: "8px" }}
+					
+					readOnlyInput
+					minDate={today} // Prevent selecting past dates
+					className=""
 				/>
 			</div>
-
 
 			{/* Proceed Button */}
 			<button
