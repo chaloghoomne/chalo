@@ -45,6 +45,16 @@ export default {
 				},
 			},
 		},
+		keyframes: {
+			pulseSlow: {
+			  "0%, 100%": { opacity: "1", transform: "scale(1)" },
+			  "50%": { opacity: "0.7", transform: "scale(1.1)" }
+			}
+		  },
+		  animation: {
+			pulseSlow: "pulseSlow 1.5s infinite ease-in-out"
+		  }
+		
 	},
 	plugins: [require("@tailwindcss/typography")],
 };

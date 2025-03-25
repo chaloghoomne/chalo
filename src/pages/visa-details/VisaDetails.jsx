@@ -34,6 +34,7 @@ import { addToCart } from "../../redux/reducers/cart-reducer";
 
 const VisaDetails = () => {
 	const { id } = useParams();
+	
 	const dispatch = useDispatch();
 	const countryId = useSelector((state) => state.CountryIdReducer.countryId);
 	const [isReturnModalOpen, setIsReturnModalOpen] = useState(false);
@@ -79,6 +80,8 @@ const VisaDetails = () => {
 	});
 
 	const cartItems = useSelector((state) => state.CartReducer.cartItems);
+
+	console.log(id)
 
 	const handleAddToCart = () => {
 		const cartItem = {
@@ -367,7 +370,7 @@ const VisaDetails = () => {
 				`${BASE_URL}create-visa-order`,
 				{
 					user: localStorage.getItem("userId"),
-					visaCategory: id,
+					visaCategory: Id,
 					travellersCount: numberOfTravelers,
 					// from: new Date(data[`${selectedType}Date`]).toISOString(),
 					// to: newDate,
@@ -404,7 +407,7 @@ const VisaDetails = () => {
 				"POST",
 				`${BASE_URL}create-visa-order`,
 				{
-					visaCategory: id,
+					visaCategory: Id,
 					travellersCount: numberOfTravelers,
 					from: fromDate,
 					to: toDate,

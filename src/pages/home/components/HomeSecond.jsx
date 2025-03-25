@@ -44,9 +44,9 @@ const HomeSecond = forwardRef((props, ref) => {
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: containerRef.current,
-        start: "top 20%",
+        start: "top 70%",
         end: "bottom 20%",
-        toggleActions: "play none none ",
+        toggleActions: "play",
       },
     })
 
