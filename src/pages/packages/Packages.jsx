@@ -7,17 +7,21 @@ import { toast } from "react-toastify";
 import { FaCircleDot } from "react-icons/fa6";
 import { Helmet } from "react-helmet";
 
+import {Button} from 'react-aria-components'
+
 const Packages = ({ plans }) => {
   const navigate = useNavigate();
   const [selected, setSelected] = useState("");
   const [data, setData] = useState();
   const [heading,setHeading] = useState()
+  const [state,setState] = useState();
+  const [filteredData,setFilteredData] = useState();
 
-  useEffect(() => {
-    if (plans?.length > 0) {
-      handleselect(plans[0]?._id);
-    }
-  }, [plans]);
+  // useEffect(() => {
+  //   if (plans?.length > 0) {
+  //     handleselect(plans[0]?._id);
+  //   }
+  // }, [plans]);
 
   useEffect(() => {
     const fetchProfileImage = async () => {
@@ -29,13 +33,37 @@ const Packages = ({ plans }) => {
         if (response) {
           setData(response.data);
         }
-        console.log(response);
+        // console.log(response);
       } catch (error) {
         console.log(error);
       }
     };
     fetchProfileImage();
   }, []);
+  // console.log(Array.isArray(plans))
+
+
+  useEffect(()=>{
+
+    if (!Array.isArray(plans)) return; // Prevent errors if plans is undefined
+
+  let sortedPlans = [...plans];
+
+
+// console.log(sortedPlans)
+      if(state === "Recent"){
+        sortedPlans.sort((a,b)=> a.createdAt > b.createdAt)
+        
+      }
+      else if(state === "Priced"){
+        sortedPlans.sort((a,b)=>a.price-b.price)
+      }
+      else{
+        setFilteredData(sortedPlans)
+      }
+      setFilteredData(sortedPlans)
+    
+  },[plans,state])
 
   // console.log(data);
   const handleselect = (id,heading) => {
@@ -69,11 +97,22 @@ const Packages = ({ plans }) => {
       <p className="text-md text-[#F26337] poppins-seven  font-bold mb-2">
         RECOMMENDATIONS
       </p>
+
+
+
       <h2 className="text-3xl font-semibold poppins-five  mb-6">
         {data?.heading}
       </h2>
+      <div className="flex flex-row  gap-4 m-3">
+  <Button onClick = {()=>{
+    setState("Recent")
+  }} className = "p-2 bg-orange-400 shadow-md hover:bg-orange-600 hover:shadow-lg hover:border-blue-500 hover:border-2 rounded-xl">Most Recent</Button>
+  <Button onClick = {()=>{
+    setState("Priced")
+  }} className = "p-2 bg-orange-400 shadow-md hover:bg-orange-600 hover:shadow-lg hover:border-blue-500 hover:border-2 rounded-xl">Least Priced</Button>
+</div>
       <div className="space-y-4 w-full flex flex-col gap-5 justify-center ">
-        {plans?.map((option, index) => (
+        {filteredData?.map((option, index) => (
           <div
             onClick={() => handleselect(option?._id,option?.visaTypeHeading)}
             key={index}

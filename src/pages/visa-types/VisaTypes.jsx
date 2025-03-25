@@ -113,7 +113,7 @@ const VisaTypes = () => {
       console.log(error);
     }
   };
-
+console.log(plans)
   return (
 
     <div className="flex flex-col  items-center justify-center py-20 px-4 bg-white">
