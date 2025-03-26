@@ -34,7 +34,7 @@ import { addToCart } from "../../redux/reducers/cart-reducer";
 
 const VisaDetails = () => {
 	const { id } = useParams();
-	
+
 	const dispatch = useDispatch();
 	const countryId = useSelector((state) => state.CountryIdReducer.countryId);
 	const [isReturnModalOpen, setIsReturnModalOpen] = useState(false);
@@ -82,7 +82,7 @@ const VisaDetails = () => {
 	const cartItems = useSelector((state) => state.CartReducer.cartItems);
 
 	// console.log(id)
-	console.log(fromDate,toDate)
+	console.log(fromDate, toDate);
 
 	const handleAddToCart = () => {
 		const cartItem = {
@@ -149,10 +149,13 @@ const VisaDetails = () => {
 
 	const footerRef = useRef(null);
 
-	
-
 	const handleScroll = useCallback(() => {
-		if (!isLargeScreen || !mainImageRef.current || !cardRef.current || !footerRef.current) {
+		if (
+			!isLargeScreen ||
+			!mainImageRef.current ||
+			!cardRef.current ||
+			!footerRef.current
+		) {
 			return;
 		}
 
@@ -163,7 +166,8 @@ const VisaDetails = () => {
 		const cardBottom = cardHeight + 80; // 80px offset
 
 		// Check if card would overlap footer
-		const wouldOverlapFooter = windowHeight - footerTop + cardBottom > windowHeight;
+		const wouldOverlapFooter =
+			windowHeight - footerTop + cardBottom > windowHeight;
 
 		if (imageBottom <= 0 && !wouldOverlapFooter) {
 			// Fix card position when scrolling past the main image
@@ -216,7 +220,6 @@ const VisaDetails = () => {
 
 		return () => window.removeEventListener("scroll", handleScroll);
 	}, [isLargeScreen, handleScroll]);
-
 
 	const navigate = useNavigate();
 
@@ -271,7 +274,7 @@ const VisaDetails = () => {
 		fetchProfileImage();
 	}, []);
 
-	const {slug} = useParams(); // Get slug from URL
+	const { slug } = useParams(); // Get slug from URL
 	// console.log(slug);
 	const Id = slug.split("-").pop(); // Extract the ID from "my-blog-title-65e1234abcd98765f4321abc"
 	// console.log(Id)
@@ -364,7 +367,7 @@ const VisaDetails = () => {
 		//   return;
 		// }
 		setCalendarModalOpen(false);
-		console.log(fromDate,toDate)
+		console.log(fromDate, toDate);
 		const newDate = new Date(returnDate).toISOString();
 		try {
 			const response = await fetchDataFromAPI(
@@ -403,16 +406,16 @@ const VisaDetails = () => {
 		if (!fromDate || !toDate) {
 			console.warn("Waiting for fromDate and toDate to be set...");
 			return;
-		  }
-		
-		  setCalendarModalOpen(false);
-		  
-		  console.log("Sending POST request with:", { fromDate, toDate });
+		}
+
+		setCalendarModalOpen(false);
+
+		console.log("Sending POST request with:", { fromDate, toDate });
 		// localStorage.setItem("fromDate", fromDate);
 		// localStorage.setItem("toDate", toDate);
 		// console.log("Visa ki ID",id)
 		try {
-			console.log(fromDate,toDate)
+			console.log(fromDate, toDate);
 			const response = await fetchDataFromAPI(
 				"POST",
 				`${BASE_URL}create-visa-order`,
@@ -449,15 +452,12 @@ const VisaDetails = () => {
 	};
 	useEffect(() => {
 		if (fromDate && toDate) {
-		  console.log("Updated fromDate and toDate:", fromDate, toDate);
+			console.log("Updated fromDate and toDate:", fromDate, toDate);
 		}
-	  }, [fromDate, toDate]);
-	  
+	}, [fromDate, toDate]);
 
 	// console.log("fromDate:", fromDate);
-// console.log("toDate:", toDate);
-
-
+	// console.log("toDate:", toDate);
 
 	const handleCalendarChoice = (choice) => {
 		setCalendarModalOpen(false);
@@ -537,199 +537,311 @@ const VisaDetails = () => {
 					/>
 					<div className="absolute lg:block hidden inset-0 left-28 -z-10 w-[85%] rounded-2xl bg-gradient-to-r from-blue-600 to-purple-600 blur-md opacity-65"></div>
 				</div>
+
 				<div className=" absolute flex justify-center items-center gap-2 text-white font-medium text-xl top-12  left-24 bg-gray-900/20 rounded-xl px-4 py-2  ">
 					<CiLocationOn size={22} color="white" /> {selectedCountry}
 				</div>
 			</div>
 
-			{/* Apply Section */}
 
-			<div className="w-full flex md:flex-row flex-col justify-between  md:px-10 px-5  ">
-				<div ref={applyNowRef} className="mb-6 md:w-[50%] ml-6 w-full">
-					<h2 className="text-3xl font-bold mt-3 mb-2">
-						Apply now for guaranteed visa on{" "}
-					</h2>
-					<span className="text-blue-500 font-bold text-3xl">
-						{new Date().toDateString()?.slice(4, 100)}
-					</span>
+			{/* Apply Section */};
+			<div className="w-full flex md:flex-row flex-col justify-between md:px-10 px-5 gap-8">
+				<div ref={applyNowRef} className="mb-6 md:w-[50%] w-full">
+					<div className="space-y-4">
+						<div>
+							<h2 className="text-3xl font-bold">
+								Apply now for guaranteed visa on{" "}
+							</h2>
+							<span className="text-blue-500 font-bold text-3xl">
+								{new Date().toDateString()?.slice(4, 100)}
+							</span>
+						</div>
 
-					<div className="text-md w-full md:w-[60%] poppins-four  py-5 text-black px-10">
-						{data?.longDescription}
-					</div>
-
-					<div className="mb-6 w-full">
-						<div className="md:w-[85%] w-80 bg-white rounded-lg  py-4">
-							<div className="mb-4 md:max-h-72 md:overflow-auto">
-								<p
-									style={{ overflowWrap: "anywhere" }}
-									className="poppins-four text-sm md:max-h-56 md:overflow-auto "
-								>
-									{important?.description}
-								</p>
-								<p className="text-blue-500 poppins-five text-md my-2 mt-8 cursor-pointer mb-2">
-									{important?.heading}
-								</p>
-
-								<ul className="text-left space-y-1">
-									{important?.points?.map((item, index) => {
-										const pointsArray = item
-											.split(",")
-											.map((point) => point.trim());
-										return (
-											<React.Fragment key={index}>
-												{pointsArray?.map(
-													(point, pointIndex) => (
-														<p
-															key={pointIndex}
-															className="flex justify-start gap-2 items-center text-gray-400 poppins-four text-sm"
-														>
-															<GoDotFill
-																color="black"
-																size={5}
-															/>
-															{point}
-														</p>
-													)
-												)}
-											</React.Fragment>
-										);
-									})}
-								</ul>
+						{/* Visa Information Card */}
+						<div className="w-full bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 mt-6">
+							<div className="bg-gradient-to-r from-blue-50 to-indigo-50 px-4 py-3 border-b border-gray-100">
+								<h3 className="text-lg font-semibold text-gray-800">
+									Visa Details
+								</h3>
 							</div>
-							<VisaProcessSteps country={selectedCountry} />
+							<div className="grid grid-cols-2 md:grid-cols-3 divide-x divide-y divide-gray-100">
+								<div className="p-4 hover:bg-gray-50 transition-colors">
+									<p className="text-xs uppercase font-semibold text-gray-500 mb-1">
+										VISA TYPE
+									</p>
+									<p className="font-medium text-gray-800">
+										{visaType || "N/A"}
+									</p>
+								</div>
+								<div className="p-4 hover:bg-gray-50 transition-colors">
+									<p className="text-xs uppercase font-semibold text-gray-500 mb-1">
+										VALIDITY
+									</p>
+									<p className="font-medium text-gray-800">
+										{data?.validity
+											? `${data.validity} Days`
+											: "N/A"}
+									</p>
+								</div>
+								<div className="p-4 hover:bg-gray-50 transition-colors">
+									<p className="text-xs uppercase font-semibold text-gray-500 mb-1">
+										PROCESSING TIME
+									</p>
+									<p className="font-medium text-gray-800">
+										{data?.processingTime
+											? `${data.processingTime} Days`
+											: "N/A"}
+									</p>
+								</div>
+								<div className="p-4 hover:bg-gray-50 transition-colors">
+									<p className="text-xs uppercase font-semibold text-gray-500 mb-1">
+										STAY
+									</p>
+									<p className="font-medium text-gray-800">
+										{data?.period
+											? `${data.period} Days`
+											: "N/A"}
+									</p>
+								</div>
+								<div className="p-4 hover:bg-gray-50 transition-colors md:col-span-2">
+									<p className="text-xs uppercase font-semibold text-gray-500 mb-1">
+										ENTRY TYPE
+									</p>
+									<p className="font-medium text-gray-800">
+										{data?.entryType || "N/A"}
+									</p>
+								</div>
+							</div>
+						</div>
+
+						{/* Description */}
+						<div className="bg-white rounded-xl p-6 shadow-md mt-6">
+							<h3 className="text-lg font-semibold text-gray-800 mb-3">
+								Description
+							</h3>
+							<div className="prose prose-sm max-w-none text-gray-600">
+								{data?.longDescription ||
+									"No description available."}
+							</div>
+						</div>
+
+						{/* Important Information */}
+						<div className="bg-white rounded-xl shadow-md overflow-hidden mt-6">
+							<div className="p-6">
+								<div className="md:max-h-72 md:overflow-auto">
+									<p
+										style={{ overflowWrap: "anywhere" }}
+										className="poppins-four text-sm text-gray-600"
+									>
+										{important?.description}
+									</p>
+									{important?.heading && (
+										<p className="text-blue-600 font-medium text-md my-4">
+											{important?.heading}
+										</p>
+									)}
+
+									<ul className="space-y-2 mt-4">
+										{important?.points?.map(
+											(item, index) => {
+												const pointsArray = item
+													.split(",")
+													.map((point) =>
+														point.trim()
+													);
+												return (
+													<React.Fragment key={index}>
+														{pointsArray?.map(
+															(
+																point,
+																pointIndex
+															) => (
+																<li
+																	key={
+																		pointIndex
+																	}
+																	className="flex items-start gap-2 text-gray-600 text-sm"
+																>
+																	<GoDotFill
+																		className="mt-1 flex-shrink-0"
+																		color="#4B5563"
+																		size={8}
+																	/>
+																	<span>
+																		{point}
+																	</span>
+																</li>
+															)
+														)}
+													</React.Fragment>
+												);
+											}
+										)}
+									</ul>
+								</div>
+								<VisaProcessSteps country={selectedCountry} />
+							</div>
 						</div>
 					</div>
 				</div>
 
-				<div className=" xl:w-[50%] lg:px-10 relative w-full lg:ml-48">
+				{/* Right Column - Application Card */}
+				<div className="xl:w-[40%] lg:px-6 relative w-full">
 					<div
 						ref={cardRef}
-						// style={{
-						// 	backgroundImage: `url(${card})`,
-						// 	// transition: 'all 0.3s ease-in-out'
-						// }}
-						className="w-full bg-cover z-30 pb-16  mt-7 bg-white shadow-xl rounded-xl lg:p-10 p-6"
+						className="w-full bg-white shadow-xl rounded-xl overflow-hidden sticky top-24"
 					>
-						<div className="flex justify-between px-5 items-center  mb-4">
-							<h2 className="text-2xl  flex flex-row poppins-six relative top-5 font-semibold ">
-								Travellers
-								<RiContactsLine
-									size={30}
-									style={{ fontWeight: "bold" }}
-								/>
+						{/* Card Header */}
+						<div className="bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-4 text-white">
+							<h2 className="text-xl font-semibold">
+								Visa Application
 							</h2>
-							<div className="flex items-center relative top-5 space-x-2 p-b8">
-								<button
-									onClick={() => handletravelerNumber("sub")}
-									className="bg-white border border-black  text-lg flex cursor-pointer justify-center items-center w-4 h-4 rounded-full"
-								>
-									-
-								</button>
-								<span className="text-lg poppins-six">
-									{numberOfTravelers}
-								</span>
-								<button
-									onClick={() => handletravelerNumber("add")}
-									className="bg-white border border-black text-lg flex justify-center items-center  w-4 h-4 rounded-full"
-								>
-									+
-								</button>
-							</div>
+							<p className="text-blue-100 text-sm">
+								Complete your application in minutes
+							</p>
 						</div>
-						<div className="w-full px-5 rounded-xl  relative top-3 border-gray-400 border-dashed border-[1px] "></div>
-						{/* <hr className="border-black " /> */}
-						<div className="mb-4 pt-3 px-5">
-							<h3 className="text-xl poppins-six relative top-3 font-semibold">
-								Price
-							</h3>
+
+						{/* Travellers Section */}
+						<div className="p-6 border-b border-gray-200">
 							<div className="flex justify-between items-center">
-								<span className="relative gap-2 flex text-sm poppins-six justify-center items-center top-4">
-									<CiWallet size={15} /> VISA Fees
-								</span>
-								<span className="relative poppins-five top-4">
-									₹{data?.price} x {numberOfTravelers}
-								</span>
+								<div className="flex items-center gap-2">
+									<RiContactsLine
+										size={24}
+										className="text-blue-600"
+									/>
+									<h3 className="text-lg font-semibold text-gray-800">
+										Travellers
+									</h3>
+								</div>
+								<div className="flex items-center gap-3">
+									<button
+										onClick={() =>
+											handletravelerNumber("sub")
+										}
+										className="bg-gray-100 hover:bg-gray-200 border border-gray-300 h-8 w-8 rounded-full flex items-center justify-center transition-colors"
+										aria-label="Decrease traveler count"
+									>
+										<span className="text-xl font-medium text-gray-700">
+											-
+										</span>
+									</button>
+									<span className="text-xl font-medium w-6 text-center">
+										{numberOfTravelers}
+									</span>
+									<button
+										onClick={() =>
+											handletravelerNumber("add")
+										}
+										className="bg-gray-100 hover:bg-gray-200 border border-gray-300 h-8 w-8 rounded-full flex items-center justify-center transition-colors"
+										aria-label="Increase traveler count"
+									>
+										<span className="text-xl font-medium text-gray-700">
+											+
+										</span>
+									</button>
+								</div>
 							</div>
 						</div>
 
-						<div className="mb-4 px-10 relative top-3 ">
-							<div
-								style={{}}
-								className="flex w-full flex-wrap gap-3 justify-between "
-							>
-								<div className="text-center">
-									<p className="font-semibold poppins-six text-[12px]">
-										VISA TYPE
-									</p>
-									<p className="text-xs text-start">
-										{visaType}
-									</p>
+						{/* Price Section */}
+						<div className="p-6 border-b border-gray-200">
+							<h3 className="text-lg font-semibold text-gray-800 mb-4">
+								Price Details
+							</h3>
+							<div className="space-y-3">
+								<div className="flex justify-between items-center">
+									<span className="flex items-center gap-2 text-gray-600">
+										<CiWallet
+											size={18}
+											className="text-blue-600"
+										/>{" "}
+										VISA Fees
+									</span>
+									<span className="font-medium">
+										₹{data?.price || 0} x{" "}
+										{numberOfTravelers}
+									</span>
 								</div>
-								<div className="text-center">
-									<p className="font-semibold poppins-six text-[12px]">
-										VALIDITY
-									</p>
-									<p className="text-xs text-start">
-										{data?.validity}
-									</p>
-								</div>
-								<div className="text-center">
-									<p className="font-semibold poppins-six text-[12px]">
-										PROCESSING TIME
-									</p>
-									<p className="text-xs text-start">
-										{data?.processingTime}
-									</p>
-								</div>
-								<div className="flex flex-row gap-16 justify-between">
-									<div className="">
-										<p className="font-semibold poppins-six text-[12px]">
-											STAY
-										</p>
-										<p className="text-xs text-start">
-											{data?.period}
-										</p>
-									</div>
-									<div>
-										<p className="poppins-six text-[12px] font-semibold">
-											ENTRY TYPE
-										</p>
-										<p className="text-xs text-start">
-											{data?.entryType}
+
+								<div className="pt-3 border-t border-dashed border-gray-200">
+									<div className="flex justify-between items-center">
+										<h4 className="text-lg font-semibold text-gray-800">
+											Total Amount
+										</h4>
+										<p className="text-xl font-semibold text-blue-600">
+											₹
+											{(data?.price || 0) *
+												numberOfTravelers}
 										</p>
 									</div>
 								</div>
 							</div>
 						</div>
-						<div className="mb-[6px] flex  px-5 justify-between w-full">
-							<h3 className="text-xl poppins-six font-medium ">
-								Total Amount
+
+						{/* Visa Summary */}
+						<div className="p-6 bg-gray-50 border-b border-gray-200">
+							<h3 className="text-sm font-semibold text-gray-500 uppercase mb-3">
+								Visa Summary
 							</h3>
-							<p className="text-xl poppins-six font-medium ">
-								₹{data?.price * numberOfTravelers}
-							</p>
+							<div className="grid grid-cols-2 gap-4 text-sm">
+								<div>
+									<p className="text-gray-500 mb-1">Type</p>
+									<p className="font-medium">
+										{visaType || "N/A"}
+									</p>
+								</div>
+								<div>
+									<p className="text-gray-500 mb-1">
+										Validity
+									</p>
+									<p className="font-medium">
+										{data?.validity
+											? `${data.validity} Days`
+											: "N/A"}
+									</p>
+								</div>
+								<div>
+									<p className="text-gray-500 mb-1">
+										Processing
+									</p>
+									<p className="font-medium">
+										{data?.processingTime
+											? `${data.processingTime} Days`
+											: "N/A"}
+									</p>
+								</div>
+								<div>
+									<p className="text-gray-500 mb-1">
+										Stay Period
+									</p>
+									<p className="font-medium">
+										{data?.period
+											? `${data.period} Days`
+											: "N/A"}
+									</p>
+								</div>
+							</div>
 						</div>
-						<div className="w-full px-5 rounded-xl  relative top-3 border-gray-400 border-dashed border-[1px] "></div>
-						{/* <div className="w-full border-dashed border px-5  my-2 border-black"></div> */}
-						<div className="flex justify-center items-center">
+
+						{/* Action Buttons */}
+						<div className="p-6 flex items-center gap-3">
 							<button
 								onClick={handleStartApplication}
-								className="bg-gradient-to-r mt-[10px] relative cursor-pointer top-2 from-[#3180CA] to-[#7AC7F9] text-white py-2 px-4 rounded-full text-2xl poppins-six w-[80%]"
+								className="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white py-3 px-6 rounded-lg text-lg font-semibold transition-all shadow-md hover:shadow-lg"
 							>
 								Start Application
 							</button>
-
-							<Link
+							<button
 								onClick={handleAddToCart}
-								className=" mt-[10px] relative cursor-pointer top-2 py-3 px-4 rounded-full"
+								className="bg-gray-100 hover:bg-gray-200 p-3 rounded-lg transition-colors"
+								aria-label="Add to cart"
 							>
-								<IoMdCart className="text-4xl" />
-							</Link>
+								<IoMdCart className="text-2xl text-gray-700" />
+							</button>
 						</div>
 					</div>
 				</div>
 			</div>
-
 			{/* Options Section */}
 			<div className="mb-6  md:px-10 px-5">
 				<div className="flex justify-center my-2 md:justify-start items-center mb-4">
@@ -798,36 +910,9 @@ const VisaDetails = () => {
 					)}
 				</div>
 			</div>
-
-			{/* Visa Information */}
-			<div className="mb-6 w-full md:px-10 px-5">
-				<div className="flex border rounded-xl shadow-sm shadow-gray-100 border-gray-200 justify-evenly  md:w-[60%]">
-					<div className="p-2 rounded-lg">
-						<p className="font-semibold">VISA TYPE</p>
-						<p>{visaType}</p>
-					</div>
-					<div className="p-2 rounded-lg">
-						<p className="font-semibold">VALIDITY</p>
-						<p>{data?.validity} Days</p>
-					</div>
-					<div className="p-2 rounded-lg">
-						<p className="font-semibold">PROCESSING TIME</p>
-						<p>{data?.processingTime} Days</p>
-					</div>
-					<div className="p-2 rounded-lg">
-						<p className="font-semibold">STAY</p>
-						<p>{data?.period} Days</p>
-					</div>
-					<div className="p-2 sm:block hidden rounded-lg">
-						<p className="font-semibold">ENTRY TYPE</p>
-						<p>{data?.entryType}</p>
-					</div>
-				</div>
-			</div>
 			<div className="md:w-[60%] w-full">
 				<FAQs ref={faqRef} data={faqData?.faq} />
 			</div>
-
 			{/* Partners Section */}
 			{/* <div className="w-full md:w-[60%] p-6 ml-[8px]">
 				<h2 className="text-3xl font-bold  mb-6">
@@ -894,7 +979,6 @@ const VisaDetails = () => {
 					</div>
 				</div>
 			)}
-
 			{/* Calendar Modal */}
 			{isCalendarModalOpen && (
 				<div className="fixed inset-0 flex z-50  justify-center bg-black bg-opacity-50">
@@ -921,7 +1005,6 @@ const VisaDetails = () => {
 					</div>
 				</div>
 			)}
-
 			{/* Flexible Modal */}
 			{isFlexibleModalOpen && (
 				<div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
@@ -960,7 +1043,6 @@ const VisaDetails = () => {
 					</div>
 				</div>
 			)}
-
 			{isReturnModalOpen && (
 				<div className="fixed inset-0 bg-black bg-opacity-50 z-30 flex justify-center items-center">
 					<div className="bg-white cursor-pointer relative p-6 rounded-lg">
