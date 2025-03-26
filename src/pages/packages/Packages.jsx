@@ -106,10 +106,10 @@ const Packages = ({ plans }) => {
       <div className="flex flex-row  gap-4 m-3">
   <Button onClick = {()=>{
     setState("Recent")
-  }} className = "p-2 bg-orange-400 shadow-md hover:bg-orange-600 hover:shadow-lg hover:border-blue-500 hover:border-2 rounded-xl">Most Recent</Button>
+  }} className = "p-2 bg-orange-400 shadow-md hover:bg-orange-600 hover:shadow-lg active:border-blue-500 active:border-2 rounded-xl">Most Recent</Button>
   <Button onClick = {()=>{
     setState("Priced")
-  }} className = "p-2 bg-orange-400 shadow-md hover:bg-orange-600 hover:shadow-lg hover:border-blue-500 hover:border-2 rounded-xl">Least Priced</Button>
+  }} className = "p-2 bg-orange-400 shadow-md hover:bg-orange-600 hover:shadow-lg active:border-blue-500 active:border-2 rounded-xl">Least Priced</Button>
 </div>
       <div className="space-y-4 w-full flex flex-col gap-5 justify-center ">
         {filteredData?.map((option, index) => (
