@@ -548,12 +548,13 @@ const VisaDetails = () => {
 			<div className="w-full flex md:flex-row flex-col justify-between md:px-10 px-5 gap-8">
 				<div ref={applyNowRef} className="mb-6 md:w-[50%] w-full">
 					<div className="space-y-4">
-						<div>
+						<div className="mb-5">
 							<h2 className="text-3xl font-bold">
 								Apply now for guaranteed visa on{" "}
 							</h2>
 							<span className="text-blue-500 font-bold text-3xl">
-								{new Date().toDateString()?.slice(4, 100)}
+							{new Date(new Date().setDate(new Date().getDate() + 5)).toDateString()?.slice(4, 100)}
+
 							</span>
 						</div>
 

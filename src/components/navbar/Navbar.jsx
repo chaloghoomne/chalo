@@ -174,7 +174,7 @@ const Navbar = () => {
     } else {
       setWhichLogo(false)
     }
-    setBgColor(pathName === "/" ? "bg-gradient-to-r from-[#3180CA] to-[#7AC7F9]" : "bg-white shadow-md")
+    setBgColor(pathName === "/" ? "bg-gradient-to-r from-[#3180CA] to-[#7AC7F9] opacity-90 hover:opacity-100" : "bg-white shadow-md")
 
     // Disable body scroll when mobile menu is open
     if (isOpen) {

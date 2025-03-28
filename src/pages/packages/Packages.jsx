@@ -1,177 +1,318 @@
-// src/VisaSelection.js
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { fetchDataFromAPI } from "../../api-integration/fetchApi";
-import { BASE_URL, NetworkConfig } from "../../api-integration/urlsVariable";
-import { toast } from "react-toastify";
-import { FaCircleDot } from "react-icons/fa6";
-import { Helmet } from "react-helmet";
+"use client"
 
-import {Button} from 'react-aria-components'
+import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
+import { fetchDataFromAPI } from "../../api-integration/fetchApi"
+import { BASE_URL, NetworkConfig } from "../../api-integration/urlsVariable"
+import { toast } from "react-toastify"
+import {  FaCalendarAlt, FaHourglassHalf, FaClock } from "react-icons/fa"
+import { FaCircleDot } from "react-icons/fa6";
+
+import { FaArrowRight, FaCheck } from "react-icons/fa6"
+import { Helmet } from "react-helmet"
+import { motion, AnimatePresence } from "framer-motion"
 
 const Packages = ({ plans }) => {
-  const navigate = useNavigate();
-  const [selected, setSelected] = useState("");
-  const [data, setData] = useState();
-  const [heading,setHeading] = useState()
-  const [state,setState] = useState();
-  const [filteredData,setFilteredData] = useState();
-
-  // useEffect(() => {
-  //   if (plans?.length > 0) {
-  //     handleselect(plans[0]?._id);
-  //   }
-  // }, [plans]);
+  const navigate = useNavigate()
+  const [selected, setSelected] = useState("")
+  const [data, setData] = useState()
+  const [heading, setHeading] = useState()
+  const [state, setState] = useState()
+  const [filteredData, setFilteredData] = useState()
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     const fetchProfileImage = async () => {
+      setIsLoading(true)
       try {
-        const response = await fetchDataFromAPI(
-          "GET",
-          `${BASE_URL}${NetworkConfig.GET_HEADING_BY_ID}/Recommendations`
-        );
+        const response = await fetchDataFromAPI("GET", `${BASE_URL}${NetworkConfig.GET_HEADING_BY_ID}/Recommendations`)
         if (response) {
-          setData(response.data);
+          setData(response.data)
         }
-        // console.log(response);
       } catch (error) {
-        console.log(error);
+        console.log(error)
+      } finally {
+        setIsLoading(false)
       }
-    };
-    fetchProfileImage();
-  }, []);
-  // console.log(Array.isArray(plans))
+    }
+    fetchProfileImage()
+  }, [])
 
+  useEffect(() => {
+    if (!Array.isArray(plans)) return // Prevent errors if plans is undefined
 
-  useEffect(()=>{
+    const sortedPlans = [...plans]
 
-    if (!Array.isArray(plans)) return; // Prevent errors if plans is undefined
+    if (state === "Recent") {
+      sortedPlans.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
+    } else if (state === "Priced") {
+      sortedPlans.sort((a, b) => a.price - b.price)
+    }
 
-  let sortedPlans = [...plans];
+    setFilteredData(sortedPlans)
+  }, [plans, state])
 
-
-// console.log(sortedPlans)
-      if(state === "Recent"){
-        sortedPlans.sort((a,b)=> a.createdAt > b.createdAt)
-        
-      }
-      else if(state === "Priced"){
-        sortedPlans.sort((a,b)=>a.price-b.price)
-      }
-      else{
-        setFilteredData(sortedPlans)
-      }
-      setFilteredData(sortedPlans)
-    
-  },[plans,state])
-
-  // console.log(data);
-  const handleselect = (id,heading) => {
-    setSelected(id);
+  const handleselect = (id, heading) => {
+    setSelected(id)
     setHeading(heading)
-  };
-  // console.log(selected,heading)
-
-  const generateSlug = (title)=>{
-    return title.toLowerCase().replace(/ /g, "-").replace(/[^\w-]+/g, "");
   }
-  // console.log(heading)
+
+  const generateSlug = (title) => {
+    return title
+      .toLowerCase()
+      .replace(/ /g, "-")
+      .replace(/[^\w-]+/g, "")
+  }
 
   const handleRedirect = () => {
     if (!selected || !heading) {
-        toast.error("First select the Package");
-        return;
+      toast.error("First select the Package")
+      return
     }
 
-    const slug = generateSlug(heading); // Generate slug safely
-    navigate(`/visa-details/${slug}-${selected}`);
-  };
+    const slug = generateSlug(heading) // Generate slug safely
+    navigate(`/visa-details/${slug}-${selected}`)
+  }
+
+  // Animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  }
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        type: "spring",
+        stiffness: 100,
+      },
+    },
+  }
 
   return (
-    <div className=" flex flex-col items-center  mt-[-40px] justify-center md:px-0 px-5 pt-20">
+    <div className="flex flex-col items-center justify-center md:px-0 px-5 pt-12 pb-16 relative">
       <Helmet>
         <meta charSet="utf-8" />
-
-        <link rel="canonical" href="https://chaloghoomne.com/" />   
+        <link rel="canonical" href="https://chaloghoomne.com/" />
       </Helmet>
-      <p className="text-md text-[#F26337] poppins-seven  font-bold mb-2">
-        RECOMMENDATIONS
-      </p>
 
+      {/* Background decorative elements */}
+      <div className="absolute top-0 left-0 w-32 h-32 bg-blue-50 rounded-full opacity-50 -translate-x-1/2 -translate-y-1/2 blur-3xl"></div>
+      <div className="absolute bottom-0 right-0 w-64 h-64 bg-orange-50 rounded-full opacity-50 translate-x-1/4 translate-y-1/4 blur-3xl"></div>
 
-
-      <h2 className="text-3xl font-semibold poppins-five  mb-6">
-        {data?.heading}
-      </h2>
-      <div className="flex flex-row  gap-4 m-3">
-  <Button onClick = {()=>{
-    setState("Recent")
-  }} className = "p-2 bg-orange-400 shadow-md hover:bg-orange-600 hover:shadow-lg active:border-blue-500 active:border-2 rounded-xl">Most Recent</Button>
-  <Button onClick = {()=>{
-    setState("Priced")
-  }} className = "p-2 bg-orange-400 shadow-md hover:bg-orange-600 hover:shadow-lg active:border-blue-500 active:border-2 rounded-xl">Least Priced</Button>
-</div>
-      <div className="space-y-4 w-full flex flex-col gap-5 justify-center ">
-        {filteredData?.map((option, index) => (
-          <div
-            onClick={() => handleselect(option?._id,option?.visaTypeHeading)}
-            key={index}
-            className="border md:min-w-[900px] relative gap-3 rounded-[25px] border-blue-500 shadow-sm shadow-blue-200 p-8 py-10 flex  cursor-pointer flex-col justify-between items-center"
-          >
-            <div
-              className={`w-4 h-4 absolute left-3 top-4 mb-4 mx-auto rounded-full border-3 `}
-            >
-              {" "}
-              <FaCircleDot
-                size={15}
-                color={`${selected === option?._id ? "#3180CA" : "gray"}`}
-              />
-            </div>
-            {option.type && (
-              <span className=" bg-gradient-to-r from-[#3180CA] to-[#7AC7F9]  absolute right-16 top-[-12px] text-white shadow-lg shadow-[#7AC7F9] px-9 py-1 rounded-full text-sm">
-                {option?.type}
-              </span>
-            )}
-            <div className="flex  justify-between w-full px-4">
-              <h2 className="text-lg md:text-[27px] poppins-five font-semibold">
-                {option?.visaTypeHeading}
-              </h2>
-              <p className="text-lg md:text-[27px] poppins-five font-bold">
-                ₹{option?.price}
-              </p>
-            </div>
-            <div className="w-full flex md:flex-row flex-col gap-2 justify-between px-4">
-              <p className="text-gray-500 poppins-five text-md">
-                Stay Period:{" "}
-                <span className="text-md text-gray-400 poppins-three">
-                  {option?.period} Days
-                </span>
-              </p>
-              <p className="text-gray-500 poppins-five text-md">
-                Validity:{" "}
-                <span className="text-md text-gray-400 poppins-three">
-                  {" "}
-                  {option?.validity} Days
-                </span>
-              </p>
-              <p className="text-gray-500 poppins-five text-md">
-                Processing Time:{" "}
-                <span className="text-md text-gray-400 poppins-three">
-                  {option?.processingTime} Bussiness Days
-                </span>
-              </p>
-            </div>
-          </div>
-        ))}
-      </div>
-      <button
-        onClick={handleRedirect}
-        className=" bg-[#F26438] text-white py-2 px-8 mt-12 text-lg poppins-three rounded-full"
+      {/* Header section */}
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="text-center mb-8"
       >
-        Continue
-      </button>
-    </div>
-  );
-};
+        <span className="inline-block px-4 py-1 bg-orange-100 text-orange-600 rounded-full mb-2 font-medium">
+          RECOMMENDATIONS
+        </span>
+        <h2 className="text-3xl md:text-4xl font-bold poppins-five bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent">
+          {data?.heading || "Choose Your Perfect Package"}
+        </h2>
+        <p className="text-gray-600 mt-2 max-w-2xl mx-auto">
+          Select the visa package that best suits your travel needs and requirements
+        </p>
+      </motion.div>
 
-export default Packages;
+      {/* Filter buttons */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+        className="flex flex-wrap justify-center gap-4 mb-8"
+      >
+        <button
+          onClick={() => setState("Recent")}
+          className={`px-5 py-2.5 rounded-full flex items-center gap-2 transition-all duration-300 ${
+            state === "Recent"
+              ? "bg-gradient-to-r from-blue-600 to-blue-400 text-white shadow-lg shadow-blue-200"
+              : "bg-white border border-blue-200 text-blue-600 hover:border-blue-400"
+          }`}
+        >
+          <FaClock className={state === "Recent" ? "text-white" : "text-blue-500"} />
+          <span>Most Recent</span>
+          {state === "Recent" && <FaCheck size={12} className="ml-1" />}
+        </button>
+        <button
+          onClick={() => setState("Priced")}
+          className={`px-5 py-2.5 rounded-full flex items-center gap-2 transition-all duration-300 ${
+            state === "Priced"
+              ? "bg-gradient-to-r from-blue-600 to-blue-400 text-white shadow-lg shadow-blue-200"
+              : "bg-white border border-blue-200 text-blue-600 hover:border-blue-400"
+          }`}
+        >
+          <span>Least Priced</span>
+          {state === "Priced" && <FaCheck size={12} className="ml-1" />}
+        </button>
+      </motion.div>
+
+      {/* Package cards */}
+      <AnimatePresence>
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          className="space-y-6 w-full max-w-5xl"
+        >
+          {isLoading ? (
+            // Loading skeletons
+            Array(3)
+              .fill(0)
+              .map((_, index) => (
+                <div key={`skeleton-${index}`} className="border rounded-[25px] border-gray-200 p-8 animate-pulse">
+                  <div className="flex justify-between w-full">
+                    <div className="h-8 bg-gray-200 rounded w-1/3"></div>
+                    <div className="h-8 bg-gray-200 rounded w-1/4"></div>
+                  </div>
+                  <div className="w-full flex flex-wrap gap-4 mt-6">
+                    <div className="h-6 bg-gray-200 rounded w-1/4"></div>
+                    <div className="h-6 bg-gray-200 rounded w-1/4"></div>
+                    <div className="h-6 bg-gray-200 rounded w-1/3"></div>
+                  </div>
+                </div>
+              ))
+          ) : filteredData?.length > 0 ? (
+            filteredData.map((option, index) => (
+              <motion.div
+                key={option?._id || index}
+                variants={itemVariants}
+                onClick={() => handleselect(option?._id, option?.visaTypeHeading)}
+                whileHover={{ y: -5, boxShadow: "0 10px 25px -5px rgba(59, 130, 246, 0.1)" }}
+                className={`border relative rounded-[25px] p-6 md:p-8 cursor-pointer transition-all duration-300 overflow-hidden ${
+                  selected === option?._id
+                    ? "border-blue-500 bg-blue-50/30 shadow-md shadow-blue-100"
+                    : "border-gray-200 hover:border-blue-300 bg-white"
+                }`}
+              >
+                {/* Selection indicator */}
+                <div className="absolute left-6 top-1/2 transform -translate-y-1/2 h-full flex items-center">
+                  <div
+                    className={`w-5 h-5 rounded-full flex items-center justify-center ${
+                      selected === option?._id ? "bg-blue-500" : "border-2 border-gray-300"
+                    }`}
+                  >
+                    {selected === option?._id && <FaCheck size={10} className="text-white" />}
+                  </div>
+                </div>
+
+                {/* Package type badge */}
+                {option.type && (
+                  <div className="absolute right-0 top-0">
+                    <div className="bg-gradient-to-r from-blue-600 to-blue-400 text-white px-6 py-1.5 rounded-bl-2xl rounded-tr-[25px] font-medium text-sm shadow-sm">
+                      {option?.type}
+                    </div>
+                  </div>
+                )}
+
+                {/* Main content with left padding for selection indicator */}
+                <div className="pl-8">
+                  <div className="flex flex-col md:flex-row md:items-center justify-between w-full gap-2 mb-4">
+                    <h3 className="text-xl md:text-2xl font-bold text-gray-800">{option?.visaTypeHeading}</h3>
+                    <div className="flex items-center">
+                      <span className="text-lg md:text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent">
+                        ₹{option?.price}
+                      </span>
+                      {selected === option?._id && (
+                        <motion.div
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          className="ml-3 bg-green-100 text-green-600 text-xs px-2 py-1 rounded-full font-medium"
+                        >
+                          Selected
+                        </motion.div>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                    <div className="flex items-center gap-2">
+                      <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-500">
+                        <FaCalendarAlt size={14} />
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500 font-medium">Stay Period</p>
+                        <p className="text-sm font-semibold">{option?.period} Days</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-500">
+                        <FaCheck size={14} />
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500 font-medium">Validity</p>
+                        <p className="text-sm font-semibold">{option?.validity} Days</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <div className="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center text-orange-500">
+                        <FaHourglassHalf size={14} />
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500 font-medium">Processing Time</p>
+                        <p className="text-sm font-semibold">{option?.processingTime} Business Days</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            ))
+          ) : (
+            <div className="text-center py-12">
+              <div className="inline-block p-4 bg-blue-100 rounded-full mb-4">
+                <FaCircleDot size={24} className="text-blue-500" />
+              </div>
+              <h3 className="text-xl font-bold mb-2">No Packages Available</h3>
+              <p className="text-gray-600">Please check back later or try different filters</p>
+            </div>
+          )}
+        </motion.div>
+      </AnimatePresence>
+
+      {/* Continue button */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.5, duration: 0.5 }}
+        className="mt-10"
+      >
+        <button
+          onClick={handleRedirect}
+          disabled={!selected}
+          className={`group relative overflow-hidden rounded-full px-8 py-3 text-lg font-medium transition-all duration-300 ${
+            selected
+              ? "bg-gradient-to-r from-orange-500 to-orange-400 text-white shadow-lg shadow-orange-200 hover:shadow-xl hover:shadow-orange-200 hover:translate-y-[-2px]"
+              : "bg-gray-200 text-gray-400 cursor-not-allowed"
+          }`}
+        >
+          <span className="relative z-10 flex items-center gap-2">
+            Continue
+            <FaArrowRight
+              className={`transition-transform duration-300 ${selected ? "group-hover:translate-x-1" : ""}`}
+            />
+          </span>
+          {selected && (
+            <span className="absolute inset-0 z-0 bg-gradient-to-r from-orange-600 to-orange-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+          )}
+        </button>
+        {!selected && <p className="text-sm text-gray-500 mt-2">Please select a package to continue</p>}
+      </motion.div>
+    </div>
+  )
+}
+
+export default Packages
+
