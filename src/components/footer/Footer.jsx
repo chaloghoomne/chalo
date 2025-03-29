@@ -81,7 +81,7 @@ const Footer = () => {
         <div className="px-4 sm:px-6 lg:px-8 py-6">
           <div className="max-w-6xl mx-auto overflow-hidden rounded-lg bg-gradient-to-r from-amber-400 to-amber-500 shadow-md">
             <div className="relative px-6 py-4 md:py-5">
-              <div className="absolute inset-0 bg-[url('../../assets/subscribe.png')] bg-cover bg-center opacity-10"></div>
+              <div className="absolute inset-0 bg-[url('src\assets\subscribe.png')] bg-cover bg-center opacity-10"></div>
               <div className="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                 <h2 className="text-xl text-center font-bold text-white whitespace-nowrap">Join our newsletter</h2>
                 <div className="flex flex-1 max-w-lg">

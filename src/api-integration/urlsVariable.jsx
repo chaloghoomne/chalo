@@ -1,5 +1,5 @@
 // export const NEXT_URL = "http://localhost:5173/";
-export const BASE_URL = "http://82.29.167.247/api/v1/";
+export const BASE_URL = "https://api.chaloghoomne.com/api/v1/";
 
 
 export const NEXT_URL = "https://chaloghoomne.com";

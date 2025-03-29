@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { BrowserRouter as Router, Route, Routes, Navigate, useLocation } from "react-router-dom";
+import {
+	BrowserRouter as Router,
+	Route,
+	Routes,
+	Navigate,
+	useLocation,
+} from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "./redux/actions/login-actions";
 
@@ -30,104 +36,152 @@ import TermsConditions from "./pages/policies/TermsConditions";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import '@mantine/dates/styles.css';
+import "@mantine/dates/styles.css";
 import ScrollToTop from "./pages/helper/ScrolltoTop";
 import CartPage from "./pages/cart/CartPage";
 import NotFound from "./pages/NotFound/NotFound";
 import ServiceUnavailable from "./pages/NotFound/ServiceUnavailable";
 import { MantineProvider } from "@mantine/core";
-import { PrimeReactProvider } from 'primereact/api';
+import { PrimeReactProvider } from "primereact/api";
 
 const useScrollToSection = () => {
-  const location = useLocation();
+	const location = useLocation();
 
-  useEffect(() => {
-    if (location.hash) {
-      document.querySelector(location.hash)?.scrollIntoView({ behavior: "smooth" });
-    } else if (location.state?.scrollTo) {
-      document.querySelector(location.state.scrollTo)?.scrollIntoView({ behavior: "smooth" });
-    }
-  }, [location]);
+	useEffect(() => {
+		if (location.hash) {
+			document
+				.querySelector(location.hash)
+				?.scrollIntoView({ behavior: "smooth" });
+		} else if (location.state?.scrollTo) {
+			document
+				.querySelector(location.state.scrollTo)
+				?.scrollIntoView({ behavior: "smooth" });
+		}
+	}, [location]);
 };
 const PrivateRoute = ({ children }) => {
-  // Retrieve token from Redux or localStorage
-  const token = useSelector((state) => state.LoginReducer?.token) || localStorage.getItem("token") || null;
-  const countryId = useSelector((state) => state.CountryIdReducer?.countryId);
-  const location = useLocation();
+	// Retrieve token from Redux or localStorage
+	const token =
+		useSelector((state) => state.LoginReducer?.token) ||
+		localStorage.getItem("token") ||
+		null;
+	const countryId = useSelector((state) => state.CountryIdReducer?.countryId);
+	const location = useLocation();
 
-  // If token is missing, redirect to login
-  if (!token) {
-    return <Navigate to="/login" state={{ from: location, countryId }} replace />;
-  }
+	// If token is missing, redirect to login
+	if (!token) {
+		return (
+			<Navigate
+				to="/login"
+				state={{ from: location, countryId }}
+				replace
+			/>
+		);
+	}
 
-  return children;
+	return children;
 };
 
 const AppContent = () => {
-  useScrollToSection();
-  const location = useLocation();
-  const [pathName, setPathName] = useState(location.pathname);
+	useScrollToSection();
+	const location = useLocation();
+	const [pathName, setPathName] = useState(location.pathname);
 
-  useEffect(() => {
-    setPathName(location.pathname);
-  }, [location]);
+	useEffect(() => {
+		setPathName(location.pathname);
+	}, [location]);
 
-  const hideNavbarFooter = ["/login", "/signup", "/forgot-password"].includes(pathName);
+	const hideNavbarFooter = ["/login", "/signup", "/forgot-password"].includes(
+		pathName
+	);
 
-  return (
-    <div className="flex flex-col min-h-screen">
-      {!hideNavbarFooter && <Navbar />}
-      <div className="flex-grow">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/visa-types/:slug" element={<VisaTypes />} />
-          <Route path="/packages" element={<Packages />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/visa-details/:slug" element={<VisaDetails />} />
-          <Route path="/upload-image" element={<ImageUpload />} />
-          <Route path="/persons-details" element={<PersonDetails />} />
-          <Route path="/offer-packages" element={<OfferPackages />} />
-          <Route path="/edit-visa-request" element={<PrivateRoute><EditVisaDetails /></PrivateRoute>} />
-          <Route path="/view-application" element={<PrivateRoute><ViewApplication /></PrivateRoute>} />
-          <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
-          <Route path="/refund-policy" element={<RefundPolicyPage />} />
-          <Route path="/terms-condition" element={<TermsConditions />} />
-          <Route path="/blogs" element={<Blog />} />
-          <Route path="/blog/:slug" element={<BlogDetails />} />
-          <Route path="/about" element={<AboutUs />} />
-          <Route path="/contact" element={<ContactUs />} />
-          <Route path="/career-form" element={<CareerForm />} />
-          <Route path="/travel-form" element={<TravelAgentForm />} />
-		      <Route path="/cart" element={<CartPage />} />
-          <Route path="/503" element={<ServiceUnavailable />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </div>
-      {!hideNavbarFooter && <Footer />}
-    </div>
-  );
+	return (
+		<div className="flex flex-col min-h-screen">
+			{!hideNavbarFooter && <Navbar />}
+			<div className="flex-grow">
+				<Routes>
+					<Route path="/" element={<Home />} />
+					<Route path="/signup" element={<SignUp />} />
+					<Route path="/login" element={<Login />} />
+					<Route
+						path="/forgot-password"
+						element={<ForgotPassword />}
+					/>
+					<Route path="/visa-types/:slug" element={<VisaTypes />} />
+					<Route path="/packages" element={<Packages />} />
+					<Route path="/profile" element={<Profile />} />
+					<Route
+						path="/visa-details/:slug"
+						element={<VisaDetails />}
+					/>
+					<Route path="/upload-image" element={<ImageUpload />} />
+					<Route
+						path="/persons-details"
+						element={<PersonDetails />}
+					/>
+					<Route path="/offer-packages" element={<OfferPackages />} />
+					<Route
+						path="/edit-visa-request"
+						element={
+							<PrivateRoute>
+								<EditVisaDetails />
+							</PrivateRoute>
+						}
+					/>
+					<Route
+						path="/view-application"
+						element={
+							<PrivateRoute>
+								<ViewApplication />
+							</PrivateRoute>
+						}
+					/>
+					<Route
+						path="/privacy-policy"
+						element={<PrivacyPolicyPage />}
+					/>
+					<Route
+						path="/refund-policy"
+						element={<RefundPolicyPage />}
+					/>
+					<Route
+						path="/terms-condition"
+						element={<TermsConditions />}
+					/>
+					<Route path="/blogs" element={<Blog />} />
+					<Route path="/blog/:slug" element={<BlogDetails />} />
+					<Route path="/about" element={<AboutUs />} />
+					<Route path="/contact" element={<ContactUs />} />
+					<Route path="/career-form" element={<CareerForm />} />
+					<Route path="/travel-form" element={<TravelAgentForm />} />
+					<Route path="/cart" element={<CartPage />} />
+					<Route path="/503" element={<ServiceUnavailable />} />
+					<Route path="*" element={<NotFound />} />
+				</Routes>
+			</div>
+			{!hideNavbarFooter && <Footer />}
+		</div>
+	);
 };
 
-const App = () => {
-  const dispatch = useDispatch();
+const App = ({ children }) => {
+	const dispatch = useDispatch();
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) dispatch(login(token));
-  }, [dispatch]);
+	useEffect(() => {
+		const token = localStorage.getItem("token");
+		if (token) dispatch(login(token));
+	}, [dispatch]);
 
-  return (
-    <PrimeReactProvider>
-      <Router>
-        <ScrollToTop />
-        <AppContent />
-        <ToastContainer />
-      </Router>
-      </PrimeReactProvider>
-  );
+	return (
+		<PrimeReactProvider>
+			<Router>
+				<ScrollToTop />
+				<AppContent />
+				{children}
+				<ToastContainer />
+			</Router>
+		</PrimeReactProvider>
+	);
 };
 
 export default App;
