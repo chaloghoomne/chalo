@@ -128,32 +128,33 @@ const PersonDetails = () => {
     }
   }, [formData.dob, formData.passportIssueDate])
 
-  const calculatePassportValidity = (dob, issueDate) => {
-    const dobDate = new Date(dob)
-    const issueDateObj = new Date(issueDate)
-    const currentDate = new Date()
+  
 
-    // Assuming passport is valid for 10 years from issue date
-    const validityPeriod = 10 * 365 * 24 * 60 * 60 * 1000 // 10 years in milliseconds
-    const validityDate = new Date(issueDateObj.getTime() + validityPeriod)
+//   const calculatePassportValidity = (dob, issueDate) => {
+//     const dobDate = new Date(dob)
+//     const issueDateObj = new Date(issueDate)
+//     const currentDate = new Date()
 
-    if (validityDate < dobDate) {
-      toast.error("Passport expiry date is earlier than date of birth.")
-      return ""
-    }
+//     // Assuming passport is valid for 10 years from issue date
+//     const validityPeriod = 10 * 365 * 24 * 60 * 60 * 1000 // 10 years in milliseconds
+//     const validityDate = new Date(issueDateObj)
 
-    if (validityDate < currentDate) {
-      toast.error("Passport has expired.")
-      return ""
-    }
+//     if (validityDate < dobDate) {
+//       toast.error("Passport expiry date is earlier than date of birth.")
+//       return ""
+//     }
 
-    setFormData((prevData) => ({
-      ...prevData,
-      passportValidTill: validityDate.toISOString().slice(0, 10),
-    }))
+//     if (validityDate < currentDate) {
+//       toast.error("Passport has expired.")
+//       return ""
+//     }
 
-    return validityDate.toISOString().slice(0, 10) // Format: YYYY-MM-DD
-  }
+//     if(validityDate < issueDateObj) {
+
+//       toast.error("Validity Can't be Less than Issue Date")
+
+//   }
+// }
 
   const sendPhoneOtp = async () => {
     if (!validatePhoneNumber(phone)) {
@@ -229,33 +230,62 @@ const PersonDetails = () => {
     return right
   }
 
+  const calculatePassportValidity = (dob, issueDate) => {
+      const dobDate = new Date(dob);
+      const issueDateObj = new Date(issueDate);
+      const currentDate = new Date();
+  
+      // Assuming passport is valid for 10 years from issue date
+      const validityPeriod = 10 * 365 * 24 * 60 * 60 * 1000; // 10 years in milliseconds
+      const validityDate = new Date(issueDateObj.getTime() + validityPeriod);
+  
+      if (validityDate < dobDate) {
+        toast.error("Passport expiry date is earlier than date of birth.");
+        return "";
+      }
+  
+      if (validityDate < currentDate) {
+        toast.error("Passport has expired.");
+        return "";
+      }
+  
+      setFormData((prevData) => ({
+        ...prevData,
+        passportValidTill: validityDate.toISOString().slice(0, 10),
+      }));
+  
+      return validityDate.toISOString().slice(0, 10); // Format: YYYY-MM-DD
+    };
+
   const validatePassportDetails = () => {
-    const { passportNumber, passportIssueDate, dob } = formData
-
-    // Regex pattern for passport number validation
-    // This example assumes passport numbers are alphanumeric and between 6 and 9 characters
-    const passportNumberRegex = /^[A-Z0-9]{6,9}$/
-
-    // Passport number validation
-    if (!passportNumberRegex.test(passportNumber)) {
-      toast.error("Invalid passport number.")
-      return false
-    }
-
-    // Calculate and set passportValidTill date
-    const passportValidTillDate = calculatePassportValidity(dob, passportIssueDate)
-    if (!passportValidTillDate) {
-      return false
-    }
-
-    setFormData((prevData) => ({
-      ...prevData,
-      passportValidTill: passportValidTillDate,
-    }))
-
-    return true
-  }
-
+      const { passportNumber, passportIssueDate, dob } = formData;
+  
+      // Regex pattern for passport number validation
+      // This example assumes passport numbers are alphanumeric and between 6 and 9 characters
+      const passportNumberRegex = /^[A-Z0-9]{6,9}$/;
+  
+      // Passport number validation
+      if (!passportNumberRegex.test(passportNumber)) {
+        toast.error("Invalid passport number.");
+        return false;
+      }
+  
+      // Calculate and set passportValidTill date
+      const passportValidTillDate = calculatePassportValidity(
+        dob,
+        passportIssueDate
+      );
+      if (!passportValidTillDate) {
+        return false;
+      }
+  
+      setFormData((prevData) => ({
+        ...prevData,
+        passportValidTill: passportValidTillDate,
+      }));
+  
+      return true;
+    };
   const handleSubmit = async (e) => {
     e.preventDefault()
     setIsLoading(true)
@@ -269,8 +299,7 @@ const PersonDetails = () => {
     if (packageData?.orderDetails === travlersCount) {
       try {
         const token = localStorage.getItem("token")
-        const response = await axios.put(
-          `${BASE_URL}edit-order-details/${cotravlerId}`,
+        const response = await fetchDataFromAPI("PUT", `${BASE_URL}edit-order-details/${cotravlerId}`,
           { ...formData, detailsFulfilled: true },
           {
             headers: {
@@ -666,10 +695,10 @@ const PersonDetails = () => {
                           value={formData.passportValidTill}
                           onChange={handleFields}
                           className="w-full p-3 border border-gray-300 rounded-lg bg-gray-50"
-                          readOnly
+                          
                         />
                         {formData.passportValidTill && (
-                          <p className="text-xs text-gray-500 mt-1">Automatically calculated based on issue date</p>
+                          <p className="text-xs text-gray-500 mt-1">Please Enter The Valid Date</p>
                         )}
                       </div>
                     </div>

@@ -565,7 +565,7 @@ const VisaDetails = () => {
 									Visa Details
 								</h3>
 							</div>
-							<div className="grid grid-cols-2 md:grid-cols-3 divide-x divide-y divide-gray-100">
+							<div className="grid grid-cols-2 md:grid-cols-5 divide-x divide-y text-center divide-gray-100">
 								<div className="p-4 hover:bg-gray-50 transition-colors">
 									<p className="text-xs uppercase font-semibold text-gray-500 mb-1">
 										VISA TYPE
@@ -584,7 +584,7 @@ const VisaDetails = () => {
 											: "N/A"}
 									</p>
 								</div>
-								<div className="p-4 hover:bg-gray-50 transition-colors">
+								{/* <div className="p-4 hover:bg-gray-50 transition-colors">
 									<p className="text-xs uppercase font-semibold text-gray-500 mb-1">
 										PROCESSING TIME
 									</p>
@@ -593,7 +593,7 @@ const VisaDetails = () => {
 											? `${data.processingTime} Days`
 											: "N/A"}
 									</p>
-								</div>
+								</div> */}
 								<div className="p-4 hover:bg-gray-50 transition-colors">
 									<p className="text-xs uppercase font-semibold text-gray-500 mb-1">
 										STAY
@@ -687,10 +687,10 @@ const VisaDetails = () => {
 				</div>
 
 				{/* Right Column - Application Card */}
-				<div className="xl:w-[40%] lg:px-6 relative w-full">
+				<div className="xl:w-[40%] lg:px-6 relative h-[70%] md:h-[80%] w-full">
 					<div
 						ref={cardRef}
-						className="w-full bg-white shadow-xl rounded-xl overflow-hidden sticky top-24"
+						className="w-full bg-white shadow-xl rounded-xl overflow-hidden mt-14 sticky top-24"
 					>
 						{/* Card Header */}
 						<div className="bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-4 text-white">

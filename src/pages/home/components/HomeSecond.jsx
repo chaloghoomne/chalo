@@ -223,7 +223,7 @@ const HomeSecond = forwardRef((props, ref) => {
         else if (ref) ref.current = el
         containerRef.current = el
       }}
-      className="py-8 md:py-12 px-4 md:px-6 lg:px-8 max-w-[1400px] mx-auto"
+      className="py-8 md:py-12 px-4 md:px-5 lg:px-5 max-w-screen mx-auto"
     >
       {isLoading ? (
         <div className="flex flex-col items-center justify-center min-h-[300px]">

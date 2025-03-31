@@ -47,8 +47,8 @@ const HomeFourth = () => {
   }, []);
 
   return (
-    <section className="relative py-24 overflow-hidden bg-white">
-      <div className="container relative mx-auto px-4 sm:px-6">
+    <section className=" py-24  w-screen bg-white">
+      <div className=" px-4 sm:px-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <motion.div
             initial="hidden"
@@ -79,7 +79,7 @@ const HomeFourth = () => {
                   key={item?.id || index}
                   variants={fadeIn}
                   whileHover={{ y: -5, transition: { duration: 0.2 } }}
-                  className="bg-white shadow-lg rounded-xl p-6 text-center hover:shadow-xl h-40 transition-all duration-300 border border-gray-200"
+                  className="bg-white shadow-lg rounded-xl p-6 text-center hover:shadow-xl h-52 transition-all duration-300 border border-gray-200 "
                 >
                   <h3 className="mt-4 text-2xl font-bold text-primary">
                     {item?.heading}
@@ -100,11 +100,11 @@ const HomeFourth = () => {
             transition={{ duration: 0.8 }}
             className="relative"
           >
-            <div className="relative rounded-2xl overflow-hidden bg-gray-100 p-2 shadow-xl border border-gray-200">
+            <div className="w-full rounded-2xl overflow-hidden bg-gray-100 p-2 shadow-xl border border-gray-200">
               <motion.img
                 src={ratings}
                 alt="Happy Customer"
-                className="w-full h-auto rounded-xl relative z-10"
+                className="w-[100%] h-auto rounded-xl relative z-10"
                 whileHover={{ scale: 1.02 }}
                 transition={{ duration: 0.3 }}
               />

@@ -76,9 +76,9 @@ const Footer = () => {
   }
 
   return (
-    <footer className="w-full bg-white">
+    <footer className="max-w-screen bg-white">
       {showNewsletter && (
-        <div className="px-4 sm:px-6 lg:px-8 py-6">
+        <div className="px-4 sm:px-6 lg:px-4 py-6">
           <div className="max-w-6xl mx-auto overflow-hidden rounded-lg bg-gradient-to-r from-amber-400 to-amber-500 shadow-md">
             <div className="relative px-6 py-4 md:py-5">
               <div className="absolute inset-0 bg-[url('src\assets\subscribe.png')] bg-cover bg-center opacity-10"></div>
@@ -107,12 +107,12 @@ const Footer = () => {
       )}
 
       <div className="bg-gray-900 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+        <div className="max-w-screen mx-auto px-4 sm:px-6 lg:px-8 py-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16">
             {/* Company Info */}
             <div>
               <div className="mb-6">
-                <img src="/assets/whitelogo.png" alt="Chalo Ghoomne" className="h-12" />
+                <img src="src\assets\whitelogo.png" alt="Chalo Ghoomne" className="h-12" />
               </div>
               <p className="text-gray-300 text-sm mb-6">
                 Our visa booking company is dedicated to simplifying the complex and often daunting process of obtaining

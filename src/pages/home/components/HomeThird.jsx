@@ -136,12 +136,12 @@ const HomeThird = () => {
   const currentReview = reviews[currentIndex]
 
   return (
-    <div className="relative overflow-hidden bg-gradient-to-b from-white to-orange-50 py-16 md:py-24">
+    <div className="relative max-w-screen overflow-hidden bg-gradient-to-b from-white to-orange-50 py-16 md:py-24">
       {/* Background decorative elements */}
       <div className="absolute top-0 left-0 w-64 h-64 bg-orange-100 rounded-full opacity-30 -translate-x-1/2 -translate-y-1/2"></div>
       <div className="absolute bottom-0 right-0 w-96 h-96 bg-orange-100 rounded-full opacity-30 translate-x-1/3 translate-y-1/3"></div>
 
-      <div className="container mx-auto px-4 md:px-8 relative z-10" ref={testimonialsRef}>
+      <div className=" px-4 md:px-8 relative z-10" ref={testimonialsRef}>
         {/* Section heading with animated underline */}
         <div className="text-center mb-16">
           <h2 className="inline-block text-orange-500 text-lg md:text-xl font-medium mb-3 relative">
@@ -214,7 +214,7 @@ const HomeThird = () => {
 
           {/* Right side - Testimonial carousel */}
           <div className="w-full lg:w-7/12">
-            <div className="relative bg-white rounded-2xl shadow-xl p-6 md:p-10 overflow-hidden">
+            <div className="relative bg-white rounded-2xl shadow-xl p-6 md:p-2 overflow-hidden">
               {/* Quote icon */}
               <FaQuoteLeft className="absolute top-6 left-6 text-orange-200 text-4xl md:text-6xl opacity-50" />
 

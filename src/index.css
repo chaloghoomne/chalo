@@ -78,6 +78,7 @@ button:focus-visible {
 @tailwind components;
 @tailwind utilities;
 
+
 /* Custom slick dots */
 /* Custom slick dots */ 
 .slick-dots.custom-dots {
