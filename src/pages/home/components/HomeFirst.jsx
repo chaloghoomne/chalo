@@ -93,7 +93,7 @@ const HomeFirst = ({ homeSecondRef }) => {
                   "We make your travel dreams come true with hassle-free visa services and exclusive travel packages."}
               </p>
 
-              <div className="flex items-center md:w-[80%] px-6 flex-wrap gap-5 p-4 bg-white/80 backdrop-blur-sm rounded-xl shadow-md">
+              <div className="flex items-center md:w-[82%] px-6 flex-wrap gap-5 p-4 bg-white/80 backdrop-blur-sm rounded-xl shadow-md">
                 <div className="flex justify-start px-5 bg-white border border-gray-200 rounded-lg items-center shadow-sm">
                   <CiSearch size={24} className="text-gray-500" />
                   <input
@@ -101,7 +101,7 @@ const HomeFirst = ({ homeSecondRef }) => {
                     placeholder="Where to..."
                     value={inputValue}
                     onChange={handleInputValue}
-                    className="flex-grow focus:outline-none w-[100%] xl:w-64 text-black p-3 rounded-lg"
+                    className="flex-grow focus:outline-none w-[100%] xl:w-56 text-black p-3 rounded-lg"
                   />
                 </div>
                 <motion.button
@@ -151,7 +151,7 @@ const HomeFirst = ({ homeSecondRef }) => {
             <motion.img
               src={homefirst}
               alt="Travel Destination"
-              className="w-full h-full object-cover absolute top-14 mb-10 lg:top-10 lg:right-24"
+              className="w-full h-full lg:object-cover object-contain absolute top-14 mb-10 lg:top-10 lg:right-24"
               initial={{ scale: 1 }}
               animate={{
                 scale: isHovering ? 1.22 : 1.2,
@@ -163,7 +163,7 @@ const HomeFirst = ({ homeSecondRef }) => {
             <motion.img
               src={italy}
               alt="Travel Destination"
-              className="h-24 w-16 absolute top-44 right-3 md:top-52 md:-right-2 lg:right-24"
+              className="h-24 w-16 absolute top-44 right-3 md:top-52 md:-right-0 lg:right-24"
               initial={{ scale: 0.5 }}
               animate={{
                 scale: isHovering ? 1.22 : 1.2,
@@ -177,7 +177,7 @@ const HomeFirst = ({ homeSecondRef }) => {
             <motion.img
               src={india}
               alt="Travel Destination"
-              className="h-28 w-24 absolute -bottom-9 left-4 md:bottom-2 md:left-8 lg:-bottom-14 lg:-left-5"
+              className="h-28 w-24 absolute -bottom-14 left-24 md:-bottom-8 md:left-20 lg:-bottom-14 lg:-left-5"
               initial={{ scale: 0.8 }}
               animate={{
                 scale: isHovering ? 1.22 : 1.2,
@@ -191,7 +191,7 @@ const HomeFirst = ({ homeSecondRef }) => {
             <motion.img
               src={uae}
               alt="Travel Destination"
-              className="h-28 w-24 absolute top-16 left-8 md:top-16 md:left-4 lg:top-20 lg:-left-10"
+              className="h-28 w-24 absolute top-32 left-8 md:top-32 md:left-10 lg:top-20 lg:-left-10"
               initial={{ scale: 0.8 }}
               animate={{
                 scale: isHovering ? 1.22 : 1.2,

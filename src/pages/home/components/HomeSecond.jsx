@@ -7,13 +7,7 @@ import { BASE_URL, NetworkConfig } from "../../../api-integration/urlsVariable"
 import { useSelector } from "react-redux"
 import debounce from "lodash/debounce"
 import { MdKeyboardArrowRight } from "react-icons/md"
-import { gsap } from "gsap"
-import { ScrollTrigger } from "gsap/ScrollTrigger"
-
-// Only register plugins on the client side
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger)
-}
+import { motion, useAnimation, useInView, AnimatePresence } from "framer-motion"
 
 const HomeSecond = forwardRef((props, ref) => {
   const [packages, setPackages] = useState([])
@@ -24,89 +18,14 @@ const HomeSecond = forwardRef((props, ref) => {
   const [showAll, setShowAll] = useState(false)
 
   const containerRef = useRef(null)
-  const elementRef = useRef(null)
-  const headingRef = useRef(null)
-  const paragraphRef = useRef(null)
+  const sectionInView = useInView(containerRef, { once: false, amount: 0.2 })
+  const controls = useAnimation()
 
   useEffect(() => {
-    // Ensure we're in the browser and refs are available
-    if (
-      typeof window === "undefined" ||
-      !containerRef.current ||
-      !elementRef.current ||
-      !headingRef.current ||
-      !paragraphRef.current
-    )
-      return
-
-    // Create a main timeline
-    let ctx = gsap.context(() => {
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: containerRef.current,
-        start: "top 70%",
-        end: "bottom 20%",
-        toggleActions: "play",
-      },
-    })
-
-    // Element animation with improved motion
-    tl.fromTo(
-      elementRef.current,
-      {
-        x: 100,
-        y: 30,
-        opacity: 0,
-        scale: 0.9,
-        rotationZ: 2,
-      },
-      {
-        x: 0,
-        y: 0,
-        opacity: 1,
-        scale: 1,
-        rotationZ: 0,
-        duration: 1.2,
-        ease: "power3.out",
-      },
-    )
-
-    // Animate heading with a modern reveal effect
-    tl.fromTo(
-      headingRef.current,
-      {
-        y: 50,
-        opacity: 0,
-      },
-      {
-        y: 0,
-        opacity: 1,
-        duration: 0.8,
-        ease: "back.out(1.7)",
-      },
-      "-=0.7",
-    )
-
-    // Animate paragraph with a fade-in effect  
-    tl.fromTo(
-      paragraphRef.current,
-      {
-        y: 20,
-        opacity: 0,
-      },
-      {
-        y: 0,
-        opacity: 1,
-        duration: 0.7,
-        ease: "power2.out",
-      },
-      "-=0.5",
-    )
-
-    // Cleanup function
-    return () => ctx.revert(); 
-  })
-  }, [])
+    if (sectionInView) {
+      controls.start("visible")
+    }
+  }, [sectionInView, controls])
 
   const ITEMS_PER_PAGE = 12
 
@@ -201,22 +120,134 @@ const HomeSecond = forwardRef((props, ref) => {
 
   const displayedPackages = showAll ? packages : packages.slice(0, ITEMS_PER_PAGE)
 
+  // Animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.2,
+      },
+    },
+  }
+
+  const headingVariants = {
+    hidden: { y: 50, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        type: "spring",
+        stiffness: 100,
+        damping: 15,
+      },
+    },
+  }
+
+  const paragraphVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        type: "spring",
+        stiffness: 100,
+        damping: 15,
+        delay: 0.2,
+      },
+    },
+  }
+
+  const cardVariants = {
+    hidden: {
+      opacity: 0,
+      y: 30,
+      scale: 0.95,
+    },
+    visible: (i) => ({
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: {
+        type: "spring",
+        stiffness: 80,
+        damping: 12,
+        delay: i * 0.05,
+      },
+    }),
+  }
+
+  const buttonVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        type: "spring",
+        stiffness: 100,
+        damping: 15,
+        delay: 0.4,
+      },
+    },
+    hover: {
+      scale: 1.05,
+      boxShadow: "0 10px 25px -5px rgba(245, 158, 11, 0.4)",
+      transition: {
+        type: "spring",
+        stiffness: 400,
+        damping: 10,
+      },
+    },
+    tap: {
+      scale: 0.95,
+    },
+  }
+
+  const loaderVariants = {
+    animate: {
+      rotate: 360,
+      transition: {
+        repeat: Number.POSITIVE_INFINITY,
+        duration: 1,
+        ease: "linear",
+      },
+    },
+  }
+
   if (error) {
     return (
-      <div className="py-10 px-5 text-center">
-        <p className="text-red-500">{error}</p>
-        <button
+      <motion.div
+        className="py-10 px-5 text-center"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+      >
+        <motion.p
+          className="text-red-500"
+          initial={{ y: -20 }}
+          animate={{ y: 0 }}
+          transition={{ type: "spring", stiffness: 100 }}
+        >
+          {error}
+        </motion.p>
+        <motion.button
           onClick={() => window.location.reload()}
-          className="mt-4 px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-all duration-300 hover:shadow-lg hover:shadow-blue-300/50 transform hover:-translate-y-1"
+          className="mt-4 px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-all duration-300"
+          whileHover={{
+            scale: 1.05,
+            boxShadow: "0 10px 25px -5px rgba(59, 130, 246, 0.5)",
+          }}
+          whileTap={{ scale: 0.95 }}
         >
           Try Again
-        </button>
-      </div>
+        </motion.button>
+      </motion.div>
     )
   }
 
   return (
-    <div
+    <motion.div
       ref={(el) => {
         // Handle both the forwarded ref and our containerRef
         if (typeof ref === "function") ref(el)
@@ -224,81 +255,150 @@ const HomeSecond = forwardRef((props, ref) => {
         containerRef.current = el
       }}
       className="py-8 md:py-12 px-4 md:px-5 lg:px-5 max-w-screen mx-auto"
+      variants={containerVariants}
+      initial="hidden"
+      animate={controls}
     >
       {isLoading ? (
-        <div className="flex flex-col items-center justify-center min-h-[300px]">
-          <div className="w-12 h-12 border-4 border-t-yellow-500 border-r-transparent border-b-transparent border-l-transparent rounded-full animate-spin"></div>
-          <p className="mt-4 text-gray-600">Loading visa packages...</p>
-        </div>
+        <motion.div
+          className="flex flex-col items-center justify-center min-h-[300px]"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        >
+          <motion.div
+            className="w-12 h-12 border-4 border-t-yellow-500 border-r-transparent border-b-transparent border-l-transparent rounded-full"
+            variants={loaderVariants}
+            animate="animate"
+          ></motion.div>
+          <motion.p
+            className="mt-4 text-gray-600"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+          >
+            Loading visa packages...
+          </motion.p>
+        </motion.div>
       ) : (
         <>
-          <h1
-            ref={headingRef}
+          <motion.h1
             className="text-3xl md:text-4xl lg:text-5xl poppins-six text-center font-bold mb-6 md:mb-10 relative inline-block w-full"
+            variants={headingVariants}
           >
-            <span className="relative z-10 bg-clip-text text-transparent bg-gradient-to-r from-yellow-600 to-orange-500 hover:from-orange-500 hover:to-yellow-600 transition-all duration-700">
+            <motion.span
+              className="relative z-10 bg-clip-text text-transparent bg-gradient-to-r from-yellow-600 to-orange-500 hover:from-orange-500 hover:to-yellow-600 transition-all duration-700"
+              whileHover={{ scale: 1.02 }}
+            >
               {headingData?.heading || "World Best Visas Requested Countries"}
-            </span>
-            <span className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-yellow-500 rounded-full transition-all duration-300 hover:w-48"></span>
-          </h1>
-          <p ref={paragraphRef} className="text-center text-gray-600 max-w-3xl mx-auto mb-8">
+            </motion.span>
+            <motion.span
+              className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-yellow-500 rounded-full"
+              whileHover={{ width: 200 }}
+              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            ></motion.span>
+          </motion.h1>
+
+          <motion.p className="text-center text-gray-600 max-w-3xl mx-auto mb-8" variants={paragraphVariants}>
             {headingData?.subHeading ||
               "Explore our selection of visa packages for the most requested destinations around the world."}
-          </p>
+          </motion.p>
 
           {packages.length === 0 ? (
-            <div className="text-center py-10">
-              <p className="text-xl text-gray-600">No visa packages found for your search.</p>
-            </div>
+            <motion.div
+              className="text-center py-10"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <motion.p
+                className="text-xl text-gray-600"
+                initial={{ scale: 0.9 }}
+                animate={{ scale: 1 }}
+                transition={{ type: "spring", stiffness: 100 }}
+              >
+                No visa packages found for your search.
+              </motion.p>
+            </motion.div>
           ) : (
             <>
-              <div
-                ref={elementRef}
+              <motion.div
                 className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5"
+                variants={containerVariants}
               >
-                {displayedPackages.map((visa, index) => (
-                  <VisaCard
-                    key={index}
-                    image={visa?.image}
-                    altImage={visa?.altImage}
-                    city={visa?.city}
-                    country={visa?.country}
-                    price={visa?.price}
-                    rating={visa?.rating}
-                    id={visa?._id}
-                    description={visa?.description}
-                  />
-                ))}
-              </div>
+                <AnimatePresence>
+                  {displayedPackages.map((visa, index) => (
+                    <motion.div
+                      key={visa?._id || index}
+                      custom={index}
+                      variants={cardVariants}
+                      initial="hidden"
+                      animate="visible"
+                      exit={{ opacity: 0, y: 20, transition: { duration: 0.2 } }}
+                      whileHover={{ y: -5, transition: { duration: 0.2 } }}
+                    >
+                      <VisaCard
+                        image={visa?.image}
+                        altImage={visa?.altImage}
+                        city={visa?.city}
+                        country={visa?.country}
+                        price={visa?.price}
+                        rating={visa?.rating}
+                        id={visa?._id}
+                        description={visa?.description}
+                      />
+                    </motion.div>
+                  ))}
+                </AnimatePresence>
+              </motion.div>
 
               {packages.length > ITEMS_PER_PAGE && (
-                <button
+                <motion.button
                   onClick={toggleShowAll}
-                  className="group relative mt-10 mx-auto block px-8 py-3 bg-gradient-to-r from-yellow-500 to-orange-500 text-white rounded-md text-lg font-semibold poppins-six overflow-hidden transition-all duration-300 hover:shadow-lg hover:shadow-yellow-300/50"
+                  className="group relative mt-10 mx-auto block px-8 py-3 bg-gradient-to-r from-yellow-500 to-orange-500 text-white rounded-md text-lg font-semibold poppins-six overflow-hidden"
+                  variants={buttonVariants}
+                  whileHover="hover"
+                  whileTap="tap"
                 >
-                  <span className="relative z-10 flex items-center justify-center gap-2">
+                  <motion.span className="relative z-10 flex items-center justify-center gap-2">
                     {showAll ? "Show Less" : "View All"}
 
                     {!showAll && (
-                      <span className="flex transition-transform duration-300 group-hover:translate-x-1">
+                      <motion.span
+                        className="flex"
+                        animate={{ x: [0, 5, 0] }}
+                        transition={{
+                          repeat: Number.POSITIVE_INFINITY,
+                          repeatType: "reverse",
+                          duration: 1.5,
+                        }}
+                      >
                         <MdKeyboardArrowRight size={22} />
-                        <MdKeyboardArrowRight
-                          size={22}
-                          className="absolute opacity-0 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-4"
-                        />
-                      </span>
+                        <motion.span
+                          initial={{ opacity: 0, x: -5 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: 0.2 }}
+                        >
+                          <MdKeyboardArrowRight size={22} />
+                        </motion.span>
+                      </motion.span>
                     )}
-                  </span>
+                  </motion.span>
 
                   {/* Button background animation */}
-                  <span className="absolute inset-0 h-full w-full bg-gradient-to-r from-orange-500 to-yellow-500 scale-x-0 transition-transform duration-500 origin-left group-hover:scale-x-100"></span>
-                </button>
+                  <motion.span
+                    className="absolute inset-0 h-full w-full bg-gradient-to-r from-orange-500 to-yellow-500"
+                    initial={{ scaleX: 0, originX: 0 }}
+                    whileHover={{ scaleX: 1 }}
+                    transition={{ duration: 0.4 }}
+                  ></motion.span>
+                </motion.button>
               )}
             </>
           )}
         </>
       )}
-    </div>
+    </motion.div>
   )
 })
 
