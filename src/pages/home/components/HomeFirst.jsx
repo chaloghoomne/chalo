@@ -93,7 +93,7 @@ const HomeFirst = ({ homeSecondRef }) => {
                   "We make your travel dreams come true with hassle-free visa services and exclusive travel packages."}
               </p>
 
-              <div className="flex items-center md:w-[82%] px-6 flex-wrap gap-5 p-4 bg-white/80 backdrop-blur-sm rounded-xl shadow-md">
+              <div className="flex items-center md:w-[78%] px-6 flex-wrap gap-5 p-4 bg-white/80 backdrop-blur-sm rounded-xl shadow-md">
                 <div className="flex justify-start px-5 bg-white border border-gray-200 rounded-lg items-center shadow-sm">
                   <CiSearch size={24} className="text-gray-500" />
                   <input

@@ -430,10 +430,10 @@ const PersonDetails = () => {
                           disabled
                         />
                       </div>
-                      <div className="hidden md:block absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
-                        <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
+                      <div className="hidden md:block absolute left-1/2 -bottom-5 transform -translate-x-1/2 -translate-y-1/2 z-10">
+                        {/* <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
                           <FaUserFriends size={28} className="text-blue-600" />
-                        </div>
+                        </div> */}
                       </div>
                       <div className="flex flex-col gap-2 flex-1">
                         <label className="font-medium text-gray-700 flex items-center gap-1">
@@ -575,24 +575,40 @@ const PersonDetails = () => {
                           <FaPhone className="text-blue-500" /> Phone Number
                         </label>
                         <div className="flex gap-2">
-                          <input
-                            type="text"
-                            value={phone}
-                            onChange={(e) => setPhone(e.target.value)}
-                            placeholder="Enter phone number"
-                            className="flex-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                          />
-                          {!phoneVerified && validatePhoneNumber(phone) && (
+                          <div className="flex">
+                            <span className="inline-flex items-center px-3 text-gray-500 bg-gray-100 border border-r-0 border-gray-300 rounded-l-lg">
+                              +91
+                            </span>
+                            <input
+                              type="text"
+                              value={phone}
+                              onChange={(e) => {
+                                const value = e.target.value.replace(/\D/g, "")
+                                if (value.length <= 10) {
+                                  setPhone(value)
+                                } else {
+                                  toast.error("Phone number cannot exceed 10 digits")
+                                }
+                              }}
+                              placeholder="Enter phone number"
+                              className="flex-1 p-3 border border-gray-300 rounded-r-lg rounded-l-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                              maxLength={10}
+                            />
+                          </div>
+                          {!phoneVerified && (
                             <button
                               type="button"
                               onClick={sendPhoneOtp}
-                              disabled={isLoading}
-                              className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg transition-all"
+                              disabled={isLoading || phone.length !== 10}
+                              className={`${phone.length === 10 ? "bg-blue-600 hover:bg-blue-700" : "bg-blue-300 cursor-not-allowed"} text-white py-2 px-4 rounded-lg transition-all`}
                             >
                               {isLoading ? "Sending..." : otpSentToPhone ? "Resend OTP" : "Send OTP"}
                             </button>
                           )}
                         </div>
+                        {phone && phone.length < 10 && (
+                          <p className="text-amber-600 text-sm mt-1">Please enter a 10-digit phone number</p>
+                        )}
                         {otpSentToPhone && !phoneVerified && (
                           <div className="mt-2">
                             <input
@@ -623,7 +639,8 @@ const PersonDetails = () => {
                       <button
                         type="button"
                         onClick={nextStep}
-                        className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-6 rounded-lg flex items-center gap-2 transition-all duration-300"
+                        className="bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300 text-white py-2 px-6 rounded-lg flex items-center gap-2 transition-all duration-300"
+                        disabled={!phoneVerified}
                       >
                         Continue <span className="text-xl">→</span>
                       </button>

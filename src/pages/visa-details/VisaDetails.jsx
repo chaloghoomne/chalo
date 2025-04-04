@@ -413,7 +413,7 @@ const VisaDetails = () => {
 		console.log("Sending POST request with:", { fromDate, toDate });
 		// localStorage.setItem("fromDate", fromDate);
 		// localStorage.setItem("toDate", toDate);
-		// console.log("Visa ki ID",id)
+		// console.log("Visa ki ID",id)             
 		try {
 			console.log(fromDate, toDate);
 			const response = await fetchDataFromAPI(
@@ -982,11 +982,8 @@ const VisaDetails = () => {
 			)}
 			{/* Calendar Modal */}
 			{isCalendarModalOpen && (
-				<div className="fixed inset-0 flex z-50  justify-center bg-black bg-opacity-50">
-					<div className="bg-white relative m-4 mt-5 max-h-[600px] overflow-auto rounded-lg shadow-lg w-full max-w-xl">
-						<h2 className="text-xl p-4 poppins-four font-bold text-center">
-							Select Departure Date
-						</h2>
+				<div className="fixed inset-0 flex z-50 rounded-lg  justify-center bg-black bg-opacity-50">
+					<div className="bg-white relative m-4 mt-5 max-h-[600px] overflow-visible rounded-lg shadow-lg w-full max-w-md">
 
 						<div className="  flex justify-center">
 							<MonthCalender
@@ -999,9 +996,9 @@ const VisaDetails = () => {
 						</div>
 						<button
 							onClick={() => setCalendarModalOpen(false)}
-							className="absolute right-2 top-3 text-2xl font-bold"
+							className="absolute right-2 top-3 text-2xl rounded-full p-1 font-extrabold bg-white hover:bg-gray-200"
 						>
-							<RxCross1 size={20} color="red" />
+							<RxCross1 size={20} color="black" />
 						</button>
 					</div>
 				</div>
