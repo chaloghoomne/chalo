@@ -121,7 +121,7 @@ const EditVisaDetails = () => {
   const handlePayment = async () => {
     setIsPaymentLoading(true)
     try {
-      const response = await fetchDataFromAPI("POST", `${BASE_URL}create-order`, { amount: 1 })
+      const response = await fetchDataFromAPI("POST", `${BASE_URL}create-order`, { amount: price})
 
       if (response) {
         const options = {

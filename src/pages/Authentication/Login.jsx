@@ -100,6 +100,7 @@ const Login = () => {
 							onChange={(e) => setPassword(e.target.value)}
 							className="w-full p-3 rounded-xl text-black bg-white border border-gray-600 placeholder-gray-400"
 						/>
+						<p className="text-amber-600 text-sm mt-1">Phone Number is password for New Users</p>
 						<div
 							onClick={() => setShowPassword(!showPassword)}
 							className="absolute right-4 bottom-3 cursor-pointer"
