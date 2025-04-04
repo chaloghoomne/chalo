@@ -121,7 +121,7 @@ const EditVisaDetails = () => {
   const handlePayment = async () => {
     setIsPaymentLoading(true)
     try {
-      const response = await fetchDataFromAPI("POST", `${BASE_URL}create-order`, { amount: 1 })
+      const response = await fetchDataFromAPI("POST", `${BASE_URL}create-order`, { amount: price})
 
       if (response) {
         const options = {
@@ -153,7 +153,7 @@ const EditVisaDetails = () => {
                         const responseData = await fetchDataFromAPI("PUT", `${BASE_URL}edit-visa-order/${packageId}`, {
                           ...response.data,
                           totalAmount: totalPrice.totalAmount,
-                          gst: totalPrice.gst,
+                          // gst: totalPrice.gst,
                           insurance: insurance,
                           insurancePrice,
                           pricePerUser: price,
@@ -242,15 +242,15 @@ const EditVisaDetails = () => {
 
     const basePrice = amount
     const discountAmount = discount || 0
-    const gstAmount = basePrice * 0.18
+    // const gstAmount = basePrice * 0.18
     const newnum = Number(insurancePrice)
     const insuranceAmount = isNaN(newnum) ? 0 : Number(insurancePrice)
-    const totalAmount = basePrice + gstAmount + insuranceAmount
+    const totalAmount = basePrice  + insuranceAmount
 
     return {
       totalAmount,
       discount: discountAmount,
-      gst: gstAmount,
+
       basePrice: basePrice,
     }
   }
@@ -501,10 +501,10 @@ const EditVisaDetails = () => {
                   <span className="font-medium">₹{totalPrice?.basePrice}</span>
                 </div>
 
-                <div className="flex justify-between items-center pb-3 border-b border-gray-100">
+                {/* <div className="flex justify-between items-center pb-3 border-b border-gray-100">
                   <span className="text-gray-600">GST (18%)</span>
                   <span className="font-medium">₹{Math.floor(totalPrice.gst)}</span>
-                </div>
+                </div> */}
 
                 {insurancePrice > 0 && (
                   <div className="flex justify-between items-center pb-3 border-b border-gray-100">
