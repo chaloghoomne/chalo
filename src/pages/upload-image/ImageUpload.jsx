@@ -287,7 +287,7 @@ const ImageUpload = () => {
                       <input
                         id={`file-upload-${index}`}
                         type="file"
-                        accept="image/*"
+                        // accept="image/*"
                         onChange={(e) => handleImageChange(e, item.name)}
                         className="hidden"
                       />

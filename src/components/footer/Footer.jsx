@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import { Link, useLocation } from "react-router-dom"
 import axios from "axios"
+import whitelogo from "../../assets/whitelogo.png"
 import { toast } from "react-toastify"
 import { BASE_URL } from "../../api-integration/urlsVariable"
 import { fetchDataFromAPI } from "../../api-integration/fetchApi"
@@ -112,7 +113,7 @@ const Footer = () => {
             {/* Company Info */}
             <div>
               <div className="mb-6">
-                <img src="src\assets\whitelogo.png" alt="Chalo Ghoomne" className="h-12" />
+                <img src={whitelogo} alt="Chalo Ghoomne" className="h-12" />
               </div>
               <p className="text-gray-300 text-sm mb-6">
                 Our visa booking company is dedicated to simplifying the complex and often daunting process of obtaining

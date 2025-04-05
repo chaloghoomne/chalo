@@ -16,6 +16,7 @@ const HomeSecond = forwardRef((props, ref) => {
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState(null)
   const [showAll, setShowAll] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
 
   const containerRef = useRef(null)
   const sectionInView = useInView(containerRef, { once: false, amount: 0.2 })
@@ -114,6 +115,17 @@ const HomeSecond = forwardRef((props, ref) => {
     return () => filterAndSortPackages.cancel()
   }, [inputValue, allPackages])
 
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768)
+    }
+
+    checkMobile()
+    window.addEventListener("resize", checkMobile)
+
+    return () => window.removeEventListener("resize", checkMobile)
+  }, [])
+
   const toggleShowAll = () => {
     setShowAll((prev) => !prev)
   }
@@ -122,85 +134,73 @@ const HomeSecond = forwardRef((props, ref) => {
 
   // Animation variants
   const containerVariants = {
-    hidden: { opacity: 0 },
+    hidden: isMobile ? { opacity: 1 } : { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.2,
+        staggerChildren: isMobile ? 0 : 0.05,
+        delayChildren: isMobile ? 0 : 0.1,
       },
     },
   }
 
   const headingVariants = {
-    hidden: { y: 50, opacity: 0 },
+    hidden: isMobile ? { opacity: 1 } : { opacity: 0 },
     visible: {
-      y: 0,
       opacity: 1,
       transition: {
-        type: "spring",
-        stiffness: 100,
-        damping: 15,
+        duration: isMobile ? 0 : 0.5,
       },
     },
   }
 
   const paragraphVariants = {
-    hidden: { y: 20, opacity: 0 },
+    hidden: isMobile ? { opacity: 1, y: 0 } : { y: 20, opacity: 0 },
     visible: {
       y: 0,
       opacity: 1,
       transition: {
-        type: "spring",
+        type: isMobile ? "tween" : "spring",
         stiffness: 100,
         damping: 15,
-        delay: 0.2,
+        delay: isMobile ? 0 : 0.2,
+        duration: isMobile ? 0 : undefined,
       },
     },
   }
 
   const cardVariants = {
-    hidden: {
-      opacity: 0,
-      y: 30,
-      scale: 0.95,
-    },
+    hidden: isMobile ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 },
     visible: (i) => ({
       opacity: 1,
       y: 0,
-      scale: 1,
       transition: {
-        type: "spring",
-        stiffness: 80,
-        damping: 12,
-        delay: i * 0.05,
+        type: isMobile ? "tween" : "spring",
+        stiffness: isMobile ? undefined : 70,
+        duration: isMobile ? 0 : undefined,
+        damping: isMobile ? undefined : 15,
+        delay: isMobile ? 0 : i * 0.03,
       },
     }),
   }
 
   const buttonVariants = {
-    hidden: { opacity: 0, y: 20 },
+    hidden: isMobile ? { opacity: 1 } : { opacity: 0 },
     visible: {
       opacity: 1,
-      y: 0,
       transition: {
-        type: "spring",
-        stiffness: 100,
-        damping: 15,
-        delay: 0.4,
+        duration: isMobile ? 0 : 0.5,
+        delay: isMobile ? 0 : 0.2,
       },
     },
     hover: {
-      scale: 1.05,
-      boxShadow: "0 10px 25px -5px rgba(245, 158, 11, 0.4)",
+      scale: isMobile ? 1 : 1.03,
       transition: {
-        type: "spring",
-        stiffness: 400,
-        damping: 10,
+        duration: isMobile ? 0 : 0.2,
       },
     },
     tap: {
-      scale: 0.95,
+      scale: isMobile ? 1 : 0.98,
     },
   }
 
@@ -254,14 +254,14 @@ const HomeSecond = forwardRef((props, ref) => {
         else if (ref) ref.current = el
         containerRef.current = el
       }}
-      className="py-8 md:py-12 px-4 md:px-5 lg:px-5 max-w-screen mx-auto"
+      className="py-6 md:py-12 px-3 md:px-5 lg:px-5 max-w-screen mx-auto overflow-x-hidden"
       variants={containerVariants}
-      initial="hidden"
-      animate={controls}
+      initial={isMobile ? "visible" : "hidden"}
+      animate={isMobile ? "visible" : controls}
     >
       {isLoading ? (
         <motion.div
-          className="flex flex-col items-center justify-center min-h-[300px]"
+          className="flex flex-col items-center justify-center min-h-[200px]"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
@@ -283,7 +283,7 @@ const HomeSecond = forwardRef((props, ref) => {
       ) : (
         <>
           <motion.h1
-            className="text-3xl md:text-4xl lg:text-5xl poppins-six text-center font-bold mb-6 md:mb-10 relative inline-block w-full"
+            className="text-2xl md:text-3xl lg:text-4xl poppins-six text-center font-bold mb-4 md:mb-6 relative inline-block w-full"
             variants={headingVariants}
           >
             <motion.span
@@ -323,7 +323,7 @@ const HomeSecond = forwardRef((props, ref) => {
           ) : (
             <>
               <motion.div
-                className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5"
+                className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5"
                 variants={containerVariants}
               >
                 <AnimatePresence>
@@ -355,18 +355,18 @@ const HomeSecond = forwardRef((props, ref) => {
               {packages.length > ITEMS_PER_PAGE && (
                 <motion.button
                   onClick={toggleShowAll}
-                  className="group relative mt-10 mx-auto block px-8 py-3 bg-gradient-to-r from-yellow-500 to-orange-500 text-white rounded-md text-lg font-semibold poppins-six overflow-hidden"
+                  className="group relative mt-8 mx-auto block px-6 sm:px-8 py-2 sm:py-3 bg-gradient-to-r from-yellow-500 to-orange-500 text-white rounded-md text-base sm:text-lg font-semibold poppins-six overflow-hidden"
                   variants={buttonVariants}
-                  whileHover="hover"
-                  whileTap="tap"
+                  whileHover={isMobile ? undefined : "hover"}
+                  whileTap={isMobile ? undefined : "tap"}
                 >
                   <motion.span className="relative z-10 flex items-center justify-center gap-2">
                     {showAll ? "Show Less" : "View All"}
 
-                    {!showAll && (
+                    {!showAll && !isMobile && (
                       <motion.span
                         className="flex"
-                        animate={{ x: [0, 5, 0] }}
+                        animate={isMobile ? undefined : { x: [0, 5, 0] }}
                         transition={{
                           repeat: Number.POSITIVE_INFINITY,
                           repeatType: "reverse",
@@ -375,23 +375,32 @@ const HomeSecond = forwardRef((props, ref) => {
                       >
                         <MdKeyboardArrowRight size={22} />
                         <motion.span
-                          initial={{ opacity: 0, x: -5 }}
-                          animate={{ opacity: 1, x: 0 }}
+                          initial={isMobile ? { opacity: 1, x: 0 } : { opacity: 0, x: -5 }}
+                          animate={isMobile ? undefined : { opacity: 1, x: 0 }}
                           transition={{ delay: 0.2 }}
                         >
                           <MdKeyboardArrowRight size={22} />
                         </motion.span>
                       </motion.span>
                     )}
+
+                    {!showAll && isMobile && (
+                      <span className="flex">
+                        <MdKeyboardArrowRight size={22} />
+                        <MdKeyboardArrowRight size={22} />
+                      </span>
+                    )}
                   </motion.span>
 
-                  {/* Button background animation */}
-                  <motion.span
-                    className="absolute inset-0 h-full w-full bg-gradient-to-r from-orange-500 to-yellow-500"
-                    initial={{ scaleX: 0, originX: 0 }}
-                    whileHover={{ scaleX: 1 }}
-                    transition={{ duration: 0.4 }}
-                  ></motion.span>
+                  {/* Button background animation - disabled on mobile */}
+                  {!isMobile && (
+                    <motion.span
+                      className="absolute inset-0 h-full w-full bg-gradient-to-r from-orange-500 to-yellow-500"
+                      initial={{ scaleX: 0, originX: 0 }}
+                      whileHover={{ scaleX: 1 }}
+                      transition={{ duration: 0.4 }}
+                    ></motion.span>
+                  )}
                 </motion.button>
               )}
             </>
