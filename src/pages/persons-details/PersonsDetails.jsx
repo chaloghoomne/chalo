@@ -552,7 +552,8 @@ const PersonDetails = () => {
                           className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
                         >
                           <option value="">Select Age Group</option>
-                          {childData?.childPrice > 0 && <option value="Child">Under 18</option>}
+                          {/* {childData?.childPrice > 0 && <option value="Child">Under 18</option>} */}
+                          <option value="Child">Under 18</option>
                           <option value="Adult">18 and Over</option>
                         </select>
                       </div>
