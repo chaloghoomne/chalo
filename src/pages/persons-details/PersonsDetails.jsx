@@ -640,7 +640,7 @@ const PersonDetails = () => {
                         type="button"
                         onClick={nextStep}
                         className="bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300 text-white py-2 px-6 rounded-lg flex items-center gap-2 transition-all duration-300"
-                        disabled={!phoneVerified}
+                        // disabled={!phoneVerified}
                       >
                         Continue <span className="text-xl">→</span>
                       </button>

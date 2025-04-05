@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
 import { Helmet } from "react-helmet"
 import { Upload, CheckCircle, Camera, Info, AlertCircle } from "lucide-react"
-
+import whitelogo from "../../assets/whitelogo.png"
 import { fetchDataFromAPI } from "../../api-integration/fetchApi"
 import { BASE_URL } from "../../api-integration/urlsVariable"
 import { calenderDate, returnCalenderDate } from "../../redux/actions/calender-date-action"
@@ -296,7 +296,7 @@ const ImageUpload = () => {
                         {previews[item.name] ? (
                           <div className="relative w-full h-full">
                             <img
-                              src={previews[item.name] || "/placeholder.svg"}
+                              src={previews[item.name] || whitelogo}
                               alt={item.name}
                               className="w-full h-full object-cover"
                             />
