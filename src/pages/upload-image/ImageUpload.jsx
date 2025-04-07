@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
 import { Helmet } from "react-helmet"
-import { Upload, CheckCircle, Camera, Info, AlertCircle } from "lucide-react"
+import { Upload, CheckCircle, Camera, Info, AlertCircle, FileText } from "lucide-react"
 import whitelogo from "../../assets/whitelogo.png"
 import { fetchDataFromAPI } from "../../api-integration/fetchApi"
 import { BASE_URL } from "../../api-integration/urlsVariable"
@@ -25,6 +25,7 @@ const ImageUpload = () => {
   const [packageData, setPackageData] = useState(null)
   const [uploading, setUploading] = useState(false)
   const [previews, setPreviews] = useState({})
+  const [fileTypes, setFileTypes] = useState({}) // Track file types
   const [data, setData] = useState([])
   const [images, setImages] = useState({})
   const [selectedDoc, setSelectedDoc] = useState(null)
@@ -124,93 +125,110 @@ const ImageUpload = () => {
       [name]: file,
     }))
 
-    // Generate and update the preview URL
-    const previewUrl = URL.createObjectURL(file)
-    setPreviews((prev) => ({
+    // Track file type
+    const fileType = file.type
+    setFileTypes((prev) => ({
       ...prev,
-      [name]: previewUrl,
+      [name]: fileType,
     }))
+
+    // Generate and update the preview URL
+    if (fileType.startsWith("image/")) {
+      const previewUrl = URL.createObjectURL(file)
+      setPreviews((prev) => ({
+        ...prev,
+        [name]: previewUrl,
+      }))
+    } else if (fileType === "application/pdf") {
+      // For PDFs, we'll use a default PDF icon/preview
+      setPreviews((prev) => ({
+        ...prev,
+        [name]: "pdf", // Special marker for PDF files
+      }))
+    }
   }
 
   // Upload images to server
   const token = localStorage.getItem("token")
   const uploadImage = async (formData) => {
     try {
-        const response = await fetch(`${BASE_URL}edit-order-details/${cotravlerId}`, {
-            method: "PUT",
-            body: formData,  // ✅ Use formData as the body
-            headers: {
-                Authorization: `Bearer ${token}`,  // ✅ Keep only the auth header
-            },
-        });
+      const response = await fetch(`${BASE_URL}edit-order-details/${cotravlerId}`, {
+        method: "PUT",
+        body: formData, // ✅ Use formData as the body
+        headers: {
+          Authorization: `Bearer ${token}`, // ✅ Keep only the auth header
+        },
+      })
 
-        const result = await response.json();
-        console.log("Response from server:", result);
-        return result;
+      const result = await response.json()
+      console.log("Response from server:", result)
+      return result
     } catch (error) {
-        console.error("Upload failed:", error);
+      console.error("Upload failed:", error)
     }
-};
+  }
 
-
-
-  
-  // const formData = new FormData()
   const handleSubmit = async () => {
-    setUploading(true);
+    setUploading(true)
 
-    let hasImages = false;
-    const formData = new FormData();
+    let hasImages = false
+    const formData = new FormData()
 
     data.forEach((item, index) => {
-        const imageFile = images[item.name];
-        if (imageFile) {
-            formData.append("documents", imageFile); // Now sending as `documents`
-            formData.append(`names[${index}]`, item.name);
-            hasImages = true;
-        }
-    });
+      const imageFile = images[item.name]
+      if (imageFile) {
+        formData.append("documents", imageFile) // Now sending as `documents`
+        formData.append(`names[${index}]`, item.name)
+        hasImages = true
+      }
+    })
 
     if (!hasImages) {
-        setError("Please upload at least one document");
-        setUploading(false);
-        return;
+      setError("Please upload at least one document")
+      setUploading(false)
+      return
     }
 
-    console.log("Final FormData before sending:");
-    for (let [key, value] of formData.entries()) {
-        console.log(key, value);
+    console.log("Final FormData before sending:")
+    for (const [key, value] of formData.entries()) {
+      console.log(key, value)
     }
 
-    dispatch(showButton(true));
+    dispatch(showButton(true))
 
     try {
-        const response = await uploadImage(formData);
-        if (response?.success) {
-            console.log("Upload Successful:", response);
-        }
+      const response = await uploadImage(formData)
+      if (response?.success) {
+        console.log("Upload Successful:", response)
+      }
     } catch (error) {
-        setError("Failed to upload documents");
-        console.error(error);
+      setError("Failed to upload documents")
+      console.error(error)
     } finally {
-        setUploading(false);
+      setUploading(false)
     }
-};
-
-
-  // useEffect(()=>{
-  //   for (const pair of formData.entries()) {
-  //     console.log(pair[0], pair[1]);
-  //   }
-    
-  // })
-  
+  }
 
   // Calculate upload progress
   const uploadProgress = data.length > 0 ? (Object.keys(previews).length / data.length) * 100 : 0
 
   // Check if all required documents are uploaded
   const allUploaded = data.length > 0 && Object.keys(previews).length === data.length
+
+  // Render preview based on file type
+  const renderPreview = (name) => {
+    if (!previews[name]) return null
+
+    if (previews[name] === "pdf") {
+      return (
+        <div className="w-full h-full flex items-center justify-center bg-gray-100">
+          <FileText className="w-12 h-12 text-orange-500" />
+        </div>
+      )
+    }
+
+    return <img src={previews[name] || whitelogo} alt={name} className="w-full h-full object-cover" />
+  }
 
   return (
     <>
@@ -264,6 +282,7 @@ const ImageUpload = () => {
                   <h2 className="text-lg font-medium text-gray-700 mb-2">Required Documents</h2>
                   <p className="text-sm text-gray-500">
                     Click on each tile to upload the corresponding document. All documents must be clear and legible.
+                    You can upload images or PDF files.
                   </p>
                 </div>
 
@@ -287,7 +306,7 @@ const ImageUpload = () => {
                       <input
                         id={`file-upload-${index}`}
                         type="file"
-                        // accept="image/*"
+                        accept="image/*,application/pdf"
                         onChange={(e) => handleImageChange(e, item.name)}
                         className="hidden"
                       />
@@ -295,11 +314,7 @@ const ImageUpload = () => {
                       <div className="aspect-square">
                         {previews[item.name] ? (
                           <div className="relative w-full h-full">
-                            <img
-                              src={previews[item.name] || whitelogo}
-                              alt={item.name}
-                              className="w-full h-full object-cover"
-                            />
+                            {renderPreview(item.name)}
                             <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                               <div className="bg-white p-2 rounded-full">
                                 <Camera className="w-6 h-6 text-orange-500" />
@@ -331,7 +346,9 @@ const ImageUpload = () => {
                       {showInfo === item.name && (
                         <div className="absolute z-10 w-64 p-3 bg-white rounded-lg shadow-lg border border-gray-200 text-xs text-gray-600 -top-2 left-full ml-2 transform -translate-y-full">
                           <div className="font-medium text-gray-800 mb-1">{item.name}</div>
-                          <p className="mb-2">{item.description || "Please upload a clear image of your document."}</p>
+                          <p className="mb-2">
+                            {item.description || "Please upload a clear image or PDF of your document."}
+                          </p>
                           {item.points && item.points.length > 0 ? (
                             <ul className="space-y-1">
                               {item.points.map((point, idx) => (
@@ -386,7 +403,7 @@ const ImageUpload = () => {
                     </div>
 
                     <p className="text-sm text-gray-600 mb-3">
-                      {selectedDoc.description || "Please upload a clear image of your document."}
+                      {selectedDoc.description || "Please upload a clear image or PDF of your document."}
                     </p>
 
                     <ul className="space-y-2">
@@ -409,7 +426,7 @@ const ImageUpload = () => {
                           </li>
                           <li className="text-sm flex items-start gap-2">
                             <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                            <span>Upload in a well-lit environment</span>
+                            <span>Upload in a well-lit environment for images</span>
                           </li>
                           <li className="text-sm flex items-start gap-2">
                             <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
