@@ -36,6 +36,7 @@ const EditVisaDetails = () => {
   const [processingTime, setProcessingTime] = useState()
   const [isLoading, setIsLoading] = useState(true)
   const [isPaymentLoading, setIsPaymentLoading] = useState(false)
+  // const [totalPrice, setTotalPrice] = useState({ totalAmount: 0, basePrice: 0, discount: 0 });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -119,70 +120,75 @@ const EditVisaDetails = () => {
   }, [packageId])
 
   const handlePayment = async () => {
-    setIsPaymentLoading(true)
+    setIsPaymentLoading(true);
+  
     try {
-      const response = await fetchDataFromAPI("POST", `${BASE_URL}create-order`, { amount: price})
-
+      const response = await fetchDataFromAPI("POST", `${BASE_URL}create-order`, { amount: totalPrice.totalAmount });
+  
       if (response) {
         const options = {
           key: "rzp_live_7jIGrWcWtT3QMW",
           amount: response?.data?.amount,
           currency: response?.data?.currency,
-          name: "Your Company Name",
+          name: "Chaloghoomne.com",
           description: "Test Transaction",
           image: "https://your-logo-url.com",
           order_id: response?.data?.id,
           callback_url: "https://google.com",
           handler: (response) => {
-            const razorpay_order_id = response.razorpay_payment_id
-            const razorpay_payment_id = response.razorpay_payment_id
-            const razorpay_signature = response?.razorpay_signature
+            const razorpay_order_id = response.razorpay_order_id;
+            const razorpay_payment_id = response.razorpay_payment_id;
+            const razorpay_signature = response?.razorpay_signature;
+  
             const verifyPayment = async () => {
               try {
                 const responseData = await fetchDataFromAPI("POST", `${BASE_URL}verify-payment`, {
                   razorpay_order_id,
                   razorpay_payment_id,
                   razorpay_signature,
-                })
+                });
+  
                 if (responseData) {
                   try {
-                    const response = await fetchDataFromAPI("GET", `${BASE_URL}user-visa-order/${packageId}`)
+                    const response = await fetchDataFromAPI("GET", `${BASE_URL}user-visa-order/${packageId}`);
                     if (response) {
-                      const totalPrice = calculateTotalPrice()
+                      const totalPrice = calculateTotalPrice();
+  
                       try {
                         const responseData = await fetchDataFromAPI("PUT", `${BASE_URL}edit-visa-order/${packageId}`, {
                           ...response.data,
                           totalAmount: totalPrice.totalAmount,
-                          // gst: totalPrice.gst,
                           insurance: insurance,
                           insurancePrice,
                           pricePerUser: price,
                           isSubmitted: true,
-                        })
+                        });
+  
                         if (responseData) {
-                          toast.success(`Successfully Submitted`)
-                          dispatch(coTraveler(null))
-                          dispatch(PackageId(null))
-                          navigate(`/`)
+                          toast.success(`Successfully Submitted`);
+                          dispatch(coTraveler(null));
+                          dispatch(PackageId(null));
+                          navigate(`/`);
                         }
                       } catch (error) {
-                        console.error("Error updating visa order:", error)
-                        toast.error("Failed to update order details")
+                        console.error("Error updating visa order:", error);
+                        toast.error("Failed to update order details");
                       }
                     }
                   } catch (error) {
-                    console.error("Error fetching visa order for update:", error)
-                    toast.error("Failed to fetch order details")
+                    console.error("Error fetching visa order for update:", error);
+                    toast.error("Failed to fetch order details");
                   }
                 }
               } catch (error) {
-                console.error("Error verifying payment:", error)
-                toast.error(`Network Error! Please Try Again Later`)
+                console.error("Error verifying payment:", error);
+                toast.error(`Network Error! Please Try Again Later`);
               } finally {
-                setIsPaymentLoading(false)
+                setIsPaymentLoading(false);
               }
-            }
-            verifyPayment()
+            };
+  
+            verifyPayment();
           },
           prefill: {
             name: "Your Name",
@@ -192,17 +198,25 @@ const EditVisaDetails = () => {
           theme: {
             color: "#F37254",
           },
-        }
-
-        const rzp = new window.Razorpay(options)
-        rzp.open()
+          modal: {
+            ondismiss: function () {
+              // 👇 Reset the button when payment is cancelled
+              setIsPaymentLoading(false);
+              toast.info("Payment was cancelled");
+            },
+          },
+        };
+  
+        const rzp = new window.Razorpay(options);
+        rzp.open();
       }
     } catch (error) {
-      console.error("Error creating payment order:", error)
-      toast.error("Failed to initiate payment")
-      setIsPaymentLoading(false)
+      console.error("Error creating payment order:", error);
+      toast.error("Failed to initiate payment");
+      setIsPaymentLoading(false);
     }
-  }
+  };
+  
 
   const handleView = async (id) => {
     try {
@@ -230,6 +244,16 @@ const EditVisaDetails = () => {
     }
   }
 
+  const [totalPrice, setTotalPrice] = useState({
+    totalAmount: 0,
+    discount: 0,
+    basePrice: 0,
+  })
+
+  useEffect(() => {
+    setTotalPrice(calculateTotalPrice())
+  }, [users, price, childPrice, discount, insurance, insurancePrice])
+
   const calculateTotalPrice = () => {
     let amount = 0
     users.forEach((item) => {
@@ -243,19 +267,18 @@ const EditVisaDetails = () => {
     const basePrice = amount
     const discountAmount = discount || 0
     // const gstAmount = basePrice * 0.18
-    const newnum = Number(insurancePrice)
-    const insuranceAmount = isNaN(newnum) ? 0 : Number(insurancePrice)
-    const totalAmount = basePrice  + insuranceAmount
+
+    // Only add insurance if the checkbox is checked
+    const insuranceAmount = insurance ? Number(insurancePrice) : 0
+    const totalAmount = basePrice + insuranceAmount
 
     return {
       totalAmount,
       discount: discountAmount,
-
       basePrice: basePrice,
     }
   }
 
-  const totalPrice = calculateTotalPrice()
 
   // Animation variants
   const containerVariants = {
@@ -509,13 +532,17 @@ const EditVisaDetails = () => {
                 {insurancePrice > 0 && (
                   <div className="flex justify-between items-center pb-3 border-b border-gray-100">
                     <div className="flex items-center gap-2">
-                      <input
-                        type="checkbox"
-                        id="insurance-checkbox"
-                        checked={insurance}
-                        onChange={(e) => setInsurance(e.target.checked)}
-                        className="w-4 h-4 rounded text-blue-600 focus:ring-blue-500"
-                      />
+                    <input
+              type="checkbox"
+              id="insurance-checkbox"
+              checked={insurance}
+              onChange={(e) => {
+                const isChecked = e.target.checked
+                setInsurance(isChecked)
+                // Don't modify the insurancePrice value itself, just use the insurance boolean
+              }}
+              className="w-4 h-4 rounded text-blue-600 focus:ring-blue-500"
+            />
                       <label htmlFor="insurance-checkbox" className="text-gray-600">
                         Travel Insurance
                       </label>
