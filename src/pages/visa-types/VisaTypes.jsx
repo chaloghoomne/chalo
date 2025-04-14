@@ -140,7 +140,7 @@ const VisaTypes = () => {
         <h1 className="text-4xl md:text-5xl poppins-six font-bold mb-6 bg-gradient-to-r from-orange-600 to-orange-400 bg-clip-text text-transparent">
           Your Gateway to {selectedCountry}
         </h1>
-        <p className="text-gray-700 poppins-four text-lg md:text-xl max-w-3xl mx-auto">{data1?.description}</p>
+        {/* <p className="text-gray-700 poppins-four text-lg md:text-xl max-w-3xl mx-auto">{data1?.description}</p> */}
       </motion.div>
 
       {/* Process Steps */}
