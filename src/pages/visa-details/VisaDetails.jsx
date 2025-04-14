@@ -624,16 +624,16 @@ const VisaDetails = () => {
 						{/* Description */}
 						<div className="bg-white rounded-xl p-6 shadow-md mt-6">
 							<h3 className="text-lg font-semibold text-gray-800 mb-3">
-								Documents Required
+								Required Documents for {selectedCountry} visa
 							</h3>
-							<div className="prose prose-sm max-w-none text-gray-600">
+							<div className="  text-gray-600">
 								{/* {data?.longDescription ||
 									"No description available."} */}
 								<div
 									dangerouslySetInnerHTML={{
 										__html: data?.longDescription,
 									}}
-									className="prose prose-lg max-w-none"
+									className="prose-sm leading-none max-w-none"
 								></div>
 							</div>
 						</div>
@@ -846,7 +846,7 @@ const VisaDetails = () => {
                 className="bg-gray-100 hover:bg-gray-200 p-2.5 rounded-lg transition-colors shadow-sm hover:shadow"
                 aria-label="Add to cart"
               >
-                <IoMdCart className="text-xl text-gray-700" />
+                <IoMdCart className="text-xl text-red-500" />
               </button>
             </div>
           </>
@@ -976,7 +976,7 @@ const VisaDetails = () => {
                   className="bg-gray-100 hover:bg-gray-200 p-2.5 rounded-lg transition-colors shadow-sm hover:shadow"
                   aria-label="Add to cart"
                 >
-                  <IoMdCart className="text-xl text-gray-700" />
+                  <IoMdCart className="text-xl text-red-500" />
                 </button>
               </div>
             </div>

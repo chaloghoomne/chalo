@@ -52,6 +52,8 @@ const Packages = ({ plans }) => {
     setFilteredData(sortedPlans)
   }, [plans, state])
 
+  console.log(filteredData)
+
   const handleselect = (id, heading) => {
     setSelected(id)
     setHeading(heading)
@@ -236,7 +238,7 @@ const Packages = ({ plans }) => {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4">
                     <div className="flex items-center gap-2">
                       <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-500">
                         <FaCalendarAlt size={14} />
@@ -254,6 +256,16 @@ const Packages = ({ plans }) => {
                       <div>
                         <p className="text-xs text-gray-500 font-medium">Validity</p>
                         <p className="text-sm font-semibold">{option?.validity} Days</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <div className="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center text-orange-500">
+                        <FaHourglassHalf size={14} />
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500 font-medium">Entry Type</p>
+                        <p className="text-sm font-semibold">{option?.entryType}</p>
                       </div>
                     </div>
 
