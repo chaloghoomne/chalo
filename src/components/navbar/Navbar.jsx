@@ -101,7 +101,7 @@ const Navbar = () => {
         localStorage.setItem("userId", response.data._id || "")
       }
     } catch (error) {
-      navigate("/503")
+      // navigate("/503")
       console.error("Error fetching user profile:", error)
     }
   }
