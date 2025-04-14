@@ -47,7 +47,7 @@ const AboutUs = () => {
           aboutUsData.metaKeywords?.join(", ") ||
             "travel, adventure, tourism, destinations",
         });
-        console.log("Updated Meta Data:", metaData);
+        // console.log("Updated Meta Data:", metaData);
       }
     }, [aboutUsData]); // ✅ Runs when `blog` updates
   
@@ -65,7 +65,7 @@ const AboutUs = () => {
 				<link rel="canonical" href="https://chaloghoomne.com/" />
 			</Helmet>
 			<h1 className="text-4xl font-bold poppins-six text-[#F26337] text-center">
-				{aboutUsData.title}
+				{/* {aboutUsData.title} */}
 			</h1>
 			<div className="mt-8 flex justify-center">
 				<img
