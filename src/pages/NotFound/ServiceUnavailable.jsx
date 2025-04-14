@@ -3,6 +3,8 @@ const ServiceUnavailable = () => {
         <div style={{ textAlign: "center", padding: "50px" }}>
             <h1>503 - Service Unavailable</h1>
             <p>We are currently experiencing issues. Please try again later.</p>
+
+            {/* {window.location.href = ""} */}
         </div>
     );
 };

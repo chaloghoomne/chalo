@@ -45,7 +45,7 @@ const BlogDetails = () => {
 					console.warn("Unexpected API response format:", res.data);
 				}
 			} catch (error) {
-				navigate("/503")
+				// navigate("/503")
 				console.error("Error fetching blog details:", error);
 			}
 		};

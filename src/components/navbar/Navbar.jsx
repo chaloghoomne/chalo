@@ -65,7 +65,7 @@ const Navbar = () => {
         },
       })
       const data = await response.data
-      console.log("API Response:", data) // Debugging API response
+      // console.log("API Response:", data) // Debugging API response
 
       if (!data || !data.data) {
         console.error("Invalid API response format:", data)
@@ -73,7 +73,7 @@ const Navbar = () => {
       }
 
       setNoti(data.data)
-      console.log(noti)
+      // console.log(noti)
       setCount(noti.filter((item) => item.isRead === false).length)
     } catch (err) {
       console.log("Error aa rahi ahi notification fetch karne me", err.message)
@@ -101,7 +101,7 @@ const Navbar = () => {
         localStorage.setItem("userId", response.data._id || "")
       }
     } catch (error) {
-      navigate("/503")
+      // navigate("/503")
       console.error("Error fetching user profile:", error)
     }
   }
@@ -207,7 +207,7 @@ const Navbar = () => {
               >
                 <span className="sr-only">Open main menu</span>
                 <svg
-                  className="block h-6 w-6"
+                  className="block h-7 w-7"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
