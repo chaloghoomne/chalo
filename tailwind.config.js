@@ -49,10 +49,16 @@ export default {
 			pulseSlow: {
 			  "0%, 100%": { opacity: "1", transform: "scale(1)" },
 			  "50%": { opacity: "0.7", transform: "scale(1.1)" }
-			}
+			},
+			textColorPulse: {
+				'0%': { backgroundPosition: '200% 0%' },
+          '100%': { backgroundPosition: '-200% 0%' },
+			  },
+
 		  },
 		  animation: {
-			pulseSlow: "pulseSlow 1.5s infinite ease-in-out"
+			pulseSlow: "pulseSlow 1.5s infinite ease-in-out",
+			'text-color-pulse': 'textColorPulse 5s ease-in-out infinite'
 		  }
 		
 	},

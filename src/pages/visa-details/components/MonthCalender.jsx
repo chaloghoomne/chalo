@@ -80,7 +80,7 @@ const MonthCalender = ({ onClose }) => {
       {/* Header */}
       <div className="bg-gradient-to-r from-blue-600 to-blue-500 rounded-t-lg text-white p-4">
         <h2 className="text-xl font-semibold text-center">Select Travel Dates</h2>
-        <p className="text-center text-blue-100 text-sm mt-1">Choose your travel and return dates</p>
+        <p className="text-center text-transparent bg-clip-text bg-gradient-to-r from-yellow-500 to-yellow-100 bg-[length:300%_100%] text-sm mt-1 animate-text-color-pulse">Choose your travel and return dates</p>
       </div>
 
       {/* Date Picker */}
