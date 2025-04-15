@@ -192,7 +192,7 @@ const Packages = ({ plans }) => {
                 variants={itemVariants}
                 onClick={() => handleselect(option?._id, option?.visaTypeHeading)}
                 whileHover={{ y: -5, boxShadow: "0 10px 25px -5px rgba(59, 130, 246, 0.1)" }}
-                className={`border relative rounded-[25px] p-6 md:p-8 cursor-pointer transition-all duration-300 overflow-hidden ${
+                className={`border relative md:mx-auto rounded-[25px] md:w-[90%] p-6 md:p-8 cursor-pointer transition-all duration-300 overflow-hidden ${
                   selected === option?._id
                     ? "border-blue-500 bg-blue-50/30 shadow-md shadow-blue-100"
                     : "border-gray-200 hover:border-blue-300 bg-white"
@@ -238,9 +238,9 @@ const Packages = ({ plans }) => {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4">
+                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-0 mt-4">
                     <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-500">
+                      <div className="w-4 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-500">
                         <FaCalendarAlt size={14} />
                       </div>
                       <div>
@@ -299,28 +299,41 @@ const Packages = ({ plans }) => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5, duration: 0.5 }}
-        className="mt-10"
+        className="mt-12 relative z-10"
       >
         <button
           onClick={handleRedirect}
           disabled={!selected}
-          className={`group relative overflow-hidden rounded-full px-8 py-3 text-lg font-medium transition-all duration-300 ${
+          className={`group relative overflow-hidden rounded-full px-10 py-4 text-lg font-medium transition-all duration-300 ${
             selected
-              ? "bg-gradient-to-r from-orange-500 to-orange-400 text-white shadow-lg shadow-orange-200 hover:shadow-xl hover:shadow-orange-200 hover:translate-y-[-2px]"
+              ? "bg-gradient-to-r from-blue-600 to-blue-400 text-white shadow-xl shadow-blue-200/50 hover:shadow-2xl hover:shadow-blue-300/50 hover:translate-y-[-3px]"
               : "bg-gray-200 text-gray-400 cursor-not-allowed"
           }`}
         >
-          <span className="relative z-10 flex items-center gap-2">
-            Continue
+          <span className="relative z-10 flex items-center gap-3">
+            Continue to Details
             <FaArrowRight
-              className={`transition-transform duration-300 ${selected ? "group-hover:translate-x-1" : ""}`}
+              className={`transition-transform duration-300 ${selected ? "group-hover:translate-x-2" : ""}`}
             />
           </span>
           {selected && (
-            <span className="absolute inset-0 z-0 bg-gradient-to-r from-orange-600 to-orange-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+            <>
+              <span className="absolute inset-0 z-0 bg-gradient-to-r from-blue-700 to-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+              <span className="absolute -inset-3 z-0 bg-blue-500/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full"></span>
+            </>
           )}
         </button>
-        {!selected && <p className="text-sm text-gray-500 mt-2">Please select a package to continue</p>}
+        {!selected && (
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.7 }}
+            className="text-sm text-gray-500 mt-3 flex items-center justify-center gap-2"
+          >
+            <FaCircleDot size={10} className="text-blue-400" />
+            Please select a package to continue
+          </motion.p>
+        )}
       </motion.div>
     </div>
   )

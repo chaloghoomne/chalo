@@ -622,8 +622,8 @@ const VisaDetails = () => {
 						</div>
 
 						{/* Description */}
-						<div className="bg-white rounded-xl p-6 shadow-md mt-6">
-							<h3 className="text-lg font-semibold text-gray-800 mb-3">
+						<div className="bg-gradient-to-r rounded-xl p-6 shadow-md mt-6 ">
+							<h3 className="text-lg font-semibold  text-gray-800 mb-3">
 								Required Documents for {selectedCountry} visa
 							</h3>
 							<div className="  text-gray-600">
