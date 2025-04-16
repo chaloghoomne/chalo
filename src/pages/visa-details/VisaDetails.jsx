@@ -622,7 +622,7 @@ const VisaDetails = () => {
 						</div>
 
 						{/* Description */}
-						<div className="bg-gradient-to-r rounded-xl p-6 shadow-md mt-6 ">
+						<div className="bg-gradient-to-r rounded-xl p-6 shadow-md mt-6">
 							<h3 className="text-lg font-semibold  text-gray-800 mb-3">
 								Required Documents for {selectedCountry} visa
 							</h3>
@@ -949,7 +949,7 @@ const VisaDetails = () => {
                   </div>
                   <div className="bg-white p-2 rounded-md shadow-sm">
                     <p className="text-gray-500 mb-0.5 text-xs">Processing</p>
-                    <p className="font-medium text-gray-800">{data?.expressDate || "24 Hours"}</p>
+                    <p className="font-medium text-gray-800">{data?.expressDays +" "+ "Days" || "24 Hours"}</p>
                   </div>
                 </div>
               </div>
@@ -987,11 +987,11 @@ const VisaDetails = () => {
 			</div>
 			{/* Options Section */}
 			<div className="mb-6  md:px-10 px-5">
-				<div className="flex justify-center my-2 md:justify-start items-center mb-4">
+				{/* <div className="flex justify-center my-2 md:justify-start items-center mb-4">
 					<hr className="border-gray-400 border-dashed border   w-[28%]" />
 					<span className="mx-4 poppins-six text-xl">OR</span>
 					<hr className="border-gray-400 border-dashed border   w-[28%]" />
-				</div>
+				</div> */}
 				<div className="flex flex-wrap   gap-4">
 					{data?.instantHeading && data?.instantPrice && (
 						<button
