@@ -1,163 +1,78 @@
-// import React, { useState, useRef, useEffect } from "react";
-// import { GoPlusCircle } from "react-icons/go";
-// import { FiMinusCircle } from "react-icons/fi";
-// import { HiOutlineChevronUpDown } from "react-icons/hi2";
-// function FAQs({ data }) {
-//   const [expandedId, setExpandedId] = useState(null);
-//   const answerRef = useRef(null);
-//   const [answerHeight, setAnswerHeight] = useState(0);
-
-//   useEffect(() => {
-//     if (answerRef.current) {
-//       setAnswerHeight(answerRef.current.scrollHeight);
-//     }
-//   }, [expandedId]);
-
-//   const toggleExpand = (id) => {
-//     setExpandedId(expandedId === id ? null : id);
-//   };
-
-//   return (
-//     <div className="w-full p-6 bg-white ml-[8px]">
-//       <h1 className="text-3xl font-bold  mb-6">
-//         Frequently Asked Questions
-//       </h1>
-//       <div className="w-full max-w-4xl mx-auto">
-//         {data?.map((item) => {
-//           const isActive = expandedId === item._id;
-//           return (
-//             <div
-//               key={item._id}
-//               className={`mb-4 border-b ${
-//                 isActive ? "border-gray-400" : "border-gray-300"
-//               }`}
-//             >
-//               <div
-//                 className="flex justify-between items-center cursor-pointer py-4"
-//                 onClick={() => toggleExpand(item._id)}
-//               >
-//                 <p
-//                   className={`text-lg font-semibold ${
-//                     isActive ? "text-black" : "text-gray-700"
-//                   }`}
-//                 >
-//                   {item.question}
-//                 </p>
-//                 <div className="ml-2">
-//                   {isActive ? (
-//                     <HiOutlineChevronUpDown size={24} color="black" />
-//                   ) : (
-//                     <HiOutlineChevronUpDown size={24} color="black" />
-//                   )}
-//                 </div>
-//               </div>
-//               {isActive && (
-//                 <div className="text-gray-600 py-2" ref={answerRef}>
-//                   {item.answer.includes("•") ? (
-//                     <ul className="list-disc pl-5">
-//                       {item.answer.split("•").map((line, index) => (
-//                         <li key={index} className="py-1">
-//                           {line}
-//                         </li>
-//                       ))}
-//                     </ul>
-//                   ) : (
-//                     <p>{item.answer}</p>
-//                   )}
-//                 </div>
-//               )}
-//             </div>
-//           );
-//         })}
-//       </div>
-//     </div>
-//   );
-// }
-
-// export default FAQs;
 import React, { useState, useRef, useEffect, forwardRef } from "react";
-import { GoPlusCircle } from "react-icons/go";
-import { FiMinusCircle } from "react-icons/fi";
-import { HiOutlineChevronUpDown } from "react-icons/hi2";
+import { ChevronDownIcon as HiOutlineChevronDown, CircleChevronUpIcon as HiOutlineChevronUp } from 'lucide-react';
 
 const FAQs = forwardRef(({ data }, ref) => {
-	const [expandedId, setExpandedId] = useState(null);
-	const answerRef = useRef(null);
-	const [answerHeight, setAnswerHeight] = useState(0);
+  const [expandedId, setExpandedId] = useState(null);
+  const answerRefs = useRef({});
 
-	useEffect(() => {
-		if (answerRef.current) {
-			setAnswerHeight(answerRef.current.scrollHeight);
-		}
-	}, [expandedId]);
-	console.log(data);
+  const toggleExpand = (id) => {
+    setExpandedId(expandedId === id ? null : id);
+  };
 
-	const toggleExpand = (id) => {
-		setExpandedId(expandedId === id ? null : id);
-	};
-
-	return (
-		<div ref={ref} className="w-full p-6 bg-white ml-[8px]">
-			<h1 className="text-3xl font-bold mb-6">
-				Frequently Asked Questions
-			</h1>
-			<div className="w-full max-w-4xl mx-auto">
-				{data?.map((item) => {
-					const isActive = expandedId === item._id;
-					// console.log(item)
-					return (
-						<div
-							key={item._id}
-							className={`mb-4 border-b ${
-								isActive ? "border-gray-400" : "border-gray-300"
-							}`}
-						>
-							<div
-								className="flex justify-between items-center cursor-pointer py-4"
-								onClick={() => toggleExpand(item._id)}
-							>
-								<p
-									className={`text-lg font-semibold ${
-										isActive
-											? "text-black"
-											: "text-gray-700"
-									}`}
-								>
-									{item.question}
-								</p>
-								<div className="ml-2">
-									{isActive ? (
-										<HiOutlineChevronUpDown
-											size={24}
-											color="black"
-										/>
-									) : (
-										<HiOutlineChevronUpDown
-											size={24}
-											color="black"
-										/>
-									)}
-								</div>
-							</div>
-							{isActive && (
-								<div
-									className="text-gray-600 py-2"
-									ref={answerRef}
-								>
-									<div
-										className="prose prose-lg max-w-none"
-										dangerouslySetInnerHTML={{
-											__html: item.answer,
-										}} // ✅ Properly renders HTML
-									/>
-								</div>
-							)}
-						</div>
-					);
-				})}
-			</div>
-		</div>
-	);
+  return (
+    <div ref={ref} className="w-full py-12 px-6 bg-white">
+      <div className="max-w-4xl mx-auto">
+        <h1 className="text-4xl font-bold mb-8 text-center relative">
+          <span className="relative z-10">Frequently Asked Questions</span>
+          <span className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-24 h-2 bg-purple-100 rounded-full -z-0"></span>
+        </h1>
+        
+        <div className="space-y-6">
+          {data?.map((item) => {
+            const isActive = expandedId === item._id;
+            return (
+              <div
+                key={item._id}
+                className={`rounded-lg border ${
+                  isActive ? "border-purple-200 shadow-sm" : "border-gray-100"
+                } transition-all duration-200 overflow-hidden`}
+              >
+                <button
+                  className="w-full flex justify-between items-center p-5 text-left focus:outline-none focus:ring-2 focus:ring-purple-100 rounded-lg"
+                  onClick={() => toggleExpand(item._id)}
+                  aria-expanded={isActive}
+                >
+                  <h3
+                    className={`text-lg font-semibold ${
+                      isActive ? "text-purple-700" : "text-gray-800"
+                    } transition-colors duration-200`}
+                  >
+                    {item.question}
+                  </h3>
+                  <div className={`ml-4 transition-transform duration-300 ${isActive ? "rotate-180" : "rotate-0"}`}>
+                    <HiOutlineChevronDown 
+                      size={20} 
+                      className={`${isActive ? "text-purple-600" : "text-gray-500"}`}
+                    />
+                  </div>
+                </button>
+                
+                <div 
+                  className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                    isActive ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
+                  }`}
+                >
+                  <div 
+                    className="p-5 pt-0 text-gray-600 bg-white"
+                    ref={el => answerRefs.current[item._id] = el}
+                  >
+                    <div
+                      className="prose prose-lg max-w-none prose-headings:text-purple-700 prose-a:text-purple-600 prose-a:no-underline hover:prose-a:underline"
+                      dangerouslySetInnerHTML={{
+                        __html: item.answer,
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
 });
+
+FAQs.displayName = "FAQs";
 
 export default FAQs;

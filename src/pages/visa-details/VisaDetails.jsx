@@ -549,7 +549,7 @@ const VisaDetails = () => {
 			</div>
 			{/* Apply Section */};
 			<div className="w-full flex md:flex-row flex-col justify-between md:px-10 px-5 gap-8">
-				<div ref={applyNowRef} className="mb-6 md:w-[50%] w-full">
+				<div ref={applyNowRef} className="mb-6 xl:w-[60%] w-full">
 					<div className="space-y-4">
 						<div className="mb-5">
 							<h2 className="text-3xl font-bold">
@@ -699,8 +699,8 @@ const VisaDetails = () => {
 				</div>
 
 				{/* Right Column - Application Card */}
-				<div className="xl:w-[40%] lg:px-4 relative h-[65%] md:h-[75%] w-full">
-      <div ref={cardRef} className="w-full bg-white shadow-lg rounded-xl overflow-hidden mt-10 sticky top-24">
+				<div className="w-full xl:w-[40%] lg:px-4 relative h-[65%] md:h-[75%] ">
+      <div ref={cardRef} className="w-full bg-white shadow-lg rounded-xl overflow-hidden lg:mt-10 mb-10 sticky top-24">
         {/* Improved Tab Navigation */}
         {data?.expressPrice && data?.expressHeading && (
           <div className="flex px-4 pt-3 gap-1.5">
