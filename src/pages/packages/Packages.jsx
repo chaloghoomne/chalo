@@ -255,7 +255,13 @@ const Packages = ({ plans }) => {
                       </div>
                       <div>
                         <p className="text-xs text-gray-500 font-medium">Validity</p>
-                        <p className="text-sm font-semibold">{option?.validity} Days</p>
+                        <p className="text-sm font-semibold">{option?.validity
+											? option.validity
+													.toLowerCase()
+													.includes("hour")
+												? option.validity
+												: `${option.validity} Days`
+											: "N/A"}</p>
                       </div>
                     </div>
 

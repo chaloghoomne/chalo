@@ -586,7 +586,11 @@ const VisaDetails = () => {
 									</p>
 									<p className="font-medium text-gray-800">
 										{data?.validity
-											? `${data.validity} Days`
+											? data.validity
+													.toLowerCase()
+													.includes("hour")
+												? data.validity
+												: `${data.validity} Days`
 											: "N/A"}
 									</p>
 								</div>
@@ -700,160 +704,211 @@ const VisaDetails = () => {
 
 				{/* Right Column - Application Card */}
 				<div className="w-full xl:w-[40%] lg:px-4 relative h-[65%] md:h-[75%] ">
-      <div ref={cardRef} className="w-full bg-white shadow-lg rounded-xl overflow-hidden lg:mt-10 mb-10 sticky top-24">
-        {/* Improved Tab Navigation */}
-        {data?.expressPrice && data?.expressHeading && (
-          <div className="flex px-4 pt-3 gap-1.5">
-            <button
-              onClick={() => handleTabChange(1)}
-              className={`px-4 py-2 text-sm font-medium transition-all duration-200 ${
-                activeTab === 1 ? "bg-blue-500 text-white shadow-md" : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-              } rounded-t-lg`}
-            >
-              Standard Visa
-            </button>
+					<div
+						ref={cardRef}
+						className="w-full bg-white shadow-lg rounded-xl overflow-hidden lg:mt-10 mb-10 sticky top-24"
+					>
+						{/* Improved Tab Navigation */}
+						{data?.expressPrice && data?.expressHeading && (
+							<div className="flex px-4 pt-3 gap-1.5">
+								<button
+									onClick={() => handleTabChange(1)}
+									className={`px-4 py-2 text-sm font-medium transition-all duration-200 ${
+										activeTab === 1
+											? "bg-blue-500 text-white shadow-md"
+											: "bg-gray-100 text-gray-700 hover:bg-gray-200"
+									} rounded-t-lg`}
+								>
+									Standard Visa
+								</button>
 
-            <button
-              onClick={() => handleTabChange(2)}
-              className={`px-4 py-2 text-sm font-medium transition-all duration-200 ${
-                activeTab === 2 ? "bg-blue-700 text-white shadow-md" : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-              } rounded-t-lg`}
-            >
-              Express Visa
-            </button>
-          </div>
-        )}
+								<button
+									onClick={() => handleTabChange(2)}
+									className={`px-4 py-2 text-sm font-medium transition-all duration-200 ${
+										activeTab === 2
+											? "bg-blue-700 text-white shadow-md"
+											: "bg-gray-100 text-gray-700 hover:bg-gray-200"
+									} rounded-t-lg`}
+								>
+									Express Visa
+								</button>
+							</div>
+						)}
 
-        {/* Card Header */}
-        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 px-4 py-3 text-white">
-          <h2 className="text-lg font-semibold">Visa Application</h2>
-          <p className="text-blue-100 text-xs">Complete your application in minutes</p>
-        </div>
+						{/* Card Header */}
+						<div className="bg-gradient-to-r from-blue-600 to-indigo-600 px-4 py-3 text-white">
+							<h2 className="text-lg font-semibold">
+								Visa Application
+							</h2>
+							<p className="text-blue-100 text-xs">
+								Complete your application in minutes
+							</p>
+						</div>
 
-        {/* Conditional Content Based on Tab */}
-        {activeTab === 1 ? (
-          <>
-            {/* Travellers Section */}
-            <div className="p-4 border-b border-gray-200">
-              <div className="flex justify-between items-center">
-                <div className="flex items-center gap-2">
-                  <RiContactsLine size={20} className="text-blue-600" />
-                  <h3 className="text-base font-semibold text-gray-800">Travellers</h3>
-                </div>
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={() => handletravelerNumber("sub")}
-                    className="bg-gray-100 hover:bg-gray-200 border border-gray-300 h-7 w-7 rounded-full flex items-center justify-center transition-colors"
-                    aria-label="Decrease traveler count"
-                  >
-                    <span className="text-base font-medium text-gray-700">-</span>
-                  </button>
-                  <span className="text-base font-medium w-6 text-center">{numberOfTravelers}</span>
-                  <button
-                    onClick={() => handletravelerNumber("add")}
-                    className="bg-gray-100 hover:bg-gray-200 border border-gray-300 h-7 w-7 rounded-full flex items-center justify-center transition-colors"
-                    aria-label="Increase traveler count"
-                  >
-                    <span className="text-base font-medium text-gray-700">+</span>
-                  </button>
-                </div>
-              </div>
-            </div>
+						{/* Conditional Content Based on Tab */}
+						{activeTab === 1 ? (
+							<>
+								{/* Travellers Section */}
+								<div className="p-4 border-b border-gray-200">
+									<div className="flex justify-between items-center">
+										<div className="flex items-center gap-2">
+											<RiContactsLine
+												size={20}
+												className="text-blue-600"
+											/>
+											<h3 className="text-base font-semibold text-gray-800">
+												Travellers
+											</h3>
+										</div>
+										<div className="flex items-center gap-2">
+											<button
+												onClick={() =>
+													handletravelerNumber("sub")
+												}
+												className="bg-gray-100 hover:bg-gray-200 border border-gray-300 h-7 w-7 rounded-full flex items-center justify-center transition-colors"
+												aria-label="Decrease traveler count"
+											>
+												<span className="text-base font-medium text-gray-700">
+													-
+												</span>
+											</button>
+											<span className="text-base font-medium w-6 text-center">
+												{numberOfTravelers}
+											</span>
+											<button
+												onClick={() =>
+													handletravelerNumber("add")
+												}
+												className="bg-gray-100 hover:bg-gray-200 border border-gray-300 h-7 w-7 rounded-full flex items-center justify-center transition-colors"
+												aria-label="Increase traveler count"
+											>
+												<span className="text-base font-medium text-gray-700">
+													+
+												</span>
+											</button>
+										</div>
+									</div>
+								</div>
 
-            {/* Price Section */}
-            <div className="p-4 border-b border-gray-200">
-              <h3 className="text-base font-semibold text-gray-800 mb-2 flex items-center gap-2">
-                <CiWallet size={18} className="text-blue-600" />
-                Price Details
-              </h3>
-              <div className="space-y-3 bg-gray-50 p-3 rounded-lg">
-                <div className="flex justify-between items-center text-sm">
-                  <span className="text-gray-600">VISA Fees</span>
-                  <span className="font-medium">
-                    ₹{data?.price || 0} x {numberOfTravelers}
-                  </span>
-                </div>
+								{/* Price Section */}
+								<div className="p-4 border-b border-gray-200">
+									<h3 className="text-base font-semibold text-gray-800 mb-2 flex items-center gap-2">
+										<CiWallet
+											size={18}
+											className="text-blue-600"
+										/>
+										Price Details
+									</h3>
+									<div className="space-y-3 bg-gray-50 p-3 rounded-lg">
+										<div className="flex justify-between items-center text-sm">
+											<span className="text-gray-600">
+												VISA Fees
+											</span>
+											<span className="font-medium">
+												₹{data?.price || 0} x{" "}
+												{numberOfTravelers}
+											</span>
+										</div>
 
-                <div className="pt-2 border-t border-dashed border-gray-300">
-                  <div className="flex justify-between items-center">
-                    <h4 className="text-sm font-semibold text-gray-800">Total Amount</h4>
-                    <p className="text-base font-semibold text-blue-600">₹{(data?.price || 0) * numberOfTravelers}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
+										<div className="pt-2 border-t border-dashed border-gray-300">
+											<div className="flex justify-between items-center">
+												<h4 className="text-sm font-semibold text-gray-800">
+													Total Amount
+												</h4>
+												<p className="text-base font-semibold text-blue-600">
+													₹
+													{(data?.price || 0) *
+														numberOfTravelers}
+												</p>
+											</div>
+										</div>
+									</div>
+								</div>
 
-            {/* Visa Summary */}
-            <div className="p-4 bg-white border-b border-gray-200">
-              <h3 className="text-xs font-semibold text-gray-500 uppercase mb-2 flex items-center gap-1.5">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-3.5 w-3.5 text-blue-600"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-                Visa Summary
-              </h3>
-              <div className="grid grid-cols-2 gap-3 text-xs bg-gray-50 p-3 rounded-lg">
-                <div className="bg-white p-2 rounded-md shadow-sm">
-                  <p className="text-gray-500 mb-0.5 text-xs">Type</p>
-                  <p className="font-medium text-gray-800">{visaType || "N/A"}</p>
-                </div>
-                {/* <div className="bg-white p-3 rounded-md shadow-sm">
+								{/* Visa Summary */}
+								<div className="p-4 bg-white border-b border-gray-200">
+									<h3 className="text-xs font-semibold text-gray-500 uppercase mb-2 flex items-center gap-1.5">
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											className="h-3.5 w-3.5 text-blue-600"
+											fill="none"
+											viewBox="0 0 24 24"
+											stroke="currentColor"
+										>
+											<path
+												strokeLinecap="round"
+												strokeLinejoin="round"
+												strokeWidth={2}
+												d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+											/>
+										</svg>
+										Visa Summary
+									</h3>
+									<div className="grid grid-cols-2 gap-3 text-xs bg-gray-50 p-3 rounded-lg">
+										<div className="bg-white p-2 rounded-md shadow-sm">
+											<p className="text-gray-500 mb-0.5 text-xs">
+												Type
+											</p>
+											<p className="font-medium text-gray-800">
+												{visaType || "N/A"}
+											</p>
+										</div>
+										{/* <div className="bg-white p-3 rounded-md shadow-sm">
                   <p className="text-gray-500 mb-1 text-xs">Validity</p>
                   <p className="font-medium text-gray-800">{data?.validity ? `${data.validity} Days` : "N/A"}</p>
                 </div> */}
-                <div className="bg-white p-2 rounded-md shadow-sm">
-                  <p className="text-gray-500 mb-0.5 text-xs">Processing</p>
-                  <p className="font-medium text-gray-800">
-                    {data?.processingTime ? `${data.processingTime} Days` : "N/A"}
-                  </p>
-                </div>
-                {/* <div className="bg-white p-3 rounded-md shadow-sm">
+										<div className="bg-white p-2 rounded-md shadow-sm">
+											<p className="text-gray-500 mb-0.5 text-xs">
+												Processing
+											</p>
+											<p className="font-medium text-gray-800">
+												{data?.processingTime
+													? `${data.processingTime} Days`
+													: "N/A"}
+											</p>
+										</div>
+										{/* <div className="bg-white p-3 rounded-md shadow-sm">
                   <p className="text-gray-500 mb-1 text-xs">Stay Period</p>
                   <p className="font-medium text-gray-800">{data?.period ? `${data.period} Days` : "N/A"}</p>
                 </div> */}
-              </div>
-            </div>
+									</div>
+								</div>
 
-            {/* Action Buttons */}
-            <div className="p-4 flex items-center gap-2">
-              <button
-                onClick={handleStartApplication}
-                className="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white py-2.5 px-4 rounded-lg text-sm font-semibold transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-1.5"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-4 w-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-                Start Application
-              </button>
-              <button
-                onClick={handleAddToCart}
-                className="bg-gray-100 hover:bg-gray-200 p-2.5 rounded-lg transition-colors shadow-sm hover:shadow"
-                aria-label="Add to cart"
-              >
-                <IoMdCart className="text-xl text-red-500" />
-              </button>
-            </div>
-          </>
-        ) : (
-          <>
-            <div>
-              {/* {data?.expressPrice && data?.expressHeading && (
+								{/* Action Buttons */}
+								<div className="p-4 flex items-center gap-2">
+									<button
+										onClick={handleStartApplication}
+										className="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white py-2.5 px-4 rounded-lg text-sm font-semibold transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-1.5"
+									>
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											className="h-4 w-4"
+											fill="none"
+											viewBox="0 0 24 24"
+											stroke="currentColor"
+										>
+											<path
+												strokeLinecap="round"
+												strokeLinejoin="round"
+												strokeWidth={2}
+												d="M13 10V3L4 14h7v7l9-11h-7z"
+											/>
+										</svg>
+										Start Application
+									</button>
+									<button
+										onClick={handleAddToCart}
+										className="bg-gray-100 hover:bg-gray-200 p-2.5 rounded-lg transition-colors shadow-sm hover:shadow"
+										aria-label="Add to cart"
+									>
+										<IoMdCart className="text-xl text-red-500" />
+									</button>
+								</div>
+							</>
+						) : (
+							<>
+								<div>
+									{/* {data?.expressPrice && data?.expressHeading && (
                 <button
                   onClick={() => handleApplicationType("express", data?.expressDate)}
                   className="w-full bg-gradient-to-r from-[#3180CA] to-[#7AC7F9] text-white p-5 rounded-xl shadow-md hover:shadow-lg transition-shadow flex justify-between items-center"
@@ -872,118 +927,168 @@ const VisaDetails = () => {
                 </button>
               )} */}
 
-              <div className="p-4 border-b border-gray-200">
-                <div className="flex justify-between items-center">
-                  <div className="flex items-center gap-2">
-                    <RiContactsLine size={20} className="text-blue-600" />
-                    <h3 className="text-base font-semibold text-gray-800">Travellers</h3>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={() => handletravelerNumber("sub")}
-                      className="bg-gray-100 hover:bg-gray-200 border border-gray-300 h-7 w-7 rounded-full flex items-center justify-center transition-colors"
-                      aria-label="Decrease traveler count"
-                    >
-                      <span className="text-base font-medium text-gray-700">-</span>
-                    </button>
-                    <span className="text-base font-medium w-6 text-center">{numberOfTravelers}</span>
-                    <button
-                      onClick={() => handletravelerNumber("add")}
-                      className="bg-gray-100 hover:bg-gray-200 border border-gray-300 h-7 w-7 rounded-full flex items-center justify-center transition-colors"
-                      aria-label="Increase traveler count"
-                    >
-                      <span className="text-base font-medium text-gray-700">+</span>
-                    </button>
-                  </div>
-                </div>
-              </div>
+									<div className="p-4 border-b border-gray-200">
+										<div className="flex justify-between items-center">
+											<div className="flex items-center gap-2">
+												<RiContactsLine
+													size={20}
+													className="text-blue-600"
+												/>
+												<h3 className="text-base font-semibold text-gray-800">
+													Travellers
+												</h3>
+											</div>
+											<div className="flex items-center gap-2">
+												<button
+													onClick={() =>
+														handletravelerNumber(
+															"sub"
+														)
+													}
+													className="bg-gray-100 hover:bg-gray-200 border border-gray-300 h-7 w-7 rounded-full flex items-center justify-center transition-colors"
+													aria-label="Decrease traveler count"
+												>
+													<span className="text-base font-medium text-gray-700">
+														-
+													</span>
+												</button>
+												<span className="text-base font-medium w-6 text-center">
+													{numberOfTravelers}
+												</span>
+												<button
+													onClick={() =>
+														handletravelerNumber(
+															"add"
+														)
+													}
+													className="bg-gray-100 hover:bg-gray-200 border border-gray-300 h-7 w-7 rounded-full flex items-center justify-center transition-colors"
+													aria-label="Increase traveler count"
+												>
+													<span className="text-base font-medium text-gray-700">
+														+
+													</span>
+												</button>
+											</div>
+										</div>
+									</div>
 
-              {/* Express Price Details */}
-              <div className="p-4 border-b border-gray-200">
-                <h3 className="text-base font-semibold text-gray-800 mb-2 flex items-center gap-2">
-                  <CiWallet size={18} className="text-blue-600" />
-                  Express Price Details
-                </h3>
-                <div className="space-y-3 bg-gray-50 p-3 rounded-lg">
-                  <div className="flex justify-between items-center text-sm">
-                    <span className="text-gray-600">Express VISA Fees</span>
-                    <span className="font-medium">
-                      ₹{data?.expressPrice || 0} x {numberOfTravelers}
-                    </span>
-                  </div>
+									{/* Express Price Details */}
+									<div className="p-4 border-b border-gray-200">
+										<h3 className="text-base font-semibold text-gray-800 mb-2 flex items-center gap-2">
+											<CiWallet
+												size={18}
+												className="text-blue-600"
+											/>
+											Express Price Details
+										</h3>
+										<div className="space-y-3 bg-gray-50 p-3 rounded-lg">
+											<div className="flex justify-between items-center text-sm">
+												<span className="text-gray-600">
+													Express VISA Fees
+												</span>
+												<span className="font-medium">
+													₹{data?.expressPrice || 0} x{" "}
+													{numberOfTravelers}
+												</span>
+											</div>
 
-                  <div className="pt-2 border-t border-dashed border-gray-300">
-                    <div className="flex justify-between items-center">
-                      <h4 className="text-sm font-semibold text-gray-800">Total Amount</h4>
-                      <p className="text-base font-semibold text-blue-600">
-                        ₹{(data?.expressPrice || 0) * numberOfTravelers}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
+											<div className="pt-2 border-t border-dashed border-gray-300">
+												<div className="flex justify-between items-center">
+													<h4 className="text-sm font-semibold text-gray-800">
+														Total Amount
+													</h4>
+													<p className="text-base font-semibold text-blue-600">
+														₹
+														{(data?.expressPrice ||
+															0) *
+															numberOfTravelers}
+													</p>
+												</div>
+											</div>
+										</div>
+									</div>
 
-              {/* Express Visa Summary */}
-              <div className="p-4 bg-white border-b border-gray-200">
-                <h3 className="text-xs font-semibold text-gray-500 uppercase mb-2 flex items-center gap-1.5">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-3.5 w-3.5 text-blue-600"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
-                  Express Visa Summary
-                </h3>
-                <div className="grid grid-cols-2 gap-3 text-xs bg-gray-50 p-3 rounded-lg">
-                  <div className="bg-white p-2 rounded-md shadow-sm">
-                    <p className="text-gray-500 mb-0.5 text-xs">Type</p>
-                    <p className="font-medium text-gray-800">Express {visaType}</p>
-                  </div>
-                  <div className="bg-white p-2 rounded-md shadow-sm">
-                    <p className="text-gray-500 mb-0.5 text-xs">Processing</p>
-                    <p className="font-medium text-gray-800">{data?.expressDays +" "+ "Days" || "24 Hours"}</p>
-                  </div>
-                </div>
-              </div>
+									{/* Express Visa Summary */}
+									<div className="p-4 bg-white border-b border-gray-200">
+										<h3 className="text-xs font-semibold text-gray-500 uppercase mb-2 flex items-center gap-1.5">
+											<svg
+												xmlns="http://www.w3.org/2000/svg"
+												className="h-3.5 w-3.5 text-blue-600"
+												fill="none"
+												viewBox="0 0 24 24"
+												stroke="currentColor"
+											>
+												<path
+													strokeLinecap="round"
+													strokeLinejoin="round"
+													strokeWidth={2}
+													d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+												/>
+											</svg>
+											Express Visa Summary
+										</h3>
+										<div className="grid grid-cols-2 gap-3 text-xs bg-gray-50 p-3 rounded-lg">
+											<div className="bg-white p-2 rounded-md shadow-sm">
+												<p className="text-gray-500 mb-0.5 text-xs">
+													Type
+												</p>
+												<p className="font-medium text-gray-800">
+													Express {visaType}
+												</p>
+											</div>
+											<div className="bg-white p-2 rounded-md shadow-sm">
+												<p className="text-gray-500 mb-0.5 text-xs">
+													Processing
+												</p>
+												<p className="font-medium text-gray-800">
+													{data?.expressDays +
+														" " +
+														"Days" || "24 Hours"}
+												</p>
+											</div>
+										</div>
+									</div>
 
-              {/* Express Action Buttons */}
-              <div className="p-4 flex items-center gap-2">
-                <button
-                  onClick={() => handleApplicationType("express", data?.expressDate)}
-                  className="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white py-2.5 px-4 rounded-lg text-sm font-semibold transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-1.5"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-4 w-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                  </svg>
-                  Start Application
-                </button>
-                <button
-                  onClick={handleAddToCart}
-                  className="bg-gray-100 hover:bg-gray-200 p-2.5 rounded-lg transition-colors shadow-sm hover:shadow"
-                  aria-label="Add to cart"
-                >
-                  <IoMdCart className="text-xl text-red-500" />
-                </button>
-              </div>
-            </div>
-          </>
-        )}
-      </div>
-    </div>
+									{/* Express Action Buttons */}
+									<div className="p-4 flex items-center gap-2">
+										<button
+											onClick={() =>
+												handleApplicationType(
+													"express",
+													data?.expressDate
+												)
+											}
+											className="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white py-2.5 px-4 rounded-lg text-sm font-semibold transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-1.5"
+										>
+											<svg
+												xmlns="http://www.w3.org/2000/svg"
+												className="h-4 w-4"
+												fill="none"
+												viewBox="0 0 24 24"
+												stroke="currentColor"
+											>
+												<path
+													strokeLinecap="round"
+													strokeLinejoin="round"
+													strokeWidth={2}
+													d="M13 10V3L4 14h7v7l9-11h-7z"
+												/>
+											</svg>
+											Start Application
+										</button>
+										<button
+											onClick={handleAddToCart}
+											className="bg-gray-100 hover:bg-gray-200 p-2.5 rounded-lg transition-colors shadow-sm hover:shadow"
+											aria-label="Add to cart"
+										>
+											<IoMdCart className="text-xl text-red-500" />
+										</button>
+									</div>
+								</div>
+							</>
+						)}
+					</div>
+				</div>
 			</div>
 			{/* Options Section */}
 			<div className="mb-6  md:px-10 px-5">
