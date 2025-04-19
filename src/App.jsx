@@ -23,6 +23,7 @@ import PersonDetails from "./pages/persons-details/PersonsDetails";
 import OfferPackages from "./pages/offer-packages/OfferPackages";
 import Profile from "./pages/profile-section/Profile";
 import EditVisaDetails from "./pages/edit-visa-requests/EditVisaDetails";
+import EditVisaDetailsv2 from "./pages/edit-visa-requests/EditVisaDetailsv2"
 import ViewApplication from "./pages/profile-section/components/ViewApplication";
 import RefundPolicyPage from "./pages/policies/Refund";
 import PrivacyPolicyPage from "./pages/policies/Privacy";
@@ -125,6 +126,14 @@ const AppContent = () => {
 						element={
 							<PrivateRoute>
 								<EditVisaDetails />
+							</PrivateRoute>
+						}
+					/>
+					<Route
+						path="/edit-visa-request-v2/:slug"
+						element={
+							<PrivateRoute>
+								<EditVisaDetailsv2 />
 							</PrivateRoute>
 						}
 					/>

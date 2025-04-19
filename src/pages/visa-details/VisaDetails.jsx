@@ -89,7 +89,9 @@ const VisaDetails = () => {
 		setActiveTab(tab);
 	};
 
-	const handleAddToCart = () => {
+	const handleAddToCart = async() => {
+		const token = localStorage.getItem("token");
+		if(!token) window.location.href = "/login";
 		const cartItem = {
 			id: data?._id || Math.random().toString(), // Ensure ID is unique
 			name: selectedCountry || "Unknown",
@@ -97,6 +99,17 @@ const VisaDetails = () => {
 			quantity: 1,
 			image: data1?.image || "",
 		};
+		const response = await fetchDataFromAPI(
+			"POST",
+			`${BASE_URL}addToCart`,{data:data?._id},{
+				headers: {
+				  Authorization: "Bearer " + localStorage.getItem("token"),
+				}
+			}	
+		)
+		if (response.status === 503) {
+			navigate("/503"); // Redirect to Service Unavailable page
+		}
 
 		// console.log("Adding to cart:", cartItem);
 		dispatch(addToCart(cartItem)); // Dispatch action
