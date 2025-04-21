@@ -185,6 +185,7 @@ useEffect(() => {
         "POST",
         `${BASE_URL}create-visa-order`,
         {
+          user: localStorage.getItem("userId"),
           visaCategory: id,
           travellersCount: 1,
           from: countryData[item]?.departureDate,
