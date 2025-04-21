@@ -44,6 +44,7 @@ import NotFound from "./pages/NotFound/NotFound";
 import ServiceUnavailable from "./pages/NotFound/ServiceUnavailable";
 import { MantineProvider } from "@mantine/core";
 import { PrimeReactProvider } from "primereact/api";
+import EditVisaDetailsv3 from "./pages/edit-visa-requests/EditVisaDetailsv3";
 
 const useScrollToSection = () => {
 	const location = useLocation();
@@ -134,6 +135,14 @@ const AppContent = () => {
 						element={
 							<PrivateRoute>
 								<EditVisaDetailsv2 />
+							</PrivateRoute>
+						}
+					/>
+					<Route
+						path="/edit-visa-request-v3"
+						element={
+							<PrivateRoute>
+								<EditVisaDetailsv3 />
 							</PrivateRoute>
 						}
 					/>

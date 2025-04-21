@@ -98,6 +98,8 @@ const Navbar = () => {
 
       if (response?.data) {
         setFormData(response.data)
+        // console.log(response.data.cart)
+        setCartCount(response.data.cart.length)
         localStorage.setItem("userId", response.data._id || "")
       }
     } catch (error) {
@@ -122,50 +124,32 @@ const Navbar = () => {
     return () => window.removeEventListener("storage", handleStorageChange)
   }, [])
 
-  useEffect(() => {
-    const getCartCount = () => {
-      try {
-        const storedData = localStorage.getItem("persist:root");
-        if (storedData) {
-          const parsedData = JSON.parse(storedData);
-          if (parsedData?.CartReducer) {
-            const cartReducer = JSON.parse(parsedData.CartReducer); // Second parse
-            const itemCount = cartReducer.cartItems ? cartReducer.cartItems.length : 0;
-            console.log("Total Cart Items:", itemCount);
-            setCartCount(itemCount);
-          }
-        }
-      } catch (error) {
-        console.error("Error parsing cart data:", error);
-      }
-    };
+  // useEffect(() => {
+   
   
-    // Initial load
-    getCartCount();
+  //   // Listen for storage changes in other tabs
+  //   const handleStorageChange = (event) => {
+  //     if (event.key === "persist:root") {
+  //       getCartCount();
+  //     }
+  //   };
   
-    // Listen for storage changes in other tabs
-    const handleStorageChange = (event) => {
-      if (event.key === "persist:root") {
-        getCartCount();
-      }
-    };
+  //   window.addEventListener("storage", handleStorageChange);
   
-    window.addEventListener("storage", handleStorageChange);
+  //   // Optional: Listen for local updates within the same tab
+  //   const originalSetItem = localStorage.setItem;
+  //   localStorage.setItem = function (key, value) {
+  //     originalSetItem.apply(this, arguments);
+  //     if (key === "persist:root") {
+  //       getCartCount();
+  //     }
+  //   };
   
-    // Optional: Listen for local updates within the same tab
-    const originalSetItem = localStorage.setItem;
-    localStorage.setItem = function (key, value) {
-      originalSetItem.apply(this, arguments);
-      if (key === "persist:root") {
-        getCartCount();
-      }
-    };
-  
-    return () => {
-      window.removeEventListener("storage", handleStorageChange);
-      localStorage.setItem = originalSetItem; // Restore original method
-    };
-  }, []); // No dependency to avoid infinite loop
+  //   return () => {
+  //     window.removeEventListener("storage", handleStorageChange);
+  //     localStorage.setItem = originalSetItem; // Restore original method
+  //   };
+  // }, []); // No dependency to avoid infinite loop
 
   useEffect(() => {
     const pathName = location.pathname

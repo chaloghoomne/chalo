@@ -107,13 +107,14 @@ const VisaDetails = () => {
 				}
 			}	
 		)
+		if(response.status ===200){window.location.href="/cart"}
 		if (response.status === 503) {
 			navigate("/503"); // Redirect to Service Unavailable page
 		}
 
 		// console.log("Adding to cart:", cartItem);
-		dispatch(addToCart(cartItem)); // Dispatch action
-
+		// dispatch(addToCart(cartItem)); // Dispatch action
+		window.location.href="/cart"
 		toast.success("Visa added to cart!");
 	};
 
