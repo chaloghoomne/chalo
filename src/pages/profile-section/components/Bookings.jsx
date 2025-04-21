@@ -19,11 +19,14 @@ const Bookings = () => {
   useEffect(() => {
     const fetchProfileImage = async () => {
       try {
+        const user = localStorage.getItem("userId");
+        console.log(user)
         const response = await fetchDataFromAPI(
           "POST",
-          `${BASE_URL}user-visa-orders`
+          `${BASE_URL}user-visa-orders`,{user:user}
         );
         if (response) {
+          console.log(response.data);
           setBookings(response.data);
         }
 
@@ -102,13 +105,13 @@ const Bookings = () => {
                       <p className="text-sm flex flex-col  text-gray-600">
                         From:
                         <span className="text-xs">
-                          {booking?.from?.slice(0, 10)}
+                          {booking?.from ? booking.from.slice(0, 10) : "N/A"}
                         </span>
                       </p>
                       <p className="text-sm flex flex-col text-gray-600">
                         To:
                         <span className="text-xs">
-                          {booking?.to.slice(0, 10)}
+                          {booking?.to ? booking.to.slice(0, 10) : "N/A"}
                         </span>
                       </p>
                       <p className="text-sm text-gray-600">

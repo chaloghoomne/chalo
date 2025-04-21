@@ -89,6 +89,25 @@ useEffect(() => {
 }, [shouldNavigate, navigateId])
 
 
+const validateForm=(formData,requiredDocs)=>{
+  for(const field of requiredDocs){
+    if(!formData[field.label] || formData[field.label].length === 0){
+      return `${field.label} is required`;
+    }
+  }
+  return null;
+}
+
+const validateDocs = (formData, requiredDocs) => {
+  for (const field of requiredDocs) {
+    if (field.show === "true" && !formData[field.name]?.file) {
+      return `${field.name} is required`;
+    }
+  }
+  return null;
+}
+
+
 
   useEffect(() => {
     if (cartItems && cartItems.length > 0) {
@@ -181,6 +200,21 @@ useEffect(() => {
   const createVisaOrder = async (item, id) => {
     try {
       console.log(countryData[item])
+      const formData = countryData[item]
+      const documents = countryDocuments[item]
+      const requiredDocs = cartItems.find((i) => i.name === item)?.document || [];
+      const formError = validateForm(formData, [...personalInfoFields, ...passportFields, ...travelDateFields]);
+      if (formError) {
+        toast.error(formError);
+        return;
+      }
+  
+      // 🔒 Validate file uploads
+      const docError = validateDocuments(documents, requiredDocs);
+      if (docError) {
+        toast.error(docError);
+        return;
+      }
       const response = await fetchDataFromAPI(
         "POST",
         `${BASE_URL}create-visa-order`,
@@ -200,6 +234,7 @@ useEffect(() => {
         },
       )
       console.log(response)
+
       addAllDetails(item, response?.data?.orderDetails?._id)
       if (response.status === 503) {
         console.log("Request Successful")
@@ -237,11 +272,7 @@ useEffect(() => {
         },
       },
     }))
-  }
-
-  useEffect(()=>{
-    console.log(mainId)
-  })
+  }  
 
   const saveCountryForm = (countryName) => {
     // Save the form data for the specific country
@@ -320,6 +351,7 @@ useEffect(() => {
                                   {field.type === "select" ? (
                                     <select
                                       name={field.name}
+                                      required
                                       value={countryData[item.name]?.[field.name] || ""}
                                       onChange={(e) => handleCountryChange(item.name, e)}
                                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -335,6 +367,7 @@ useEffect(() => {
                                     <input
                                       type={field.type}
                                       name={field.name}
+                                      required
                                       value={countryData[item.name]?.[field.name] || ""}
                                       onChange={(e) => handleCountryChange(item.name, e)}
                                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -358,6 +391,7 @@ useEffect(() => {
                                   <input
                                     type={field.type}
                                     name={field.name}
+                                    required
                                     value={countryData[item.name]?.[field.name] || ""}
                                     onChange={(e) => handleCountryChange(item.name, e)}
                                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -378,6 +412,7 @@ useEffect(() => {
                                   <input
                                     type={field.type}
                                     name={field.name}
+                                    required
                                     value={countryData[item.name]?.[field.name] || ""}
                                     onChange={(e) => handleCountryChange(item.name, e)}
                                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -403,6 +438,7 @@ useEffect(() => {
                                       <div className="relative">
                                         <input
                                           type="file"
+                                          required
                                           onChange={(e) => handleFileChange(item.name, doc, e)}
                                           className="opacity-0 absolute inset-0 w-full h-full cursor-pointer z-10"
                                         />

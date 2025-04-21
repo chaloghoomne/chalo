@@ -51,6 +51,17 @@ const CartPage = () => {
     }
   }
 
+  const removeFromCart = async(id)=>{
+    try{
+      const res = await fetchDataFromAPI("POST",`${BASE_URL}remove-from-cart`,{id:id})
+      // console.log(res) 
+      if(res.status === 200){toast("Removed from cart");window.location.reload()}
+    }catch(err){
+      // console.log("err",err);
+      toast(err.message)
+    }
+  }
+
   // Fetch package details for each cart ID
   useEffect(() => {
     const fetchPackages = async () => {
@@ -153,7 +164,7 @@ const CartPage = () => {
                     </div>
                   </div>
                   <button
-                    onClick={() => dispatch(removeFromCart(item.id))}
+                    onClick={() => removeFromCart(item.id)}
                     className="text-red-500 hover:text-red-700 transition mt-2 md:mt-0"
                   >
                     <FaTrash size={18} />
