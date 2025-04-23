@@ -203,18 +203,18 @@ const validateDocs = (formData, requiredDocs) => {
       const formData = countryData[item]
       const documents = countryDocuments[item]
       const requiredDocs = cartItems.find((i) => i.name === item)?.document || [];
-      const formError = validateForm(formData, [...personalInfoFields, ...passportFields, ...travelDateFields]);
-      if (formError) {
-        toast.error(formError);
-        return;
-      }
+      // const formError = validateForm(formData, [...personalInfoFields, ...passportFields, ...travelDateFields]);
+      // if (formError) {
+      //   toast.error(formError);
+      //   return;
+      // }
   
       // 🔒 Validate file uploads
-      const docError = validateDocuments(documents, requiredDocs);
-      if (docError) {
-        toast.error(docError);
-        return;
-      }
+      // const docError = validateDocuments(documents, requiredDocs);
+      // if (docError) {
+      //   toast.error(docError);
+      //   return;
+      // }
       const response = await fetchDataFromAPI(
         "POST",
         `${BASE_URL}create-visa-order`,
@@ -233,7 +233,7 @@ const validateDocs = (formData, requiredDocs) => {
           },
         },
       )
-      console.log(response)
+      // console.log(response)
 
       addAllDetails(item, response?.data?.orderDetails?._id)
       if (response.status === 503) {
@@ -279,7 +279,7 @@ const validateDocs = (formData, requiredDocs) => {
     console.log(`Saving data for ${countryName}:`, countryData[countryName])
     console.log(`Documents for ${countryName}:`, countryDocuments[countryName])
     // Here you would typically validate and process the data
-    alert(`${countryName} visa requirements saved successfully!`)
+    // alert(`${countryName} visa requirements saved successfully!`)
   }
 
   const handleShowPayment = () => {
