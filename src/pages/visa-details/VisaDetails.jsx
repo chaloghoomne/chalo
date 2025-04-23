@@ -657,6 +657,162 @@ const VisaDetails = () => {
 								></div>
 							</div>
 						</div>
+						<div className="flex flex-wrap gap-6">
+						{data?.instantHeading && data?.instantPrice && (
+						<button
+							onClick={() => handleApplicationType("instant", data?.instantDate)}
+							className="group bg-gradient-to-r from-[#3180CA] to-[#7AC7F9] md:min-w-[60%] w-full text-white p-5 relative rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden"
+						>
+							{/* Animated background elements */}
+							<div className="absolute top-0 left-0 w-full h-full overflow-hidden">
+							<div className="absolute -right-8 -top-8 w-24 h-24 rounded-full bg-white opacity-10 group-hover:scale-150 transition-transform duration-700"></div>
+							<div className="absolute right-1/3 bottom-0 w-16 h-16 rounded-full bg-white opacity-10 group-hover:scale-150 transition-transform duration-700 delay-100"></div>
+							</div>
+
+							{/* Hot tag */}
+							<div className="absolute -right-8 -top-8 rotate-45 transform translate-x-2 translate-y-10 bg-yellow-500 text-xs font-bold text-white py-1 px-10 shadow-md">
+							POPULAR
+							</div>
+
+							<div className="flex flex-col md:flex-row justify-between items-start md:items-center relative z-10 gap-4">
+							<div className="flex flex-col self-start">
+								<div className="flex items-center mb-1">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									className="h-5 w-5 mr-2"
+									viewBox="0 0 20 20"
+									fill="currentColor"
+								>
+									<path
+									fillRule="evenodd"
+									d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+									clipRule="evenodd"
+									/>
+								</svg>
+								<span className="text-sm font-medium uppercase tracking-wider">Instant Processing</span>
+								</div>
+								<span className="text-2xl font-bold text-start">{data?.instantHeading}</span>
+								<span className="text-xl font-medium text-start flex items-center mt-1">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									className="h-5 w-5 mr-1"
+									viewBox="0 0 20 20"
+									fill="currentColor"
+								>
+									<path
+									fillRule="evenodd"
+									d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+									clipRule="evenodd"
+									/>
+								</svg>
+								Visa on {data?.instantDate}
+								</span>
+							</div>
+
+							<div className="bg-white text-start md:min-w-56 text-gray-700 p-3 rounded-lg shadow-md group-hover:shadow-lg transition-all duration-300 transform group-hover:scale-105 w-full md:w-auto">
+								<div className="flex items-center justify-between">
+								<span className="font-medium text-[#3180CA]">Chalo Ghoomne Instant</span>
+								<div className="bg-blue-100 text-blue-600 text-xs font-bold px-2 py-1 rounded">FAST</div>
+								</div>
+								<p className="text-start font-bold text-2xl mt-1">₹{data?.instantPrice}</p>
+								<div className="flex items-center mt-1 text-sm text-gray-500">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									className="h-4 w-4 mr-1 text-green-500"
+									viewBox="0 0 20 20"
+									fill="currentColor"
+								>
+									<path
+									fillRule="evenodd"
+									d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+									clipRule="evenodd"
+									/>
+								</svg>
+								Quick processing
+								</div>
+								<div className="absolute right-3 bottom-3 bg-[#3180CA] text-white p-2 rounded-full group-hover:bg-[#7AC7F9] transition-colors duration-300">
+								<MdChevronRight size={20} />
+								</div>
+							</div>
+							</div>
+						</button>
+						)}
+
+						{data?.expressPrice && data?.expressHeading && (
+						<button
+							onClick={() => handleApplicationType("express", data?.expressDate)}
+							className="group bg-gradient-to-r from-[#3180CA] to-[#7AC7F9] md:min-w-[60%] w-full text-white p-5 relative rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden"
+						>
+							{/* Animated background elements */}
+							<div className="absolute top-0 left-0 w-full h-full overflow-hidden">
+							<div className="absolute -left-8 -top-8 w-24 h-24 rounded-full bg-white opacity-10 group-hover:scale-150 transition-transform duration-700"></div>
+							<div className="absolute left-1/3 bottom-0 w-16 h-16 rounded-full bg-white opacity-10 group-hover:scale-150 transition-transform duration-700 delay-100"></div>
+							</div>
+
+							<div className="flex flex-col md:flex-row justify-between items-start md:items-center relative z-10 gap-4">
+							<div className="flex flex-col self-start">
+								<div className="flex items-center mb-1">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									className="h-5 w-5 mr-2"
+									viewBox="0 0 20 20"
+									fill="currentColor"
+								>
+									<path
+									fillRule="evenodd"
+									d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z"
+									clipRule="evenodd"
+									/>
+								</svg>
+								<span className="text-sm font-medium uppercase tracking-wider">Express Service</span>
+								</div>
+								<span className="text-2xl font-bold text-start">{data?.expressHeading}</span>
+								<span className="text-xl font-medium text-start flex items-center mt-1">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									className="h-5 w-5 mr-1"
+									viewBox="0 0 20 20"
+									fill="currentColor"
+								>
+									<path
+									fillRule="evenodd"
+									d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+									clipRule="evenodd"
+									/>
+								</svg>
+								Visa on {data?.expressDate}
+								</span>
+							</div>
+
+							<div className="bg-white text-start md:min-w-56 text-gray-700 p-3 rounded-lg shadow-md group-hover:shadow-lg transition-all duration-300 transform group-hover:scale-105 w-full md:w-auto">
+								<div className="flex items-center justify-between">
+								<span className="font-medium text-[#3180CA]">Chalo Ghoomne Express</span>
+								<div className="bg-purple-100 text-purple-600 text-xs font-bold px-2 py-1 rounded">EXPRESS</div>
+								</div>
+								<p className="text-start font-bold text-2xl mt-1">₹{data?.expressPrice}</p>
+								<div className="flex items-center mt-1 text-sm text-gray-500">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									className="h-4 w-4 mr-1 text-green-500"
+									viewBox="0 0 20 20"
+									fill="currentColor"
+								>
+									<path
+									fillRule="evenodd"
+									d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+									clipRule="evenodd"
+									/>
+								</svg>
+								Standard processing
+								</div>
+								<div className="absolute right-3 bottom-3 bg-[#3180CA] text-white p-2 rounded-full group-hover:bg-[#7AC7F9] transition-colors duration-300">
+								<MdChevronRight size={20} />
+								</div>
+							</div>
+							</div>
+						</button>
+						)}
+					</div>
 
 						{/* Important Information */}
 						<div className="bg-white rounded-xl shadow-md overflow-hidden mt-6">
@@ -1106,74 +1262,7 @@ const VisaDetails = () => {
 					</div>
 				</div>
 			</div>
-			{/* Options Section */}
-			<div className="mb-6  md:px-10 px-5">
-				{/* <div className="flex justify-center my-2 md:justify-start items-center mb-4">
-					<hr className="border-gray-400 border-dashed border   w-[28%]" />
-					<span className="mx-4 poppins-six text-xl">OR</span>
-					<hr className="border-gray-400 border-dashed border   w-[28%]" />
-				</div> */}
-				<div className="flex flex-wrap   gap-4">
-					{data?.instantHeading && data?.instantPrice && (
-						<button
-							onClick={() =>
-								handleApplicationType(
-									"instant",
-									data?.instantDate
-								)
-							}
-							className="bg-gradient-to-r from-[#3180CA] to-[#7AC7F9] md:min-w-[60%] text-white p-4  relative md:px-8 md:pb-6 rounded-2xl shadow-md shadow-gray-400 flex justify-between items-center"
-						>
-							<div className="flex flex-col self-start">
-								<span className="text-2xl poppins-five text-start">
-									{data?.instantHeading}{" "}
-								</span>
-								<span className="text-2xl poppins-five text-start">
-									Visa on {data?.instantDate}{" "}
-								</span>
-							</div>
-							<span className="bg-white relative text-start md:pl-4 md:min-w-56 text-sm md:relative md:top-2  text-gray-500 p-2  rounded-lg">
-								Chalo Ghoomne Instant
-								<p className="text-start ">
-									₹{data?.instantPrice}
-								</p>
-								<div className="absolute hidden md:block top-5 right-2">
-									<MdChevronRight size={20} color="gray" />
-								</div>
-							</span>
-						</button>
-					)}
-					{data?.expressPrice && data?.expressHeading && (
-						<button
-							onClick={() =>
-								handleApplicationType(
-									"express",
-									data?.expressDate
-								)
-							}
-							className="bg-gradient-to-r from-[#3180CA] to-[#7AC7F9] md:min-w-[60%] text-white p-4 md:px-8 md:pb-6 rounded-2xl shadow-md shadow-gray-400 flex justify-between items-center"
-						>
-							<div className="flex flex-col">
-								<span className="text-2xl poppins-five text-start">
-									{data?.expressHeading}{" "}
-								</span>
-								<span className="text-2xl poppins-five text-start">
-									Visa on {data?.expressDate}{" "}
-								</span>
-							</div>
-							<span className="bg-white relative text-start md:pl-4 md:min-w-56 text-sm md:relative md:top-2  text-gray-500 p-2  rounded-lg">
-								Chalo Ghoomne Express
-								<p className="text-start ">
-									₹{data?.expressPrice}
-								</p>
-								<div className="absolute hidden md:block top-5 right-2">
-									<MdChevronRight size={20} color="gray" />
-								</div>
-							</span>
-						</button>
-					)}
-				</div>
-			</div>
+
 			<div className="md:w-[60%] w-full">
 				<FAQs ref={faqRef} data={faqData?.faq} />
 			</div>

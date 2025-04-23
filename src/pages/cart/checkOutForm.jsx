@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { FaFileUpload, FaArrowLeft, FaCreditCard, FaRegCreditCard } from "react-icons/fa"
+import { FaFileUpload, FaArrowLeft, FaCreditCard } from "react-icons/fa"
 import { useNavigate } from "react-router-dom"
 import { fetchDataFromAPI } from "../../api-integration/fetchApi"
 import { BASE_URL } from "../../api-integration/urlsVariable"
@@ -41,8 +41,8 @@ const CheckoutForm = ({ onClose, totalPrice, cartItems }) => {
   // Store documents separately for each country
   const [countryData, setCountryData] = useState({})
   const [countryDocuments, setCountryDocuments] = useState({})
-  const [showPopup,setShowPopup] = useState(false);
-  const [mainId,setMainId] = useState([]);
+  const [showPopup, setShowPopup] = useState(false)
+  const [mainId, setMainId] = useState([])
 
   const [activeTab, setActiveTab] = useState(cartItems[0]?.id || cartItems[0]?._id)
 
@@ -78,36 +78,69 @@ const CheckoutForm = ({ onClose, totalPrice, cartItems }) => {
     setCurrentStep((prev) => Math.max(prev - 1, 1))
   }
 
+  const [shouldNavigate, setShouldNavigate] = useState(false)
+  const [navigateId, setNavigateId] = useState(null)
 
-const [shouldNavigate, setShouldNavigate] = useState(false)
-const [navigateId, setNavigateId] = useState(null)
-
-useEffect(() => {
-  if (shouldNavigate && navigateId) {
-    navigate(`/edit-visa-request-v2/${navigateId}`)
-  }
-}, [shouldNavigate, navigateId])
-
-
-const validateForm=(formData,requiredDocs)=>{
-  for(const field of requiredDocs){
-    if(!formData[field.label] || formData[field.label].length === 0){
-      return `${field.label} is required`;
+  useEffect(() => {
+    if (shouldNavigate && navigateId) {
+      navigate(`/edit-visa-request-v2/${navigateId}`)
     }
-  }
-  return null;
-}
+  }, [shouldNavigate, navigateId])
 
-const validateDocs = (formData, requiredDocs) => {
-  for (const field of requiredDocs) {
-    if (field.show === "true" && !formData[field.name]?.file) {
-      return `${field.name} is required`;
+  const validateForm = (formData) => {
+    // Validate personal info
+    if (!formData.firstName?.trim()) return "First Name is required"
+    if (!formData.lastName?.trim()) return "Last Name is required"
+    if (!formData.gender?.trim()) return "Gender is required"
+    if (!formData.ageGroup?.trim()) return "Age Group is required"
+    if (!formData.fatherName?.trim()) return "Father's Name is required"
+    if (!formData.motherName?.trim()) return "Mother's Name is required"
+    if (!formData.dob) return "Date of Birth is required"
+    if (!formData.email?.trim()) return "Email is required"
+    if (!/^\S+@\S+\.\S+$/.test(formData.email)) return "Please enter a valid email address"
+    if (!formData.phoneNumber?.trim()) return "Phone Number is required"
+    if (!/^\d{10,15}$/.test(formData.phoneNumber)) return "Please enter a valid phone number"
+
+    // Validate passport info
+    if (!formData.passportNumber?.trim()) return "Passport Number is required"
+    if (!formData.passportIssueDate) return "Passport Issue Date is required"
+    if (!formData.passportValidTill) return "Passport Expiry Date is required"
+
+    // Validate travel dates
+    if (!formData.departureDate) return "Departure Date is required"
+    if (!formData.returnDate) return "Return Date is required"
+
+    // Check if return date is after departure date
+    if (formData.departureDate && formData.returnDate) {
+      const departure = new Date(formData.departureDate)
+      const returnDate = new Date(formData.returnDate)
+      if (returnDate < departure) {
+        return "Return date must be after departure date"
+      }
     }
+
+    return null
   }
-  return null;
-}
 
+  const validateDocs = (documents, requiredDocs) => {
+    const requiredDocuments = requiredDocs.filter((doc) => doc.show === "true")
 
+    for (const doc of requiredDocuments) {
+      if (!documents[doc.name]?.file) {
+        return `${doc.name} document is required`
+      }
+    }
+
+    return null
+  }
+
+  const getTodayDateString = () => {
+    const today = new Date()
+    const year = today.getFullYear()
+    const month = String(today.getMonth() + 1).padStart(2, "0")
+    const day = String(today.getDate()).padStart(2, "0")
+    return `${year}-${month}-${day}`
+  }
 
   useEffect(() => {
     if (cartItems && cartItems.length > 0) {
@@ -187,7 +220,6 @@ const validateDocs = (formData, requiredDocs) => {
       if (result.success) {
         setShowPopup(true)
         setNavigateId(result.data.visaOrder)
-               
       } else {
         toast.error(result.message || "Update failed")
       }
@@ -199,22 +231,24 @@ const validateDocs = (formData, requiredDocs) => {
 
   const createVisaOrder = async (item, id) => {
     try {
-      console.log(countryData[item])
       const formData = countryData[item]
       const documents = countryDocuments[item]
-      const requiredDocs = cartItems.find((i) => i.name === item)?.document || [];
-      // const formError = validateForm(formData, [...personalInfoFields, ...passportFields, ...travelDateFields]);
-      // if (formError) {
-      //   toast.error(formError);
-      //   return;
-      // }
-  
-      // 🔒 Validate file uploads
-      // const docError = validateDocuments(documents, requiredDocs);
-      // if (docError) {
-      //   toast.error(docError);
-      //   return;
-      // }
+      const requiredDocs = cartItems.find((i) => i.name === item)?.document || []
+
+      // Validate form fields
+      const formError = validateForm(formData)
+      if (formError) {
+        toast.error(formError)
+        return
+      }
+
+      // Validate document uploads
+      const docError = validateDocs(documents, requiredDocs)
+      if (docError) {
+        toast.error(docError)
+        return
+      }
+
       const response = await fetchDataFromAPI(
         "POST",
         `${BASE_URL}create-visa-order`,
@@ -233,7 +267,6 @@ const validateDocs = (formData, requiredDocs) => {
           },
         },
       )
-      // console.log(response)
 
       addAllDetails(item, response?.data?.orderDetails?._id)
       if (response.status === 503) {
@@ -241,6 +274,7 @@ const validateDocs = (formData, requiredDocs) => {
         navigate("/503") // Redirect to Service Unavailable page
       }
     } catch (error) {
+      toast.error("An error occurred while processing your request")
       navigate("/503")
       console.log(error)
     }
@@ -272,14 +306,31 @@ const validateDocs = (formData, requiredDocs) => {
         },
       },
     }))
-  }  
+  }
 
   const saveCountryForm = (countryName) => {
-    // Save the form data for the specific country
-    console.log(`Saving data for ${countryName}:`, countryData[countryName])
-    console.log(`Documents for ${countryName}:`, countryDocuments[countryName])
-    // Here you would typically validate and process the data
-    // alert(`${countryName} visa requirements saved successfully!`)
+    const formData = countryData[countryName]
+    const documents = countryDocuments[countryName]
+    const requiredDocs = cartItems.find((i) => i.name === countryName)?.document || []
+
+    // Validate form fields
+    const formError = validateForm(formData)
+    if (formError) {
+      toast.error(formError)
+      return false
+    }
+
+    // Validate document uploads
+    const docError = validateDocs(documents, requiredDocs)
+    if (docError) {
+      toast.error(docError)
+      return false
+    }
+
+    console.log(`Saving data for ${countryName}:`, formData)
+    console.log(`Documents for ${countryName}:`, documents)
+    toast.success(`${countryName} visa requirements saved successfully!`)
+    return true
   }
 
   const handleShowPayment = () => {
@@ -304,7 +355,7 @@ const validateDocs = (formData, requiredDocs) => {
 
             {showPayment ? (
               /* Payment Section */
-             <EditVisaDetailsv3 visaIds={mainId }/>
+              <EditVisaDetailsv3 visaIds={mainId} />
             ) : (
               /* Form Content */
               <div>
@@ -339,6 +390,27 @@ const validateDocs = (formData, requiredDocs) => {
                         </p>
 
                         <div className="grid gap-8">
+                          {/* Travel Dates Section */}
+                          <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+                            <h3 className="text-lg font-medium mb-4 text-gray-800 border-b pb-2">Travel Dates</h3>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+                              {travelDateFields.map((field) => (
+                                <div key={field.name}>
+                                  <label className="block text-gray-700 font-medium mb-1">{field.label}</label>
+                                  <input
+                                    type={field.type}
+                                    name={field.name}
+                                    required
+                                    min={getTodayDateString()}
+                                    value={countryData[item.name]?.[field.name] || ""}
+                                    onChange={(e) => handleCountryChange(item.name, e)}
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                  />
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+
                           {/* Personal Information Section */}
                           <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
                             <h3 className="text-lg font-medium mb-4 text-gray-800 border-b pb-2">
@@ -402,27 +474,6 @@ const validateDocs = (formData, requiredDocs) => {
                             </div>
                           </div>
 
-                          {/* Travel Dates Section */}
-                          <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
-                            <h3 className="text-lg font-medium mb-4 text-gray-800 border-b pb-2">Travel Dates</h3>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
-                              {travelDateFields.map((field) => (
-                                <div key={field.name}>
-                                  <label className="block text-gray-700 font-medium mb-1">{field.label}</label>
-                                  <input
-                                    type={field.type}
-                                    name={field.name}
-                                    required
-                                    value={countryData[item.name]?.[field.name] || ""}
-                                    onChange={(e) => handleCountryChange(item.name, e)}
-                                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                  />
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-
-
                           {/* Document Upload Section */}
                           {item.document && item.document.length > 0 && (
                             <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
@@ -458,27 +509,35 @@ const validateDocs = (formData, requiredDocs) => {
                           )}
                         </div>
                         {showPopup && (
-  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-    <div className="bg-white p-6 rounded-xl shadow-lg max-w-sm w-full">
-      <p className="mb-4 text-lg font-semibold text-center">
-        Do you want to make the payment now?
-      </p>
-      <div className="flex justify-center gap-4">
-        <Button onClick = {()=>setShouldNavigate(true)}>YES</Button>
-        <Button onClick = {()=>{setShowPopup(false); setMainId([...mainId, navigateId])}}>NO</Button>
-      </div>
-    </div>
-  </div>
-)}
-
-
+                          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                            <div className="bg-white p-6 rounded-xl shadow-lg max-w-sm w-full">
+                              <p className="mb-4 text-lg font-semibold text-center">
+                                Do you want to make the payment now?
+                              </p>
+                              <div className="flex justify-center gap-4">
+                                <Button onClick={() => setShouldNavigate(true)}>YES</Button>
+                                <Button
+                                  onClick={() => {
+                                    setShowPopup(false)
+                                    setMainId([...mainId, navigateId])
+                                    toast.success("Your application has been saved and you can make payments anytime")
+                                  }}
+                                >
+                                  NO
+                                </Button>
+                              </div>
+                            </div>
+                          </div>
+                        )}
 
                         <div className="flex justify-end mt-6">
                           <button
                             type="button"
                             onClick={() => {
-                              saveCountryForm(item.name)
-                              createVisaOrder(item.name, item.id)
+                              const isValid = saveCountryForm(item.name)
+                              if (isValid) {
+                                createVisaOrder(item.name, item.id)
+                              }
                             }}
                             className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors shadow-sm"
                           >

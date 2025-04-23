@@ -138,9 +138,7 @@ const VisaProcessSteps = ({ country }) => {
             <p className="text-xs text-blue-600">Processing on schedule</p>
           </div>
         </div>
-        <div className="bg-white px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-medium text-blue-700 shadow-sm">
-          Est. completion: 3-5 days
-        </div>
+
       </div>
     </div>
   )
