@@ -519,6 +519,8 @@ const VisaDetails = () => {
 		));
 	};
 
+	console.log(data)
+
 	const handletravelerNumber = (value) => {
 		if (value === "sub") {
 			if (numberOfTravelers > 1) {
@@ -705,7 +707,7 @@ const VisaDetails = () => {
 									clipRule="evenodd"
 									/>
 								</svg>
-								Visa on {data?.instantDate}
+								Visa on {new Date(Date.now() + parseInt(data.instantDays) * 86400000).toDateString()}
 								</span>
 							</div>
 
@@ -780,7 +782,10 @@ const VisaDetails = () => {
 									clipRule="evenodd"
 									/>
 								</svg>
-								Visa on {data?.expressDate}
+							
+  Visa on {new Date(Date.now() + parseInt(data.expressDays) * 86400000).toDateString()}
+
+
 								</span>
 							</div>
 
