@@ -198,10 +198,12 @@ const PersonDetails = () => {
       if (!response.data.success) {
         throw new Error(response.data.message || "Invalid OTP")
       }
+      console.log(response.data.userId)
 
       const { token } = response.data
 
       localStorage.setItem("token", token)
+      localStorage.setItem("userId", response.data.userId)
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`
 
       setPhoneVerified(true)
@@ -644,7 +646,7 @@ const PersonDetails = () => {
                         type="button"
                         onClick={nextStep}
                         className="bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300 text-white py-2 px-6 rounded-lg flex items-center gap-2 transition-all duration-300"
-                        disabled={!phoneVerified}
+                        // disabled={!phoneVerified}
                       >
                         Continue <span className="text-sm md:text-xl">→</span>
                       </button>

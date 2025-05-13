@@ -219,6 +219,7 @@ const EditVisaDetailsv3 = ({ visaIds }) => {
                           `${BASE_URL}edit-visa-order/${activeVisaId}`,
                           {
                             ...visaOrderResponse.data,
+                            user:localStorage.getItem(userId),
                             totalAmount: calculatedPrice.totalAmount,
                             insurance: insurance,
                             insurancePrice,

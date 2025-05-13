@@ -147,7 +147,7 @@ const EditVisaDetails = () => {
                   razorpay_payment_id,
                   razorpay_signature,
                 });
-  
+                console.log(localStorage.getItem(userId))
                 if (responseData) {
                   try {
                     const response = await fetchDataFromAPI("GET", `${BASE_URL}user-visa-order/${packageId}`);
@@ -157,6 +157,7 @@ const EditVisaDetails = () => {
                       try {
                         const responseData = await fetchDataFromAPI("PUT", `${BASE_URL}edit-visa-order/${packageId}`, {
                           ...response.data,
+                          user:localStorage.getItem(userId),
                           totalAmount: totalPrice.totalAmount,
                           insurance: insurance,
                           insurancePrice,

@@ -1,7 +1,7 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { FaFileUpload, FaArrowLeft, FaCreditCard } from "react-icons/fa"
+import { useState, useEffect, Component } from "react"
+import { FaFileUpload, FaArrowLeft, FaCreditCard, FaSpinner, FaExclamationTriangle, FaSync } from "react-icons/fa"
 import { useNavigate } from "react-router-dom"
 import { fetchDataFromAPI } from "../../api-integration/fetchApi"
 import { BASE_URL } from "../../api-integration/urlsVariable"
@@ -10,10 +10,62 @@ import "react-toastify/dist/ReactToastify.css"
 import { Button } from "react-aria-components"
 import EditVisaDetailsv3 from "../edit-visa-requests/EditVisaDetailsv3"
 
+// Error Boundary Component
+class PaymentErrorBoundary extends Component {
+  constructor(props) {
+    super(props)
+    this.state = { hasError: false, error: null, errorInfo: null }
+  }
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true }
+  }
+
+  componentDidCatch(error, errorInfo) {
+    this.setState({
+      error: error,
+      errorInfo: errorInfo
+    })
+    console.error("Payment error boundary caught an error:", error, errorInfo)
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="p-6 bg-red-50 border border-red-200 rounded-lg">
+          <div className="flex items-center mb-4">
+            <FaExclamationTriangle className="text-red-500 mr-2" size={24} />
+            <h3 className="text-lg font-medium text-red-700">Payment Processing Error</h3>
+          </div>
+          <p className="text-gray-700 mb-4">
+            We encountered an issue while processing your payment. This does not mean you were charged.
+          </p>
+          <p className="text-sm text-gray-600 mb-6">
+            Please try again or contact our support team if the problem persists.
+          </p>
+          <button
+            onClick={() => this.setState({ hasError: false, error: null, errorInfo: null })}
+            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            Try Again
+          </button>
+        </div>
+      )
+    }
+
+    return this.props.children
+  }
+}
+
 const CheckoutForm = ({ onClose, totalPrice, cartItems }) => {
   const [currentStep, setCurrentStep] = useState(1)
   const [loading, setLoading] = useState(false)
+  const [paymentLoading, setPaymentLoading] = useState(false)
+  const [paymentInitializing, setPaymentInitializing] = useState(false)
   const [showPayment, setShowPayment] = useState(false)
+  const [paymentError, setPaymentError] = useState(null)
+  const [verificationAttempts, setVerificationAttempts] = useState(0)
+  const [paymentData, setPaymentData] = useState(null)
   const defaultForm = {
     // Personal Information
     firstName: "",
@@ -333,6 +385,321 @@ const CheckoutForm = ({ onClose, totalPrice, cartItems }) => {
     return true
   }
 
+  // Function to load Razorpay script
+  const loadRazorpayScript = () => {
+    return new Promise((resolve) => {
+      const script = document.createElement("script")
+      script.src = "https://checkout.razorpay.com/v1/checkout.js"
+      script.onload = () => {
+        resolve(true)
+      }
+      script.onerror = () => {
+        resolve(false)
+      }
+      document.body.appendChild(script)
+    })
+  }
+
+  // Function to create Razorpay order
+  const validateAmount = (amount) => {
+    // Check if amount is valid
+    if (!amount || isNaN(amount) || amount <= 0) {
+      return {
+        valid: false,
+        message: "Invalid payment amount. Please contact support."
+      }
+    }
+    
+    // Check if amount is too small
+    if (amount < 1) {
+      return {
+        valid: false,
+        message: "Payment amount must be at least ₹1."
+      }
+    }
+    
+    // Check if amount is reasonable (e.g., not accidentally too large)
+    if (amount > 100000) {
+      return {
+        valid: false,
+        message: "Payment amount exceeds maximum limit. Please contact support."
+      }
+    }
+    
+    return { valid: true }
+  }
+
+  const createRazorpayOrder = async (amount) => {
+    try {
+      // Validate amount before making API call
+      const amountValidation = validateAmount(amount)
+      if (!amountValidation.valid) {
+        throw new Error(amountValidation.message)
+      }
+      
+      setPaymentInitializing(true)
+      const token = localStorage.getItem("token")
+      const response = await fetch(`${BASE_URL}create-order`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          amount: amount,
+          purpose: "Visa Processing Fee",
+        }),
+      })
+
+      if (!response.ok) {
+        const errorText = await response.text()
+        throw new Error(`Server error (${response.status}): ${errorText || "Unknown error"}`)
+      }
+
+      const result = await response.json()
+      
+      if (!result.success) {
+        throw new Error(result.message || "Failed to create order")
+      }
+      
+      return result.data
+    } catch (error) {
+      console.error("Create order error:", error)
+      throw error
+    } finally {
+      setPaymentInitializing(false)
+    }
+  }
+
+  // Function to verify payment
+  const verifyPayment = async (paymentData, attempt = 1) => {
+    try {
+      const token = localStorage.getItem("token")
+      const response = await fetch(`${BASE_URL}verify-payment`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(paymentData),
+      })
+
+      if (!response.ok) {
+        // If server is temporarily unavailable, we can retry
+        if (response.status >= 500 && attempt <= 3) {
+          // Wait before retrying (exponential backoff)
+          const waitTime = Math.min(2000 * Math.pow(2, attempt - 1), 10000)
+          await new Promise(resolve => setTimeout(resolve, waitTime))
+          
+          // Retry verification
+          return verifyPayment(paymentData, attempt + 1)
+        }
+        
+        throw new Error(`Server responded with status: ${response.status}`)
+      }
+
+      const result = await response.json()
+      
+      if (!result.success) {
+        // Some verification errors might be temporary
+        if (attempt <= 3 && result.message?.includes("pending")) {
+          // Wait before retrying
+          const waitTime = Math.min(2000 * Math.pow(2, attempt - 1), 10000)
+          await new Promise(resolve => setTimeout(resolve, waitTime))
+          
+          // Retry verification
+          return verifyPayment(paymentData, attempt + 1)
+        }
+        
+        throw new Error(result.message || "Payment verification failed")
+      }
+      
+      return result
+    } catch (error) {
+      console.error(`Payment verification error (attempt ${attempt}):`, error)
+      
+      // If we haven't exceeded max attempts and it's a potentially recoverable error
+      if (attempt <= 3 && (error.message?.includes("timeout") || error.message?.includes("network"))) {
+        // Wait before retrying (exponential backoff)
+        const waitTime = Math.min(2000 * Math.pow(2, attempt - 1), 10000)
+        await new Promise(resolve => setTimeout(resolve, waitTime))
+        
+        // Retry verification
+        return verifyPayment(paymentData, attempt + 1)
+      }
+      
+      throw error
+    }
+  }
+
+  // Function to retry payment verification
+  const retryVerification = async () => {
+    if (!paymentData) {
+      setPaymentError("No payment data available for verification")
+      return
+    }
+    
+    try {
+      setPaymentLoading(true)
+      setPaymentError(null)
+      setVerificationAttempts(prev => prev + 1)
+      
+      const verificationResult = await verifyPayment(paymentData)
+      
+      if (verificationResult.success) {
+        toast.success("Payment verification successful!")
+        navigate("/payment-success")
+      } else {
+        setPaymentError("Payment verification failed. Please contact support.")
+      }
+    } catch (error) {
+      setPaymentError(`Verification failed: ${error.message}. Please contact support.`)
+    } finally {
+      setPaymentLoading(false)
+    }
+  }
+
+  // Function to display Razorpay payment form
+  const displayRazorpay = async (orderData) => {
+    try {
+      setPaymentInitializing(true)
+      const res = await loadRazorpayScript()
+
+      if (!res) {
+        toast.error("Razorpay SDK failed to load. Please check your internet connection.")
+        setPaymentLoading(false)
+        setPaymentInitializing(false)
+        setPaymentError("Payment gateway failed to load. Please try again later.")
+        return false
+      }
+
+      const options = {
+        key: orderData.key,
+        amount: orderData.amount,
+        currency: orderData.currency,
+        name: "Chalo Ghoomne",
+        description: "Visa Processing Fee",
+        order_id: orderData.order_id,
+        handler: async function (response) {
+          try {
+            // Verify payment on success
+            const paymentResponseData = {
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_signature: response.razorpay_signature,
+            }
+            
+            // Store payment data for potential retries
+            setPaymentData(paymentResponseData)
+
+            const verificationResult = await verifyPayment(paymentResponseData)
+            
+            if (verificationResult.success) {
+              toast.success("Payment successful! Your visa processing has begun.")
+              // Redirect or update UI as needed
+              navigate("/payment-success")
+            } else {
+              toast.error("Payment verification failed. Please contact support.")
+              setPaymentError("Payment could not be verified. Please try again or contact support.")
+            }
+          } catch (error) {
+            toast.error("Payment verification failed: " + (error.message || "Unknown error"))
+            setPaymentError("Payment could not be verified. Please contact support.")
+          } finally {
+            setPaymentLoading(false)
+            setPaymentInitializing(false)
+          }
+        },
+        prefill: {
+          name: countryData[Object.keys(countryData)[0]]?.firstName + " " + countryData[Object.keys(countryData)[0]]?.lastName || "",
+          email: countryData[Object.keys(countryData)[0]]?.email || "",
+          contact: countryData[Object.keys(countryData)[0]]?.phoneNumber || "",
+        },
+        notes: {
+          address: "Chalo Ghoomne Corporate Office",
+        },
+        theme: {
+          color: "#3399cc",
+        },
+        modal: {
+          ondismiss: function () {
+            setPaymentLoading(false)
+            setPaymentInitializing(false)
+            toast.info("Payment cancelled. You can try again later.")
+          },
+        },
+      }
+
+      setPaymentInitializing(false)
+      const paymentObject = new window.Razorpay(options)
+      paymentObject.on("payment.failed", function (response) {
+        toast.error(`Payment failed: ${response.error.description}`)
+        setPaymentError(`Payment failed: ${response.error.description}. Please try again.`)
+        setPaymentLoading(false)
+      })
+      
+      paymentObject.open()
+      return true
+    } catch (error) {
+      console.error("Razorpay display error:", error)
+      setPaymentInitializing(false)
+      setPaymentLoading(false)
+      setPaymentError(`Failed to initialize payment: ${error.message}`)
+      return false
+    }
+  }
+
+  // Function to handle payment initiation
+  const handlePayment = async () => {
+    try {
+      // Clear previous errors and set loading state
+      setPaymentLoading(true)
+      setPaymentError(null)
+      setPaymentData(null)
+
+      // Check if all forms are filled correctly
+      const allFormsValid = Object.keys(countryData).every(country => {
+        return saveCountryForm(country)
+      })
+
+      if (!allFormsValid) {
+        setPaymentLoading(false)
+        return
+      }
+
+      // Validate payment amount
+      if (!totalPrice || isNaN(totalPrice) || totalPrice <= 0) {
+        toast.error("Invalid payment amount. Please contact support.")
+        setPaymentError("Invalid payment amount. Please refresh or contact support.")
+        setPaymentLoading(false)
+        return
+      }
+
+      // Calculate total price for payment
+      const amount = totalPrice // Use the total price passed as prop
+
+      // Create Razorpay order
+      const orderData = await createRazorpayOrder(amount)
+      
+      if (!orderData) {
+        throw new Error("Failed to create payment order")
+      }
+      
+      // Display Razorpay payment form
+      const paymentInitiated = await displayRazorpay(orderData)
+      
+      if (!paymentInitiated) {
+        setPaymentLoading(false)
+      }
+    } catch (error) {
+      console.error("Payment error:", error)
+      toast.error("Payment failed: " + (error.message || "Unknown error occurred"))
+      setPaymentError("Payment processing failed. Please try again later.")
+      setPaymentLoading(false)
+      setPaymentInitializing(false)
+    }
+  }
+
   const handleShowPayment = () => {
     setShowPayment(true)
   }
@@ -554,7 +921,7 @@ const CheckoutForm = ({ onClose, totalPrice, cartItems }) => {
                     type="button"
                     onClick={prevStep}
                     className="flex items-center px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors"
-                    disabled={currentStep === 1}
+                    disabled={currentStep === 1 || paymentLoading}
                   >
                     <FaArrowLeft className="mr-2" /> Previous
                   </button>
@@ -562,13 +929,56 @@ const CheckoutForm = ({ onClose, totalPrice, cartItems }) => {
                   <div className="flex gap-3">
                     <button
                       type="button"
-                      onClick={handleShowPayment}
-                      className="flex items-center px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-sm"
+                      onClick={handlePayment}
+                      disabled={paymentLoading}
+                      className={`flex items-center px-6 py-2 ${
+                        paymentLoading 
+                          ? "bg-gray-400 cursor-not-allowed" 
+                          : "bg-blue-600 hover:bg-blue-700"
+                      } text-white rounded-lg transition-colors shadow-sm`}
                     >
-                      <FaCreditCard className="mr-2" /> Submit All & Pay
+                      {paymentLoading ? (
+                        <>
+                          <FaSpinner className="mr-2 animate-spin" /> Processing...
+                        </>
+                      ) : (
+                        <>
+                          <FaCreditCard className="mr-2" /> Submit All & Pay
+                        </>
+                      )}
                     </button>
                   </div>
                 </div>
+                {/* Payment Error Message */}
+                {paymentError && (
+                  <div className="p-4 mt-4 bg-red-50 border border-red-200 rounded-lg">
+                    <p className="text-red-600">{paymentError}</p>
+                    <p className="text-sm text-gray-600 mt-2">
+                      If you continue experiencing issues, please contact our support team.
+                    </p>
+                    {verificationAttempts > 0 && (
+                      <button
+                        onClick={retryVerification}
+                        disabled={paymentLoading}
+                        className="mt-3 flex items-center px-4 py-2 text-blue-600 border border-blue-300 rounded hover:bg-blue-50"
+                      >
+                        {paymentLoading ? (
+                          <FaSpinner className="animate-spin mr-2" />
+                        ) : (
+                          <FaSync className="mr-2" />
+                        )}
+                        Retry Verification
+                      </button>
+                    )}
+                  </div>
+                )}
+                {/* Payment Initializing State */}
+                {paymentInitializing && !paymentLoading && (
+                  <div className="p-4 mt-4 bg-blue-50 border border-blue-200 rounded-lg flex items-center">
+                    <FaSpinner className="animate-spin text-blue-500 mr-3" />
+                    <p>Initializing payment gateway. Please wait...</p>
+                  </div>
+                )}
               </div>
             )}
           </div>

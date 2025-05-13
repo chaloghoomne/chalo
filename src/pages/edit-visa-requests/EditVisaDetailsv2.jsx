@@ -175,6 +175,7 @@ const EditVisaDetailsv2 = () => {
                       try {
                         const responseData = await fetchDataFromAPI("PUT", `${BASE_URL}edit-visa-order/${packageId}`, {
                           ...response.data,
+                          user:localStorage.getItem(userId),
                           totalAmount: totalPrice.totalAmount,
                           insurance: insurance,
                           insurancePrice,
