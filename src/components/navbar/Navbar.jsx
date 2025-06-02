@@ -236,7 +236,7 @@ const Navbar = () => {
                   }}
                   className="block poppins-five pop px-3 py-2 cursor-pointer rounded-md text-[16px] font-normal hover:bg-blue-600/20 transition-all duration-200 relative after:content-[''] after:absolute after:h-0.5 after:w-0 after:left-0 after:bottom-0 after:bg-white hover:after:w-full after:transition-all after:duration-300"
                 >
-                  About Us
+                  About Us 
                 </div>
                 <div
                   onClick={() => navigate("/travel-form")}
