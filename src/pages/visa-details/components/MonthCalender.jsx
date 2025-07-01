@@ -28,7 +28,7 @@ const MonthCalender = ({ onClose }) => {
 
   // Immediately dispatch dates when they're selected
   useEffect(() => {
-    if (dateRange && dateRange.length === 2) {
+    if (dateRange && dateRange.length === 2 && dateRange[0] && dateRange[1] ) {
       try {
         const formattedVisaDate = format(dateRange[0], "yyyy-MM-dd")
         const formattedReturnDate = format(dateRange[1], "yyyy-MM-dd")
@@ -47,7 +47,7 @@ const MonthCalender = ({ onClose }) => {
 
   // Handle Proceed button
   const proceedFunc = () => {
-    if (!dateRange || dateRange.length !== 2) {
+    if (!dateRange || dateRange.length !== 2 || !dateRange[0] || !dateRange[1] || dateRange[1] < dateRange[0]) {
       toast.error("Please select both Travel and Return Dates")
       return
     }
@@ -58,7 +58,7 @@ const MonthCalender = ({ onClose }) => {
 
     try {
       // If dates weren't already dispatched, do it now (fallback)
-      if (!datesDispatched) {
+      if (!datesDispatched && dateRange[0] && dateRange[1]) {
         const formattedVisaDate = format(dateRange[0], "yyyy-MM-dd")
         const formattedReturnDate = format(dateRange[1], "yyyy-MM-dd")
 
@@ -108,7 +108,7 @@ const MonthCalender = ({ onClose }) => {
               </div>
               <div className="flex flex-col items-end">
                 <span className="text-gray-500">Return Date</span>
-                <span className="font-medium text-blue-700">{format(dateRange[1], "MMM dd, yyyy")}</span>
+                <span className="font-medium text-blue-700">{dateRange[1] ? format(dateRange[1], "MMM dd, yyyy") : "--"}</span>
               </div>
             </div>
           ) : (

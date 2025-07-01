@@ -238,11 +238,11 @@ const ImageUpload = () => {
         <link rel="canonical" href="https://chaloghoomne.com/" />
       </Helmet>
 
-      <div className="min-h-screen bg-gradient-to-b from-orange-50 to-white p-4 flex items-center justify-center">
-        <div className="w-full max-w-5xl bg-white rounded-2xl shadow-xl overflow-hidden">
+      <div className="min-h-screen bg-gradient-to-b from-orange-50 to-white sm:p-4 flex items-center justify-center">
+        <div className="w-full sm:w-[100%] max-w-5xl bg-white rounded-b-2xl sm:rounded-2xl shadow-xl overflow-hidden">
           {/* Header */}
           <div className="p-6 bg-gradient-to-r from-orange-500 to-orange-600 text-white">
-            <h1 className="text-2xl font-bold text-center">
+            <h1 className=" md:text-2xl font-bold text-center">
               {packageData?.orderDetails
                 ? `Traveler Information: Applicant #${packageData?.orderDetails} of ${travlersCount}`
                 : "Upload Your Documents"}
@@ -279,8 +279,8 @@ const ImageUpload = () => {
             ) : (
               <>
                 <div className="mb-6">
-                  <h2 className="text-lg font-medium text-gray-700 mb-2">Required Documents</h2>
-                  <p className="text-sm text-gray-500">
+                  <h2 className="text-md sm:text-lg font-medium text-gray-700 mb-2">Required Documents</h2>
+                  <p className="text-xs sm:text-sm text-gray-500">
                     Click on each tile to upload the corresponding document. All documents must be clear and legible.
                     You can upload images or PDF files.
                   </p>
@@ -333,13 +333,13 @@ const ImageUpload = () => {
                                 <Upload className="w-8 h-8 text-orange-400" />
                               )}
                             </div>
-                            <span className="text-xs font-medium text-center text-gray-700">Upload</span>
+                            <span className="text-xs mb-2 font-medium text-center text-gray-700">Upload</span>
                           </div>
                         )}
                       </div>
 
                       <div className="p-3 bg-white border-t">
-                        <h3 className="text-sm font-medium text-gray-800 truncate">{item.name}</h3>
+                        <h3 className="text-xs md:text-sm font-medium text-gray-800 truncate">{item.name}</h3>
                       </div>
 
                       {/* Info tooltip */}

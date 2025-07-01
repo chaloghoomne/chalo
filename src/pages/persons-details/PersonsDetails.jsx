@@ -727,8 +727,8 @@ const PersonDetails = () => {
                     </div>
 
                     {/* Document Upload Section */}
-                    <div className="mt-8 p-4 bg-blue-50 rounded-lg">
-                      <h3 className="text-lg font-medium text-blue-700 mb-4 flex items-center gap-2">
+                    <div className="mt-8 md:p-4 bg-blue-50 rounded-lg">
+                      <h3 className="text-lg  p-2 font-medium text-blue-700 mb-4 flex items-center gap-2">
                         <IoDocumentsSharp /> Upload Required Documents
                       </h3>
                       <ImageUpload />

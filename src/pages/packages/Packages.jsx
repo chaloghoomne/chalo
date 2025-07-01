@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { fetchDataFromAPI } from "../../api-integration/fetchApi"
 import { BASE_URL, NetworkConfig } from "../../api-integration/urlsVariable"
@@ -20,6 +20,7 @@ const Packages = ({ plans }) => {
   const [state, setState] = useState()
   const [filteredData, setFilteredData] = useState()
   const [isLoading, setIsLoading] = useState(true)
+  const continueRef = useRef(null)
 
   useEffect(() => {
     const fetchProfileImage = async () => {
@@ -188,9 +189,10 @@ const Packages = ({ plans }) => {
           ) : filteredData?.length > 0 ? (
             filteredData.map((option, index) => (
               <motion.div
+
                 key={option?._id || index}
                 variants={itemVariants}
-                onClick={() => handleselect(option?._id, option?.visaTypeHeading)}
+                onClick={() => {handleselect(option?._id, option?.visaTypeHeading); continueRef.current.scrollIntoView({ behavior: "smooth" ,block: "center", })}}
                 whileHover={{ y: -5, boxShadow: "0 10px 25px -5px rgba(59, 130, 246, 0.1)" }}
                 className={`border relative md:mx-auto rounded-[25px] md:w-[90%] p-6 md:p-8 cursor-pointer transition-all duration-300 overflow-hidden ${
                   selected === option?._id
@@ -302,13 +304,16 @@ const Packages = ({ plans }) => {
 
       {/* Continue button */}
       <motion.div
+      ref={continueRef}
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5, duration: 0.5 }}
         className="mt-12 relative z-10"
+        
       >
         <button
           onClick={handleRedirect}
+          
           disabled={!selected}
           className={`group relative overflow-hidden rounded-full px-10 py-4 text-lg font-medium transition-all duration-300 ${
             selected

@@ -14,11 +14,13 @@ import { FaPlane, FaMapMarkedAlt } from "react-icons/fa"
 import { calenderDate, returnCalenderDate } from "../../redux/actions/calender-date-action"
 import { Helmet } from "react-helmet"
 import { motion } from "framer-motion"
+import { useRef } from "react"
 
 const VisaTypes = () => {
   const [selectedVisa, setSelectedVisa] = useState("Tourist")
   const [isLoading, setIsLoading] = useState(true)
   const selectedCountry = useSelector((state) => state.SelectedCountryReducer.selectedCountry)
+  const productRef = useRef(null);
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const [plans, setPlans] = useState()
@@ -26,6 +28,7 @@ const VisaTypes = () => {
   const [data1, setData1] = useState()
   const [visatypes, setVisaTypes] = useState()
   const { id } = useParams()
+
 
   const { slug } = useParams() // Get slug from URL
   const [Id, setId] = useState(null)
@@ -197,7 +200,7 @@ const VisaTypes = () => {
                       ? "border-orange-500 bg-orange-50 shadow-orange-200"
                       : "border-gray-300 hover:border-orange-300 bg-white"
                   }`}
-                  onClick={() => handleplans(visa?._id, visa?.name)}
+                  onClick={() => {handleplans(visa?._id, visa?.name); productRef.current.scrollIntoView({ behavior: "smooth" })}}
                 >
                   {selectedVisa === visa?._id && (
                     <div className="absolute top-3 right-3">
@@ -250,6 +253,7 @@ const VisaTypes = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.5 }}
         className="w-full max-w-5xl"
+         ref ={productRef}
       >
         {isLoading ? (
           // Loading skeleton for packages
