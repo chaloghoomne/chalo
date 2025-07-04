@@ -58,7 +58,7 @@ const HomeSecond = forwardRef((props, ref) => {
     const cachedVersion = localStorage.getItem("PackageVersion");
 
     // 1. Get the latest version from the server
-    const versionRes = await fetchDataFromAPI("GET", `${BASE_URL}places/version`);
+    const versionRes = await fetchDataFromAPI("GET", `${BASE_URL}version`);
     const serverVersion = versionRes?.version; // <- FIX: extract the actual version string
 
     console.log("Cached version:", cachedVersion);
