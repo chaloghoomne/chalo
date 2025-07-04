@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux"
 import { getCountryId, getselectedCountry } from "../../../redux/actions/package-id-actions"
 import ImagePlaceholder from "./ImagePlaceholder"
 
-const VisaCard = ({ image, city, country, price, rating, description, id, altImage }) => {
+const VisaCard = ({ image, city, country, price, rating, description, id, altImage ,slug}) => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const [finalValue, setFinalValue] = useState(30)
@@ -36,7 +36,7 @@ const VisaCard = ({ image, city, country, price, rating, description, id, altIma
   const handleRedirect = (id, name) => {
     dispatch(getselectedCountry(name))
     dispatch(getCountryId(id))
-    navigate(`/visa-types/${generateSlug(country)}-${id}`)
+    navigate(`/visa-types/${generateSlug(slug)}`)
   }
 
   const handleseeMore = (value) => {

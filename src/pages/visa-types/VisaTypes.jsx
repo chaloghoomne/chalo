@@ -20,6 +20,7 @@ const VisaTypes = () => {
   const [selectedVisa, setSelectedVisa] = useState("Tourist")
   const [isLoading, setIsLoading] = useState(true)
   const selectedCountry = useSelector((state) => state.SelectedCountryReducer.selectedCountry)
+  const selectedId = useSelector((state) => state.CountryIdReducer.countryId)
   const productRef = useRef(null);
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -34,18 +35,21 @@ const VisaTypes = () => {
   const [Id, setId] = useState(null)
 
   useEffect(() => {
-    if (slug) {
-      const extractedId = slug.split("-").pop()
-      setId(extractedId)
+    // if (slug) {
+    //   const extractedId = slug.split("-").pop()
+    //   setId(extractedId)
+    // }
+    if(selectedId){
+      setId(selectedId)
     }
-  }, [slug])
+  }, [selectedId])
 
   useEffect(() => {
     const fetchData = async () => {
       if (!Id) return
       setIsLoading(true)
       try {
-        const response = await fetchDataFromAPI("GET", `${BASE_URL}place/${Id}`)
+        const response = await fetchDataFromAPI("GET", `${BASE_URL}place/${selectedId}`)
         if (response.status === 503) {
           navigate("/503") // Redirect to Service Unavailable page
         }
@@ -143,7 +147,7 @@ const VisaTypes = () => {
         <h1 className="text-4xl md:text-5xl poppins-six font-bold mb-6 bg-gradient-to-r from-orange-600 to-orange-400 bg-clip-text text-transparent">
           Your Gateway to {selectedCountry}
         </h1>
-        {/* <p className="text-gray-700 poppins-four text-lg md:text-xl max-w-3xl mx-auto">{data1?.description}</p> */}
+        <p dangerouslySetInnerHTML={{ __html: data1?.description }}></p>
       </motion.div>
 
       {/* Process Steps */}

@@ -550,7 +550,7 @@ const VisaDetails = () => {
 			{/* Main Image */}
 			<div
 				ref={mainImageRef}
-				className="w-full relative mt-12 rounded-xl bg-cover flex h-[500px] justify-center items-center mb-10"
+				className="w-full relative mt-12 rounded-xl bg-cover flex h-[500px] justify-center items-center mb-5"
 			>
 				<div className="px-16 w-full relative ">
 					<img
@@ -880,10 +880,10 @@ const VisaDetails = () => {
 				</div>
 
 				{/* Right Column - Application Card */}
-				<div className="w-full xl:w-[40%] lg:px-4 relative h-[65%] md:h-[75%] ">
+				<div className="w-full  xl:w-[40%] lg:px-4 relative h-[65%] md:h-[75%] ">
 					<div
 						ref={cardRef}
-						className="w-full bg-white shadow-lg rounded-xl overflow-hidden lg:mt-10 mb-10 sticky top-24"
+						className="w-full bg-white shadow-lg rounded-xl overflow-hidden lg: mb-10 sticky top-24"
 					>
 						{/* Improved Tab Navigation */}
 						{data?.expressPrice && data?.expressHeading && (

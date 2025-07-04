@@ -52,30 +52,43 @@ const HomeSecond = forwardRef((props, ref) => {
   // Fetch packages data
   useEffect(() => {
     const fetchPackages = async () => {
-      setIsLoading(true)
-      try {
-        const cachedData = localStorage.getItem("Package")
+  setIsLoading(true);
+  try {
+    const cachedData = localStorage.getItem("Package");
+    const cachedVersion = localStorage.getItem("PackageVersion");
 
-        if (cachedData) {
-          const parsedData = JSON.parse(cachedData)
-          setAllPackages(parsedData)
-          setPackages(parsedData)
-        } else {
-          const response = await fetchDataFromAPI("GET", `${BASE_URL}places?country=${inputValue}`)
+    // 1. Get the latest version from the server
+    const versionRes = await fetchDataFromAPI("GET", `${BASE_URL}places/version`);
+    const serverVersion = versionRes?.version; // <- FIX: extract the actual version string
 
-          if (response?.data) {
-            setAllPackages(response.data)
-            setPackages(response.data)
-            localStorage.setItem("Package", JSON.stringify(response.data))
-          }
-        }
-      } catch (error) {
-        console.error("Error fetching packages:", error)
-        setError("Failed to load visa packages")
-      } finally {
-        setIsLoading(false)
+    console.log("Cached version:", cachedVersion);
+    console.log("Server version:", serverVersion);
+
+    // 2. Use cached data only if versions match
+    if (cachedData && cachedVersion === serverVersion && cachedVersion !== null) {
+      const parsedData = JSON.parse(cachedData);
+      setAllPackages(parsedData);
+      setPackages(parsedData);
+      console.log("✅ Loaded packages from localStorage");
+    } else {
+      // 3. Fetch fresh data
+      const response = await fetchDataFromAPI("GET", `${BASE_URL}places?country=${inputValue}`);
+      if (response?.data) {
+        setAllPackages(response.data);
+        setPackages(response.data);
+        localStorage.setItem("Package", JSON.stringify(response.data));
+        localStorage.setItem("PackageVersion", serverVersion); // <- FIX: save correct version
+        console.log("🔄 Fetched new data and updated cache");
       }
     }
+  } catch (error) {
+    console.error("Error fetching packages:", error);
+    setError("Failed to load visa packages");
+  } finally {
+    setIsLoading(false);
+  }
+};
+
 
     fetchPackages()
   }, [inputValue])
@@ -131,6 +144,7 @@ const HomeSecond = forwardRef((props, ref) => {
   }
 
   const displayedPackages = showAll ? packages : packages.slice(0, ITEMS_PER_PAGE)
+  console.log(displayedPackages)
 
   // Animation variants
   const containerVariants = {
@@ -344,6 +358,7 @@ const HomeSecond = forwardRef((props, ref) => {
                         country={visa?.country}
                         price={visa?.price}
                         rating={visa?.rating}
+                        slug = {visa?.slug}
                         id={visa?._id}
                         description={visa?.description}
                       />
