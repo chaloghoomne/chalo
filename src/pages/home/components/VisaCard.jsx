@@ -36,7 +36,7 @@ const VisaCard = ({ image, city, country, price, rating, description, id, altIma
   const handleRedirect = (id, name) => {
     dispatch(getselectedCountry(name))
     dispatch(getCountryId(id))
-    navigate(`/visa-types/${generateSlug(slug)}`)
+    navigate(`/${generateSlug(slug)}`)
   }
 
   const handleseeMore = (value) => {

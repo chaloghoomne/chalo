@@ -107,7 +107,7 @@ const SignUp = () => {
 				dispatch(login(true));
 				localStorage.setItem("token", response.data);
 				if (state?.countryId) {
-					navigate(`/visa-types/${state.countryId}`);
+					navigate(`/${state.countryId}`);
 				} else {
 					navigate("/");
 				}

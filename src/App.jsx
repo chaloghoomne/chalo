@@ -109,7 +109,7 @@ const AppContent = () => {
 						path="/forgot-password"
 						element={<ForgotPassword />}
 					/>
-					<Route path="/visa-types/:slug" element={<VisaTypes />} />
+					<Route path="/:slug" element={<VisaTypes />} />
 					<Route path="/packages" element={<Packages />} />
 					<Route path="/profile" element={<Profile />} />
 					<Route

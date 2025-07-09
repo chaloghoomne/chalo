@@ -59,7 +59,7 @@ const Login = () => {
 				localStorage.setItem("token", response.data.token);
 
 				if (state?.countryId) {
-					navigate(`/visa-types/${state.countryId}`);
+					navigate(`/${state.countryId}`);
 				} else {
 					window.location.href = `/`;
 				}
