@@ -6,7 +6,7 @@ import { fetchDataFromAPI } from "../../api-integration/fetchApi"
 import { BASE_URL, NetworkConfig } from "../../api-integration/urlsVariable"
 import Packages from "../packages/Packages"
 import { useDispatch, useSelector } from "react-redux"
-import { getVisaType } from "../../redux/actions/package-id-actions"
+import { getCountryId, getselectedCountry, getVisaType } from "../../redux/actions/package-id-actions"
 import { BsEmojiSmile } from "react-icons/bs"
 import { FaCircleDot, FaPassport } from "react-icons/fa6"
 import { MdTravelExplore, MdOutlineVerified } from "react-icons/md"
@@ -19,7 +19,8 @@ import { useRef } from "react"
 const VisaTypes = () => {
   const [selectedVisa, setSelectedVisa] = useState("Tourist")
   const [isLoading, setIsLoading] = useState(true)
-  const selectedCountry = useSelector((state) => state.SelectedCountryReducer.selectedCountry)
+  // const selectedCountry = useSelector((state) => state.SelectedCountryReducer.selectedCountry)
+  const [selectedCountry, setSelectedCountry] = useState(useSelector((state) => state.SelectedCountryReducer.selectedCountry));
   const selectedId = useSelector((state) => state.CountryIdReducer.countryId)
   const productRef = useRef(null);
   const dispatch = useDispatch()
@@ -36,25 +37,43 @@ const VisaTypes = () => {
 
   useEffect(() => {
     // if (slug) {
-    //   const extractedId = slug.split("-").pop()
+    //   const extractedId = slug.replace(/-/g, " ")
+    //   console.log(extractedId)
     //   setId(extractedId)
     // }
     if(selectedId){
       setId(selectedId)
     }
-  }, [selectedId])
+  }, [slug, selectedId])
 
   useEffect(() => {
     const fetchData = async () => {
       if (!Id) return
       setIsLoading(true)
       try {
-        const response = await fetchDataFromAPI("GET", `${BASE_URL}place/${selectedId}`)
+        const response = await fetchDataFromAPI("GET", `${BASE_URL}placeSlug/${slug}`)
         if (response.status === 503) {
           navigate("/503") // Redirect to Service Unavailable page
         }
         if (response) {
+          console.log(response.data)
+          if(selectedId !== response?.data?._id){
+            // setSelectedCountry(response?.data?.country)
+            // dispatch(getCountryId(response?.data?._id))
+            // dispatch(getselectedCountry(response?.data?.country))
+            // setVisaTypes(response?.data?.tourTypes)
+            // setId(response?.data?._id)
+            // setSelectedVisa(response?.data?.tourTypes[0]?._id)
+            // setData1(response.data)
+            setSelectedCountry(response?.data?.country);
+    dispatch(getCountryId(response?.data?._id));
+    dispatch(getselectedCountry(response?.data?.country));
+    setId(response?.data?._id);
+            handleplans(response?.data?.tourTypes[0]?._id, response?.data?.tourTypes[0]?.name)
+          }
+          // setSelectedCountry(response?.data?.country)
           setVisaTypes(response?.data?.tourTypes)
+          // setId(response?.data?._id)
           setSelectedVisa(response?.data?.tourTypes[0]?._id)
           setData1(response.data)
           handleplans(response?.data?.tourTypes[0]?._id, response?.data?.tourTypes[0]?.name)
@@ -141,6 +160,9 @@ const VisaTypes = () => {
         transition={{ duration: 0.5 }}
         className="max-w-4xl w-full text-center mb-12"
       >
+        <div className="flex items-center justify-center py-3">
+          <img src={data1?.bannerImage} alt="" className="w-full bg-cover h-[300px]  lg:h-[450px] rounded-2xl"/>
+        </div>
         <div className="inline-block px-4 py-1 bg-orange-100 text-orange-600 rounded-full mb-4">
           {selectedCountry} Visa Application
         </div>
@@ -293,6 +315,9 @@ const VisaTypes = () => {
           <>
             
             <Packages plans={plans} />
+            <div className="text-center pt-16 px-4">
+              <p dangerouslySetInnerHTML={{ __html:data1?.seoDescription }}/>
+            </div>
           </>
         )}
       </motion.div>

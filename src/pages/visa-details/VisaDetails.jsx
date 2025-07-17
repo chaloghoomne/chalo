@@ -543,8 +543,8 @@ const VisaDetails = () => {
 				<meta charSet="utf-8" />
 				<title>{metaData.metaTitle}</title>
 
-				<meta name="description" content={metaData.metaDescription} />
-				<meta name="keywords" content={metaData.metaKeywords} />
+				{/* <meta name="description" content={metaData.metaDescription} /> */}
+				{/* <meta name="keywords" content={metaData.metaKeywords} /> */}
 				<link rel="canonical" href="https://chaloghoomne.com/" />
 			</Helmet>
 			{/* Main Image */}
